@@ -12,7 +12,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-      title: const Text('CovidT'),
+      title: const Text('Login'),
       backgroundColor: const Color.fromARGB(255, 70, 70, 70)
         ),
       body: Center(
