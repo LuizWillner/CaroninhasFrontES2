@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/login_background.png'),
+            image: AssetImage('assets/home_background.png'),
             fit: BoxFit.cover,
           ),
         ),

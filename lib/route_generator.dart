@@ -18,3 +18,53 @@ class RouteGenerator {
     }
   }
 }
+
+
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                // Add login functionality here
+              },
+              child: Text('Login'),
+            ),
+            SizedBox(height: 10.0),
+            TextButton(
+              onPressed: () {
+                // Add "Forgot your password?" functionality here
+              },
+              child: Text('Forgot your password?'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
