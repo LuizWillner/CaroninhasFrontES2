@@ -5,13 +5,15 @@ class CadastroInput extends StatelessWidget {
   final String placeholderText;
   final bool isObscured;
   final TextEditingController controller;
+  final TextInputType keyboardType;
 
   const CadastroInput(
       {Key? key,
       required this.labelText,
       required this.placeholderText,
       required this.isObscured,
-      required this.controller})
+      required this.controller,
+      required this.keyboardType})
       : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class CadastroInput extends StatelessWidget {
             child: TextField(
               obscureText: isObscured,
               controller: controller,
+              keyboardType: keyboardType,
               decoration: InputDecoration(
                 labelText: placeholderText,
                 floatingLabelBehavior: FloatingLabelBehavior.never,

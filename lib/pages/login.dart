@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         Navigator.of(context).pushNamed(
-                                          '/cadastro',
+                                          '/Cadastro',
                                         );
                                       },
                                   ),

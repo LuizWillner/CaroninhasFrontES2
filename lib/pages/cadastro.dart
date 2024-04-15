@@ -14,8 +14,24 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _cpfController = TextEditingController();
   TextEditingController _uffController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
   TextEditingController _password1Controller = TextEditingController();
   TextEditingController _password2Controller = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? _picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (_picked != null) {
+      setState(() {
+        _dateController.text = _picked.toString().split(" ")[0];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,36 +76,80 @@ class _CadastroState extends State<Cadastro> {
                             isObscured: false,
                             placeholderText: "Nome Completo",
                             labelText: "Nome",
+                            keyboardType: TextInputType.text,
                           ),
                           CadastroInput(
                             controller: _emailController,
                             isObscured: false,
                             placeholderText: "joaoSP@id.uff.br",
                             labelText: "E-mail",
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           CadastroInput(
                             controller: _cpfController,
                             isObscured: false,
                             placeholderText: "xxx.xxx.xxx-xx",
                             labelText: "CPF",
+                            keyboardType: TextInputType.number,
                           ),
                           CadastroInput(
                             controller: _uffController,
                             isObscured: false,
                             placeholderText: "xxx.xxx.xxx",
                             labelText: "Matrícula",
+                            keyboardType: TextInputType.number,
+                          ),
+                          Padding(padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
+                                  child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Data de Nascimento",
+                                style: const TextStyle(
+                                  color: Color(0xFF0E4B7C),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 42,
+                                child: TextField(
+                                  onTap: () {
+                                    _selectDate(context);
+                                  },
+                                  controller: _dateController,
+                                  readOnly: true,
+                                  keyboardType: TextInputType.datetime,
+                                  decoration: InputDecoration(
+                                    labelText: "xx/xx/xxxx",
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.never,
+                                    labelStyle: const TextStyle(
+                                        color: Color(0xFF0E4B7C)),
+                                    border: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFF0E4B7C)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           ),
                           CadastroInput(
                             controller: _password1Controller,
                             isObscured: true,
                             placeholderText: "Digite aqui sua senha",
                             labelText: "Senha",
+                            keyboardType: TextInputType.text,
                           ),
                           CadastroInput(
                             controller: _password2Controller,
                             isObscured: true,
                             placeholderText: "Repita aqui sua senha",
                             labelText: "Senha (repetir)",
+                            keyboardType: TextInputType.text,
                           ),
                           const SizedBox(height: 16.0),
                           Padding(
@@ -111,6 +171,7 @@ class _CadastroState extends State<Cadastro> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 18.0),
                           Center(
                               child: RichText(
                             text: TextSpan(
@@ -128,7 +189,7 @@ class _CadastroState extends State<Cadastro> {
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.of(context).pushNamed(
-                                        '/login',
+                                        '/Login',
                                       );
                                     },
                                 ),

@@ -11,7 +11,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: ((context) => const Home()));
       case '/Login':
         return MaterialPageRoute(builder: ((context) => const Login()));
-      case '/cadastro':
+      case '/Cadastro':
         return MaterialPageRoute(builder: ((context) => const Cadastro()));
       default:
         return MaterialPageRoute(builder: ((context) => const Home()));

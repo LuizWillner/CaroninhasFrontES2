@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
                             ),
                             onPressed: (() {
                               Navigator.of(context).pushNamed(
-                                '/cadastro',
+                                '/Cadastro',
                               );
                             }),
                             child: const Text(
