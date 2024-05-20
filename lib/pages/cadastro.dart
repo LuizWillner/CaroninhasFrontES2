@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
+import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:app_uff_caronas/services/service_auth.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -13,10 +17,12 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _cpfController = TextEditingController();
-  TextEditingController _uffController = TextEditingController();
+  TextEditingController _iduffController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
   TextEditingController _password1Controller = TextEditingController();
   TextEditingController _password2Controller = TextEditingController();
+
+  final AuthService authService = AuthService(apiService: ApiService());
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? _picked = await showDatePicker(
@@ -93,49 +99,50 @@ class _CadastroState extends State<Cadastro> {
                             keyboardType: TextInputType.number,
                           ),
                           CadastroInput(
-                            controller: _uffController,
+                            controller: _iduffController,
                             isObscured: false,
                             placeholderText: "xxx.xxx.xxx",
                             labelText: "Matrícula",
                             keyboardType: TextInputType.number,
                           ),
-                          Padding(padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
-                                  child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Data de Nascimento",
-                                style: const TextStyle(
-                                  color: Color(0xFF0E4B7C),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Data de Nascimento",
+                                  style: const TextStyle(
+                                    color: Color(0xFF0E4B7C),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 42,
-                                child: TextField(
-                                  onTap: () {
-                                    _selectDate(context);
-                                  },
-                                  controller: _dateController,
-                                  readOnly: true,
-                                  keyboardType: TextInputType.datetime,
-                                  decoration: InputDecoration(
-                                    labelText: "xx/xx/xxxx",
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.never,
-                                    labelStyle: const TextStyle(
-                                        color: Color(0xFF0E4B7C)),
-                                    border: const UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xFF0E4B7C)),
+                                SizedBox(
+                                  height: 42,
+                                  child: TextField(
+                                    onTap: () {
+                                      _selectDate(context);
+                                    },
+                                    controller: _dateController,
+                                    readOnly: true,
+                                    keyboardType: TextInputType.datetime,
+                                    decoration: InputDecoration(
+                                      labelText: "xx/xx/xxxx",
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                      labelStyle: const TextStyle(
+                                          color: Color(0xFF0E4B7C)),
+                                      border: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xFF0E4B7C)),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                           ),
                           CadastroInput(
                             controller: _password1Controller,
@@ -163,9 +170,24 @@ class _CadastroState extends State<Cadastro> {
                                 ),
                                 backgroundColor: const Color(0xFF00AFF8),
                               ),
-                              onPressed: null,
+                              onPressed: () async {
+                                final email = _emailController.text;
+                                final firstName = _nameController.text;
+                                final lastName = _nameController.text;
+                                final cpf = _cpfController.text;
+                                final birthdate = _dateController.text;
+                                final iduff = _iduffController.text;
+                                final password = _password1Controller.text;
+                                try {
+                                  final user =
+                                      await authService.createUser(email, firstName, lastName,cpf,birthdate, iduff, password);
+                                  print(user);
+                                } catch (error) {
+                                  print(error);
+                                }
+                              },
                               child: const Text(
-                                'Login',
+                                'Cadastre-se',
                                 style: TextStyle(
                                     color: Color(0xFFFAFAFA), fontSize: 24),
                               ),
