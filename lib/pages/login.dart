@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/services/service_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -13,6 +12,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final storage = FlutterSecureStorage();
+
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthService authService = AuthService(apiService: ApiService());
@@ -99,13 +100,11 @@ class _LoginState extends State<Login> {
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                  try {
-                                    authService.createUserTest();
-                                    print("aaaa");
-                                  } catch (error) {
-                                    print(error.toString());
-                                  }
-                                },
+                                      try {
+                                      } catch (error) {
+                                        print(error.toString());
+                                      }
+                                    },
                                     child: const Text("Esqueceu sua senha?"),
                                   )
                                 ],
@@ -129,7 +128,18 @@ class _LoginState extends State<Login> {
                                   try {
                                     final user = await authService.login(
                                         username, password);
-                                    print(user.toString());
+                                    await storage.write(
+                                        key: "token_bearer",
+                                        value: user["access_token"]);
+                                        final isLogged = await storage.read(
+                                            key: "token_bearer");
+                                        isLogged != null
+                                            ? Navigator.of(context).pushNamed(
+                                                '/Test',
+                                              )
+                                            : Navigator.of(context).pushNamed(
+                                                '/Login',
+                                              );
                                   } catch (error) {
                                     print(error.toString());
                                   }

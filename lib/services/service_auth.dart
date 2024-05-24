@@ -23,6 +23,7 @@ class AuthService {
       String cpf,
       String birthdate,
       String iduff,
+      String phone,
       String password) async {
     final response = await apiService.postApi('users/create',{
       "email": email,
@@ -30,6 +31,7 @@ class AuthService {
       "last_name": lastName,
       "cpf": cpf,
       "birthdate": "2000-05-20T04:48:56.242Z",
+      "phone": phone,
       "iduff": iduff,
       "password": password
     });

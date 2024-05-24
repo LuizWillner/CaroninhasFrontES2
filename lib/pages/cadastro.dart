@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/services/service_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -18,9 +19,11 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _cpfController = TextEditingController();
   TextEditingController _iduffController = TextEditingController();
+   TextEditingController _phoneController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
   TextEditingController _password1Controller = TextEditingController();
   TextEditingController _password2Controller = TextEditingController();
+  final storage = FlutterSecureStorage();
 
   final AuthService authService = AuthService(apiService: ApiService());
 
@@ -97,6 +100,12 @@ class _CadastroState extends State<Cadastro> {
                             placeholderText: "xxx.xxx.xxx-xx",
                             labelText: "CPF",
                             keyboardType: TextInputType.number,
+                          ),CadastroInput(
+                            controller: _phoneController,
+                            isObscured: false,
+                            placeholderText: "(xx) xxxxx-xxxx",
+                            labelText: "Telefone",
+                            keyboardType: TextInputType.number,
                           ),
                           CadastroInput(
                             controller: _iduffController,
@@ -171,16 +180,17 @@ class _CadastroState extends State<Cadastro> {
                                 backgroundColor: const Color(0xFF00AFF8),
                               ),
                               onPressed: () async {
+                                print(await storage.read(key: 'login_token'));
                                 final email = _emailController.text;
                                 final firstName = _nameController.text;
                                 final lastName = _nameController.text;
                                 final cpf = _cpfController.text;
                                 final birthdate = _dateController.text;
+                                final phone = _phoneController.text;
                                 final iduff = _iduffController.text;
                                 final password = _password1Controller.text;
                                 try {
-                                  final user =
-                                      await authService.createUser(email, firstName, lastName,cpf,birthdate, iduff, password);
+                                  final user = await authService.createUser(email, firstName, lastName,cpf,birthdate,phone, iduff, password);
                                   print(user);
                                 } catch (error) {
                                   print(error);
