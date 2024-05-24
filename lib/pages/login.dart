@@ -101,6 +101,7 @@ class _LoginState extends State<Login> {
                                   TextButton(
                                     onPressed: () async {
                                       try {
+                                        print (await authService.getUser());
                                       } catch (error) {
                                         print(error.toString());
                                       }
@@ -130,16 +131,16 @@ class _LoginState extends State<Login> {
                                         username, password);
                                     await storage.write(
                                         key: "token_bearer",
-                                        value: user["access_token"]);
-                                        final isLogged = await storage.read(
-                                            key: "token_bearer");
-                                        isLogged != null
-                                            ? Navigator.of(context).pushNamed(
-                                                '/Test',
-                                              )
-                                            : Navigator.of(context).pushNamed(
-                                                '/Login',
-                                              );
+                                        value: "Bearer "+ user['access_token']);
+                                    final isLogged =
+                                        await storage.read(key: "token_bearer");
+                                    isLogged != null
+                                        ? Navigator.of(context).pushNamed(
+                                            '/Login',
+                                          )
+                                        : Navigator.of(context).pushNamed(
+                                            '/Login',
+                                          );
                                   } catch (error) {
                                     print(error.toString());
                                   }

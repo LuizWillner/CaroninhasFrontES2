@@ -55,7 +55,7 @@ class ApiService {
     final token = await _storage.read(key: "token_bearer") ??  '';
 
     final response = await http.get(url, headers: <String, String>{'Content-Type': 'application/json',
-                                  'Authorization': token});
+                                  'Authorization':token});
 
     print(json.decode(response.body));
     if (response.statusCode >= 200 && response.statusCode < 300) {
