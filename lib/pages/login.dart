@@ -108,7 +108,11 @@ class _LoginState extends State<Login> {
                                   ),
                                   backgroundColor: const Color(0xFF00AFF8),
                                 ),
-                                onPressed: null,
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                    '/Pedir_carona',
+                                  );
+                                },
                                 child: const Text(
                                   'Login',
                                   style: TextStyle(
