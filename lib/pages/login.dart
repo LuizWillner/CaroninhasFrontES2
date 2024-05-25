@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:app_uff_caronas/services/service_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -9,6 +12,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final storage = FlutterSecureStorage();
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthService authService = AuthService(apiService: ApiService());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,11 +58,12 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
                               child: TextField(
-                                decoration: InputDecoration(
-                                  labelText: 'Digite o CPF',
+                                controller: _usernameController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Digite seu email',
                                   labelStyle:
                                       TextStyle(color: Color(0xFF0E4B7C)),
                                   border: UnderlineInputBorder(
@@ -71,9 +81,10 @@ class _LoginState extends State<Login> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  const TextField(
+                                  TextField(
+                                    controller: _passwordController,
                                     obscureText: true,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       labelText: 'Digite a senha',
                                       labelStyle:
                                           TextStyle(color: Color(0xFF0E4B7C)),
@@ -88,8 +99,12 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () {
-                                      print("esqueceu rapaz?");
+                                    onPressed: () async {
+                                      try {
+                                        print (await authService.getUser());
+                                      } catch (error) {
+                                        print(error.toString());
+                                      }
                                     },
                                     child: const Text("Esqueceu sua senha?"),
                                   )
@@ -108,10 +123,27 @@ class _LoginState extends State<Login> {
                                   ),
                                   backgroundColor: const Color(0xFF00AFF8),
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                    '/Pedir_carona',
-                                  );
+                                onPressed: () async {
+                                  final username = _usernameController.text;
+                                  final password = _passwordController.text;
+                                  try {
+                                    final user = await authService.login(
+                                        username, password);
+                                    await storage.write(
+                                        key: "token_bearer",
+                                        value: "Bearer "+ user['access_token']);
+                                    final isLogged =
+                                        await storage.read(key: "token_bearer");
+                                    isLogged != null
+                                        ? Navigator.of(context).pushNamed(
+                                            '/Login',
+                                          )
+                                        : Navigator.of(context).pushNamed(
+                                            '/Login',
+                                          );
+                                  } catch (error) {
+                                    print(error.toString());
+                                  }
                                 },
                                 child: const Text(
                                   'Login',
