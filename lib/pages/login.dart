@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
                                   TextButton(
                                     onPressed: () async {
                                       try {
-                                        print (await authService.getUser());
+                                        print(await authService.getUser());
                                       } catch (error) {
                                         print(error.toString());
                                       }
@@ -124,9 +124,13 @@ class _LoginState extends State<Login> {
                                   backgroundColor: const Color(0xFF00AFF8),
                                 ),
                                 onPressed: () async {
+                                  // Navigator.of(context).pushNamed(
+                                  //   '/Pedir_carona',
+                                  // );
                                   final username = _usernameController.text;
                                   final password = _passwordController.text;
                                   try {
+                                    // TODO: mostrar loading no botão
                                     final user = await authService.login(
                                         username, password);
                                     await storage.write(
@@ -136,13 +140,13 @@ class _LoginState extends State<Login> {
                                         await storage.read(key: "token_bearer");
                                     isLogged != null
                                         ? Navigator.of(context).pushNamed(
-                                            '/Login',
+                                            '/Pedir_carona',
                                           )
                                         : Navigator.of(context).pushNamed(
                                             '/Login',
                                           );
                                   } catch (error) {
-                                    print(error.toString());
+                                    print(error.toString()); // TODO: acusar erro na tela
                                   }
                                 },
                                 child: const Text(

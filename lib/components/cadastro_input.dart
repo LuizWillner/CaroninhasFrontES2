@@ -39,6 +39,7 @@ class CadastroInput extends StatelessWidget {
               controller: controller,
               keyboardType: keyboardType,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero,
                 labelText: placeholderText,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 labelStyle: const TextStyle(color: Color(0xFF0E4B7C)),
@@ -60,6 +61,7 @@ class FormInput extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final IconData fieldIcon;
+  static const darkBlueColor = Color(0xFF0E4B7C);
 
   const FormInput(
       {Key? key,
@@ -81,18 +83,20 @@ class FormInput extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    fieldIcon,
-                    size: 20.0,
-                  ),
                   SizedBox(
                     height: 42,
-                    width: 200,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     child: TextField(
                       obscureText: isObscured,
                       controller: controller,
                       keyboardType: keyboardType,
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        prefixIcon: Icon(
+                          fieldIcon,
+                          size: 20.0,
+                          color: darkBlueColor,
+                        ),
                         labelText: placeholderText,
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         labelStyle: const TextStyle(color: Color(0xFF0E4B7C)),

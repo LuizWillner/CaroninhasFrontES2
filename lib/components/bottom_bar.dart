@@ -19,12 +19,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
           case 0:
             if (currentIndex != 0) {
               Navigator.of(context).pushNamed('/Pedir_carona');
-            }            
+            }
             break;
           case 1:
             if (currentIndex != 1) {
               Navigator.of(context).pushNamed('/Criar_carona');
-            } 
+            }
             break;
           case 2:
             if (currentIndex != 2) {
@@ -33,13 +33,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
             break;
           case 3:
             if (currentIndex != 3) {
-              Navigator.of(context).pushNamed('/Home');
-            } 
+              null;
+            }
             break;
           case 4:
             if (currentIndex != 4) {
               Navigator.of(context).pushNamed('/Perfil');
-            } 
+            }
             break;
           default:
             break;
