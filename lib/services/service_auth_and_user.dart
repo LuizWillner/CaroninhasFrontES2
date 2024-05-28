@@ -38,8 +38,33 @@ class AuthService {
     return response;
   }
 
+  Future<Map<String, dynamic>> createCar(
+      String marca,
+      String modelo,
+      String cor,
+      String placa,
+     ) async {
+    final response = await apiService.postApi('veiculo/me?tipo=CARRO&marca=$marca&modelo=$modelo&cor=$cor&placa=$placa', {
+    });
+    return response;
+  }
+
+  Future<Map<String, dynamic>> becomeMotorist(
+      String cnh,
+     ) async {
+    final response = await apiService.postApi("users/me/motorista?num_cnh=$cnh", {
+    });
+    return response;
+  }
+
   Future<Map<String, dynamic>> getUser() async {
     final response = await apiService.getApi("users/me");
     return response;
   }
+
+  Future<Map<String, dynamic>> getAllCars() async {
+    final response = await apiService.getApi("veiculo/me/all");
+    return response;
+  }
+
 }

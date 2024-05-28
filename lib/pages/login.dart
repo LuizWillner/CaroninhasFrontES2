@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
-import 'package:app_uff_caronas/services/service_auth.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
