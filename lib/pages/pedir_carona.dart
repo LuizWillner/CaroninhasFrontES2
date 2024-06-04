@@ -82,9 +82,27 @@ class _PedirCaronaState extends State<PedirCarona>
                             color: Colors.white),
                         child: TabBar(
                           controller: _tabController,
-                          tabs: const [
-                            Tab(child: Text('Pedir carona')),
-                            Tab(child: Text('Encontrar carona'))
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                50), // Ajusta o raio de borda conforme necessário
+                            color:
+                                Color(0xFF00AFF8), // Cor de fundo da aba ativa
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
+                          tabs: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Tab(
+                                child: Text('Pedir carona'),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Tab(
+                                child: Text('Encontrar carona'),
+                              ),
+                            ),
                           ],
                         )),
                     Container(
