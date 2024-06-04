@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
+import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class CriarCarona extends StatefulWidget {
   const CriarCarona({super.key});
@@ -140,7 +141,8 @@ class _CriarCaronaState extends State<CriarCarona>
                                           await showTimePicker(
                                               context: context,
                                               initialTime: _selectedTime,
-                                              initialEntryMode: TimePickerEntryMode.dial);
+                                              initialEntryMode:
+                                                  TimePickerEntryMode.dial);
                                       if (timeOfDay != null) {
                                         setState(() {
                                           _selectedTime = timeOfDay;
@@ -176,7 +178,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                       ),
                                       backgroundColor: clearBlueColor,
                                     ),
-                                    onPressed: null,
+                                    onPressed: () => _showMyDialog(context),
                                     child: const Text(
                                       'Oferecer',
                                       style: TextStyle(
@@ -197,5 +199,51 @@ class _CriarCaronaState extends State<CriarCarona>
           ),
         ),
         bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 1));
+  }
+
+  Future<void> _showMyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: 'Sucesso',
+          titleStyle: TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+          content: 'Carona criada com sucesso (Motorista)',
+          contentStyle: TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
+                style: TextButton.styleFrom(
+                    backgroundColor: Color(0xFF00AFF8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    )),
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () {
+                  //TEM QUE ADICIONAR NO BD//
+                  Navigator.of(context).pop();
+                },
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }

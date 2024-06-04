@@ -193,7 +193,7 @@ class _PedirCaronaState extends State<PedirCarona>
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Pedido de Carona cadastrado com sucesso',
+          content: 'Pedido de Carona cadastrado com sucesso (Passageiro)',
           contentStyle: TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,
