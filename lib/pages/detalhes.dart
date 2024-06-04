@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/path_details.dart';
 
 class DetalhesCarona extends StatefulWidget {
-  const DetalhesCarona({Key? key}) : super(key: key);
+  const DetalhesCarona({super.key});
 
   @override
   State<DetalhesCarona> createState() => _DetalhesCaronaState();
@@ -47,7 +46,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                             const BorderRadius.all(Radius.circular(20)),
                         color: Colors.white),
                     padding: const EdgeInsets.all(20.0),
-                    child: Text("Snapshot da viagem")),
+                    child: const Text("Snapshot da viagem")),
                 Container(
                   width: 300.0,
                   padding: const EdgeInsets.all(20.0),
@@ -61,7 +60,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                           Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: CustomPaint(
-                                size: Size(2, 3 * 30.0),
+                                size: const Size(2, 3 * 30.0),
                                 painter: AddressesPainter([
                                   "Rua Nóbrega",
                                   "UFF - Bloco D (Faculdade de Engenharia)",
@@ -99,30 +98,30 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                           )
                         ],
                       ),
-                      Text("4 de maio",
-                          style: const TextStyle(
+                      const Text("4 de maio",
+                          style: TextStyle(
                               fontSize: 16.0, color: Colors.grey)),
-                      Text("14:00",
-                          style: const TextStyle(
+                      const Text("14:00",
+                          style: TextStyle(
                               fontSize: 16.0, color: Colors.grey)),
-                      Text("R\$ 22,90",
-                          style: const TextStyle(
+                      const Text("R\$ 22,90",
+                          style: TextStyle(
                               fontSize: 16.0, color: Colors.grey)),
                       const SizedBox(height: 18.0),
-                      Text("Tipo",
-                          style: const TextStyle(
+                      const Text("Tipo",
+                          style: TextStyle(
                               fontSize: 16.0, color: Colors.grey)),
-                      Text("Passageiro",
-                          style: const TextStyle(
+                      const Text("Passageiro",
+                          style: TextStyle(
                               fontSize: 18.0,
                               color: darkBlueColor,
                               fontWeight: FontWeight.bold)),
                       const SizedBox(height: 18.0),
-                      Text("Integrantes",
-                          style: const TextStyle(
+                      const Text("Integrantes",
+                          style: TextStyle(
                               fontSize: 16.0, color: Colors.grey)),
-                      Text("Lista da tropa",
-                          style: const TextStyle(
+                      const Text("Lista da tropa",
+                          style: TextStyle(
                               fontSize: 18.0,
                               color: darkBlueColor,
                               fontWeight: FontWeight.bold)),

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ApiService {
   ApiService();
 
-  final _storage = FlutterSecureStorage(); 
+  final _storage = const FlutterSecureStorage(); 
 
 
   Future<Map<String, dynamic>> postUrlencoded(

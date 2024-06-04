@@ -1,8 +1,4 @@
-import 'package:app_uff_caronas/config.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
-import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class AuthService {
   final ApiService apiService;

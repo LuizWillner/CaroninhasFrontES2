@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/home_background.png'),
             fit: BoxFit.cover,
@@ -46,12 +46,12 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(2),
                         child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide(
+                              side: const BorderSide(
                                 width: 1.0,
                                 color: Color(0xFF00AFF8),
                                 style: BorderStyle.solid,
                               ),
-                              backgroundColor: Color(0xFF00AFF8),
+                              backgroundColor: const Color(0xFF00AFF8),
                             ),
                             onPressed: (() {
                               Navigator.of(context).pushNamed(
@@ -69,12 +69,12 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(2),
                         child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide(
+                              side: const BorderSide(
                                 width: 1.0,
                                 color: Color(0xFFFAFAFA),
                                 style: BorderStyle.solid,
                               ),
-                              backgroundColor: Color(0xFFFAFAFA),
+                              backgroundColor: const Color(0xFFFAFAFA),
                             ),
                             onPressed: (() {
                               Navigator.of(context).pushNamed(

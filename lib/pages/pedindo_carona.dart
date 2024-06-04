@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/path_details.dart';
 
 class PedindoCarona extends StatefulWidget {
-  const PedindoCarona({Key? key}) : super(key: key);
+  const PedindoCarona({super.key});
 
   @override
   State<PedindoCarona> createState() => _PedindoCaronaState();

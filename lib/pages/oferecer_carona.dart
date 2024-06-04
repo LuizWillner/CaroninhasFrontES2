@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 
 class CriarCarona extends StatefulWidget {
-  const CriarCarona({Key? key}) : super(key: key);
+  const CriarCarona({super.key});
 
   @override
   State<CriarCarona> createState() => _CriarCaronaState();
@@ -15,12 +14,12 @@ class _CriarCaronaState extends State<CriarCarona>
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
 
-  TextEditingController _fromController = TextEditingController();
-  TextEditingController _toController = TextEditingController();
+  final TextEditingController _fromController = TextEditingController();
+  final TextEditingController _toController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  TextEditingController _passagersController = TextEditingController();
-  TextEditingController _priceController = TextEditingController();
+  final TextEditingController _passagersController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
   late TabController _tabController;
 
@@ -83,7 +82,7 @@ class _CriarCaronaState extends State<CriarCarona>
                             color: Colors.white),
                         child: TabBar(
                           controller: _tabController,
-                          tabs: [
+                          tabs: const [
                             Tab(child: Text('Criar carona')),
                             Tab(child: Text('Aceitar carona'))
                           ],
@@ -188,7 +187,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Text("lista de caronas")
+                            const Text("lista de caronas")
                           ],
                         ))
                   ],
