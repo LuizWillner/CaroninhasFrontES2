@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
+import 'package:app_uff_caronas/services/api_services.dart';
 
 class CriarCarona extends StatefulWidget {
   const CriarCarona({Key? key}) : super(key: key);
@@ -19,15 +22,63 @@ class _CriarCaronaState extends State<CriarCarona>
   TextEditingController _toController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  TextEditingController _passagersController = TextEditingController();
+  TextEditingController _vagasController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
 
   late TabController _tabController;
+  final AuthService authService = AuthService(apiService: ApiService());
+  final storage = FlutterSecureStorage();
+  int? selectedVehicleId;
+  var vehicles = [];
+  void _fetchDriverData() async {
+    try {
+      final vehiclesResponse = (await ApiService().getApi('veiculo/me/all'));
+      setState(() {
+        vehicles = vehiclesResponse["data"];
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  late List<dynamic> mockVehicles = [
+    {
+      "placa": "DOG4444",
+      "created_at": "2024-05-26T22:42:00.693969",
+      "veiculo": {
+        "tipo": "CARRO",
+        "marca": "MITSUBISHI",
+        "modelo": "LANCER",
+        "cor": "BRANCO",
+        "id": 2,
+        "created_at": "2024-05-26T22:42:00.653325"
+      },
+      "id": 2,
+      "fk_motorista": 22,
+      "fk_veiculo": 2
+    },
+    {
+      "placa": "penisdenis",
+      "created_at": "2024-05-26T22:42:00.693969",
+      "veiculo": {
+        "tipo": "CARRO",
+        "marca": "MITSUBISHI",
+        "modelo": "LANCER",
+        "cor": "BRANCO",
+        "id": 4,
+        "created_at": "2024-05-26T22:42:00.653325"
+      },
+      "id": 4,
+      "fk_motorista": 22,
+      "fk_veiculo": 4
+    },
+  ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchDriverData();
   }
 
   @override
@@ -45,7 +96,7 @@ class _CriarCaronaState extends State<CriarCarona>
             child: Stack(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * (4 / 10),
+                  height: MediaQuery.of(context).size.height * (4.5 / 10),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/login_background.png'),
@@ -141,7 +192,8 @@ class _CriarCaronaState extends State<CriarCarona>
                                           await showTimePicker(
                                               context: context,
                                               initialTime: _selectedTime,
-                                              initialEntryMode: TimePickerEntryMode.dial);
+                                              initialEntryMode:
+                                                  TimePickerEntryMode.dial);
                                       if (timeOfDay != null) {
                                         setState(() {
                                           _selectedTime = timeOfDay;
@@ -151,10 +203,10 @@ class _CriarCaronaState extends State<CriarCarona>
                                     child: Text(
                                         "${_selectedTime.hour}:${_selectedTime.minute}")),
                                 FormInput(
-                                  controller: _passagersController,
+                                  controller: _vagasController,
                                   isObscured: false,
                                   fieldIcon: Icons.person,
-                                  placeholderText: "Passageiros",
+                                  placeholderText: "Vagas",
                                   keyboardType: TextInputType.text,
                                 ),
                                 FormInput(
@@ -164,6 +216,39 @@ class _CriarCaronaState extends State<CriarCarona>
                                   fieldIcon: Icons.price_change,
                                   keyboardType: TextInputType.text,
                                 ),
+                                Padding(
+                                    padding: const EdgeInsets.fromLTRB(32, 0, 32, 16),
+                                    child: Center(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 42,
+                                                width: MediaQuery.of(context).size.width * 0.65,
+                                                child: DropdownButton<int>(
+                                                value: selectedVehicleId,
+                                                hint: Text('Select a vehicle'),
+                                                items: vehicles.map((vehicle) {
+                                                  return DropdownMenuItem<int>(
+                                                    value: vehicle['id'],
+                                                    child: Text(vehicle['placa']),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (int? newValue) {
+                                                  setState(() {
+                                                    selectedVehicleId = newValue;
+                                                  });
+                                                },
+                                              ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    )),
                                 const SizedBox(height: 16.0),
                                 Padding(
                                   padding:
@@ -177,7 +262,35 @@ class _CriarCaronaState extends State<CriarCarona>
                                       ),
                                       backgroundColor: clearBlueColor,
                                     ),
-                                    onPressed: null,
+                                    onPressed: () async {
+                                      print(await storage.read(
+                                          key: 'login_token'));
+                                      final veiculoId = selectedVehicleId;
+                                      final horaDePartida = _selectedDate.add(
+                                          Duration(
+                                              hours: _selectedTime.hour,
+                                              minutes: _selectedTime.minute));
+                                      final precoCarona = _priceController.text;
+                                      final vagas = _vagasController.text;
+                                      final localPartida = _fromController.text;
+                                      final localDestino = _toController.text;
+
+                                      try {
+                                        final user_status =
+                                            await authService.createRide(
+                                                veiculoId,
+                                                horaDePartida,
+                                                precoCarona,
+                                                vagas,
+                                                localPartida,
+                                                localDestino);
+                                        print(user_status);
+                                        await storage.write(
+                                            key: "isDriver", value: "true");
+                                      } catch (error) {
+                                        print(error);
+                                      }
+                                    },
                                     child: const Text(
                                       'Oferecer',
                                       style: TextStyle(

@@ -39,21 +39,36 @@ class AuthService {
   }
 
   Future<Map<String, dynamic>> createCar(
-      String marca,
-      String modelo,
-      String cor,
-      String placa,
-     ) async {
-    final response = await apiService.postApi('veiculo/me?tipo=CARRO&marca=$marca&modelo=$modelo&cor=$cor&placa=$placa', {
-    });
+    String marca,
+    String modelo,
+    String cor,
+    String placa,
+  ) async {
+    final response = await apiService.postApi(
+        'veiculo/me?tipo=CARRO&marca=$marca&modelo=$modelo&cor=$cor&placa=$placa',
+        {});
+    return response;
+  }
+
+  Future<Map<String, dynamic>> createRide(
+      int? veiculoId,
+      DateTime horaDePartida,
+      String precoCarona,
+      String vagas,
+      String localPartida,
+      String localDestino) async {
+    final stringHoraDePartida = horaDePartida.toString().replaceAll(":", "%3A");
+    final response = await apiService.postApi(
+        'carona?veiculo_id=$veiculoId&hora_de_partida=$stringHoraDePartida&preco_carona=$precoCarona&vagas=$vagas',
+        {"local_partida": localPartida, "local_destino": localDestino});
     return response;
   }
 
   Future<Map<String, dynamic>> becomeMotorist(
-      String cnh,
-     ) async {
-    final response = await apiService.postApi("users/me/motorista?num_cnh=$cnh", {
-    });
+    String cnh,
+  ) async {
+    final response =
+        await apiService.postApi("users/me/motorista?num_cnh=$cnh", {});
     return response;
   }
 
@@ -66,5 +81,4 @@ class AuthService {
     final response = await apiService.getApi("veiculo/me/all");
     return response;
   }
-
 }
