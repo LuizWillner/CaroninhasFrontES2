@@ -175,6 +175,6 @@ class _PedirCaronaState extends State<PedirCarona>
             ),
           ),
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 0));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0));
   }
 }

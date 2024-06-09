@@ -192,6 +192,9 @@ class _CadastroState extends State<Cadastro> {
                                 try {
                                   final user = await authService.createUser(email, firstName, lastName,cpf,birthdate,phone, iduff, password);
                                   print(user);
+                                   Navigator.of(context).pushNamed(
+                                        '/Login',
+                                      ); //TODO notificação de sucesso/falha
                                 } catch (error) {
                                   print(error);
                                 }

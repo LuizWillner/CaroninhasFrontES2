@@ -134,6 +134,6 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
             ),
           ),
         )),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2));
   }
 }

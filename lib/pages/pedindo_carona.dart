@@ -127,6 +127,6 @@ class _PedindoCaronaState extends State<PedindoCarona> {
             ),
           ),
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 0));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0));
   }
 }

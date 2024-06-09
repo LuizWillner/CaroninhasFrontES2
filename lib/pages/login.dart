@@ -131,22 +131,35 @@ class _LoginState extends State<Login> {
                                   final password = _passwordController.text;
                                   try {
                                     // TODO: mostrar loading no botão
-                                    final user = await authService.login(
+                                    var isDriver;
+                                    final token = await authService.login(
                                         username, password);
                                     await storage.write(
                                         key: "token_bearer",
-                                        value: "Bearer "+ user['access_token']);
+                                        value:
+                                            "Bearer " + token['access_token']);
+                                    final user = await authService.getUser();
+                                    if (user['motorista'] == null) {
+                                      isDriver = "false";
+                                    } else {
+                                      isDriver = "true";
+                                    }
+
+                                    await storage.write(
+                                        key: "isDriver", value: isDriver);
+
                                     final isLogged =
                                         await storage.read(key: "token_bearer");
                                     isLogged != null
                                         ? Navigator.of(context).pushNamed(
                                             '/Pedir_carona',
-                                          )
+                                          ) //TODO Loading e mensagem de falha de login
                                         : Navigator.of(context).pushNamed(
                                             '/Login',
                                           );
                                   } catch (error) {
-                                    print(error.toString()); // TODO: acusar erro na tela
+                                    print(error
+                                        .toString()); // TODO: acusar erro na tela
                                   }
                                 },
                                 child: const Text(

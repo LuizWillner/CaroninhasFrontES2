@@ -197,6 +197,6 @@ class _CriarCaronaState extends State<CriarCarona>
             ),
           ),
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 1));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1));
   }
 }

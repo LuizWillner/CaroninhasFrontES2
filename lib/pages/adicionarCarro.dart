@@ -177,6 +177,8 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                               final user_status =
                                   await authService.becomeMotorist(cnh);
                               print(user_status);
+                              await storage.write(
+                                  key: "isDriver", value: "true");
                             } catch (error) {
                               print(error);
                             }
@@ -200,6 +202,6 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                         ),
                       ],
                     )))),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 4));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4));
   }
 }
