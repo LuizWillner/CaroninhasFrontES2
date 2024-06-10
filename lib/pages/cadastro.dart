@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
-import 'package:app_uff_caronas/services/service_auth.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Cadastro extends StatefulWidget {
@@ -192,6 +192,9 @@ class _CadastroState extends State<Cadastro> {
                                 try {
                                   final user = await authService.createUser(email, firstName, lastName,cpf,birthdate,phone, iduff, password);
                                   print(user);
+                                   Navigator.of(context).pushNamed(
+                                        '/Login',
+                                      ); //TODO notificação de sucesso/falha
                                 } catch (error) {
                                   print(error);
                                 }

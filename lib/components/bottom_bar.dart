@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const Color clearBlueColor = Color(0xFF00AFF8);
 const Color darkBlueColor = Color(0xFF0E4B7C);
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
+  final storage = FlutterSecureStorage();
 
-  const CustomBottomNavigationBar({
+  CustomBottomNavigationBar({
     Key? key,
     required this.currentIndex,
   }) : super(key: key);
@@ -14,7 +16,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      onTap: (int index) {
+      onTap: (int index) async {
+        final _isDriver = await storage.read(key: "isDriver");
         switch (index) {
           case 0:
             if (currentIndex != 0) {
@@ -22,7 +25,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             }
             break;
           case 1:
-            if (currentIndex != 1) {
+            if (currentIndex != 1 && (_isDriver == "true")) {
               Navigator.of(context).pushNamed('/Criar_carona');
             }
             break;

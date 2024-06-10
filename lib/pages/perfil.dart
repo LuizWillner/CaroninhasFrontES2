@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:app_uff_caronas/services/service_auth.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 
 class Perfil extends StatefulWidget {
@@ -21,7 +21,8 @@ class _PerfilState extends State<Perfil> {
   final storage = FlutterSecureStorage();
   var _loading = true;
   dynamic user;
-  late List<dynamic> vehicles = [
+  var vehicles = [];
+  late List<dynamic> mock_vehicles = [
     {
       "placa": "DOG4444",
       "created_at": "2024-05-26T22:42:00.693969",
@@ -36,7 +37,23 @@ class _PerfilState extends State<Perfil> {
       "id": 2,
       "fk_motorista": 22,
       "fk_veiculo": 2
-    }
+    },
+    {
+      "placa": "penisdenis",
+      "created_at": "2024-05-26T22:42:00.693969",
+      "veiculo": {
+        "tipo": "CARRO",
+        "marca": "MITSUBISHI",
+        "modelo": "LANCER",
+        "cor": "BRANCO",
+        "id": 4,
+        "created_at": "2024-05-26T22:42:00.653325"
+      },
+      "id": 4,
+      "fk_motorista": 22,
+      "fk_veiculo": 4
+    },
+    
   ];
 
   void _fetchUserData() async {
@@ -46,7 +63,7 @@ class _PerfilState extends State<Perfil> {
         setState(() {
           _loading = false;
         });
-        // _fetchDriverData();
+        _fetchDriverData();
       } else {
         setState(() {
           _loading = false;
@@ -59,14 +76,16 @@ class _PerfilState extends State<Perfil> {
 
   void _fetchDriverData() async {
     try {
-      vehicles = (await ApiService().getApi('veiculo/me/all')) as List;
+      final vehiclesResponse = (await ApiService().getApi('veiculo/me/all'));
       setState(() {
-        _loading = false;
+        vehicles = vehiclesResponse["data"];
       });
     } catch (error) {
       print(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
@@ -195,16 +214,69 @@ class _PerfilState extends State<Perfil> {
                           ),
                           const SizedBox(height: 32.0),
                           const Text(
-                            'Área do Motorista',
+                            'Carros do Motorista',
                             style: TextStyle(
                                 fontSize: 28.0,
                                 color: darkBlueColor,
                                 fontWeight: FontWeight.bold,
                                 height: 0.5),
                           ),
+                          Padding(padding: EdgeInsets.all(16),
+                          child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(
+                                          width: 1.0,
+                                          color: Color(0xFF00AFF8),
+                                          style: BorderStyle.solid,
+                                        ),
+                                        backgroundColor:
+                                            const Color(0xFF00AFF8),
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.of(context).pushNamed(
+                                          '/Adicionar_carro',
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Adicionar Carro',
+                                        style: TextStyle(
+                                            color: Color(0xFFFAFAFA),
+                                            fontSize: 24),
+                                      ),
+                                    ) ,
+                          ),
                           user['motorista'] == null
-                              ? Text(
-                                  "Tem um carro? cadastre-se como motorista!")
+                              ? Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                                      child: Text(
+                                          "No momento você não tem nenhum carro. Cadastre seu e torne-se um motorista!"),
+                                    ),
+                                    OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(
+                                          width: 1.0,
+                                          color: Color(0xFF00AFF8),
+                                          style: BorderStyle.solid,
+                                        ),
+                                        backgroundColor:
+                                            const Color(0xFF00AFF8),
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.of(context).pushNamed(
+                                          '/Adicionar_carro',
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Adicionar Carro',
+                                        style: TextStyle(
+                                            color: Color(0xFFFAFAFA),
+                                            fontSize: 24),
+                                      ),
+                                    )
+                                  ],
+                                )
                               : vehicles == []
                                   ? Text("Cadastre um novo carro!")
                                   : Row(
@@ -227,14 +299,16 @@ class _PerfilState extends State<Perfil> {
                                                             .start,
                                                     children: [
                                                       Padding(
-                                                        padding: EdgeInsets.fromLTRB(
-                                                            10, 10, 10, 5),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Text(
+                                                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                                            child: Text(
                                                               'Carro atual',
                                                               style: TextStyle(
                                                                   fontSize:
@@ -242,7 +316,7 @@ class _PerfilState extends State<Perfil> {
                                                                   color:
                                                                       darkBlueColor,
                                                                   height: 0.5),
-                                                            ),
+                                                            ) ,),
                                                             Text(
                                                               '${veiculoDetails['marca']} ${veiculoDetails['modelo']}',
                                                               style: TextStyle(
@@ -259,14 +333,16 @@ class _PerfilState extends State<Perfil> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: EdgeInsets.fromLTRB(
-                                                            10, 10, 10, 5),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Text(
+                                                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                                            child: Text(
                                                               'Placa',
                                                               style: TextStyle(
                                                                   fontSize:
@@ -274,7 +350,7 @@ class _PerfilState extends State<Perfil> {
                                                                   color:
                                                                       darkBlueColor,
                                                                   height: 0.5),
-                                                            ),
+                                                            ),),
                                                             Text(
                                                               vehicle['placa'],
                                                               style: TextStyle(
@@ -291,14 +367,16 @@ class _PerfilState extends State<Perfil> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: EdgeInsets.fromLTRB(
-                                                            10, 10, 10, 5),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Text(
+                                                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                                            child: Text(
                                                               'Cor',
                                                               style: TextStyle(
                                                                   fontSize:
@@ -306,7 +384,8 @@ class _PerfilState extends State<Perfil> {
                                                                   color:
                                                                       darkBlueColor,
                                                                   height: 0.5),
-                                                            ),
+                                                            ), ),
+                                                            
                                                             Text(
                                                               veiculoDetails[
                                                                   'cor'],
@@ -434,6 +513,6 @@ class _PerfilState extends State<Perfil> {
                   ),
                 )),
               ),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 4));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4));
   }
 }
