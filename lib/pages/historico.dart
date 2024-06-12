@@ -109,19 +109,10 @@ class _HistoricoState extends State<Historico>
             color: Colors.white,
             child: Stack(
               children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * (4.5 / 10),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/login_background.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
                 Column(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(top: 40.0),
+                      padding: EdgeInsets.only(top: 0.0),
                       child: Center(
                         child: Text(
                           "Dê uma caroninha pra que ta precisando!", // TODO: mudar cor do fundo
@@ -135,10 +126,7 @@ class _HistoricoState extends State<Historico>
                       ),
                     ),
                     Container(
-                        margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.03,
-                            left: 30.0,
-                            right: 30.0),
+                        margin: EdgeInsets.only(left: 30.0, right: 30.0),
                         decoration: BoxDecoration(
                             border: Border.all(
                               color: clearBlueColor,
