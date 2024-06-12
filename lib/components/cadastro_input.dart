@@ -8,13 +8,12 @@ class CadastroInput extends StatelessWidget {
   final TextInputType keyboardType;
 
   const CadastroInput(
-      {Key? key,
+      {super.key,
       required this.labelText,
       required this.placeholderText,
       required this.isObscured,
       required this.controller,
-      required this.keyboardType})
-      : super(key: key);
+      required this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +63,12 @@ class FormInput extends StatelessWidget {
   static const darkBlueColor = Color(0xFF0E4B7C);
 
   const FormInput(
-      {Key? key,
+      {super.key,
       required this.fieldIcon,
       required this.placeholderText,
       required this.isObscured,
       required this.controller,
-      required this.keyboardType})
-      : super(key: key);
+      required this.keyboardType});
 
   @override
   Widget build(BuildContext context) {

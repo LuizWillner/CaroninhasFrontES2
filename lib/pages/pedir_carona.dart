@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
+import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class PedirCarona extends StatefulWidget {
   const PedirCarona({super.key});
@@ -70,7 +70,9 @@ class _PedirCaronaState extends State<PedirCarona>
                     ),
                     Container(
                         margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.03, left: 30.0, right: 30.0),
+                            top: MediaQuery.of(context).size.height * 0.03,
+                            left: 30.0,
+                            right: 30.0),
                         decoration: BoxDecoration(
                             border: Border.all(
                               color: clearBlueColor,
@@ -80,15 +82,32 @@ class _PedirCaronaState extends State<PedirCarona>
                             color: Colors.white),
                         child: TabBar(
                           controller: _tabController,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                50), // Ajusta o raio de borda conforme necessário
+                            color:
+                                const Color(0xFF00AFF8), // Cor de fundo da aba ativa
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
                           tabs: [
-                            Tab(child: Text('Pedir carona')),
-                            Tab(child: Text('Encontrar carona'))
+                            Container(
+                              alignment: Alignment.center,
+                              child: const Tab(
+                                child: Text('Pedir carona'),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              child: const Tab(
+                                child: Text('Encontrar carona'),
+                              ),
+                            ),
                           ],
                         )),
                     Container(
-                      height: 400,
-                        margin: const EdgeInsets.only(
-                            left: 30.0, right: 30.0),
+                        height: 400,
+                        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
                         decoration: BoxDecoration(
                             border: Border.all(
                               color: clearBlueColor,
@@ -152,10 +171,11 @@ class _PedirCaronaState extends State<PedirCarona>
                                       ),
                                       backgroundColor: clearBlueColor,
                                     ),
-                                    onPressed: () => {
-                                      Navigator.of(context)
-                                          .pushNamed('/Pedindo_carona')
-                                    },
+                                    onPressed: () =>
+                                        // Navigator.of(context)
+                                        //     .pushNamed('/Pedindo_carona')
+                                        _showMyDialog(context),
+                                    // _showConfirmationDialog(context),
                                     child: const Text(
                                       'Procurar',
                                       style: TextStyle(
@@ -166,7 +186,7 @@ class _PedirCaronaState extends State<PedirCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Text("lista de caronas")
+                            const Text("lista de caronas")
                           ],
                         ))
                   ],
@@ -177,4 +197,98 @@ class _PedirCaronaState extends State<PedirCarona>
         ),
         bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0));
   }
+
+  Future<void> _showMyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: 'Sucesso',
+          titleStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+          content: 'Pedido de Carona cadastrado com sucesso (Passageiro)',
+          contentStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF00AFF8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    )),
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () {
+                  //TEM QUE ADICIONAR NO BD//
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+  // Future<void> _showConfirmationDialog(BuildContext context) async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('Confirmação'),
+  //         content: Text('Você deseja prosseguir?'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text('Cancelar'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop(); // Fecha o diálogo de confirmação
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text('Prosseguir'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop(); // Fecha o diálogo de confirmação
+  //               _showSuccessDialog(context); // Abre o diálogo de sucesso
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Future<void> _showSuccessDialog(BuildContext context) async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('Sucesso'),
+  //         content: Text('Adicionado com sucesso!'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text('OK'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop(); // Fecha o diálogo de sucesso
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

@@ -1,7 +1,5 @@
-import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
@@ -18,7 +16,7 @@ class _PerfilState extends State<Perfil> {
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
   final AuthService authService = AuthService(apiService: ApiService());
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   var _loading = true;
   dynamic user;
   var vehicles = [];
@@ -200,7 +198,7 @@ class _PerfilState extends State<Perfil> {
                                   const SizedBox(height: 8.0),
                                   const Text(
                                     // TODO: adicionar nota no modelo do banco
-                                    '4.8' + ' ⭐',
+                                    '4.8' ' ⭐',
                                     style: TextStyle(
                                         fontSize: 24.0,
                                         color: darkBlueColor,
@@ -278,7 +276,7 @@ class _PerfilState extends State<Perfil> {
                                   ],
                                 )
                               : vehicles == []
-                                  ? Text("Cadastre um novo carro!")
+                                  ? const Text("Cadastre um novo carro!")
                                   : Row(
                                       children: [
                                         Expanded(
@@ -319,7 +317,7 @@ class _PerfilState extends State<Perfil> {
                                                             ) ,),
                                                             Text(
                                                               '${veiculoDetails['marca']} ${veiculoDetails['modelo']}',
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                 fontSize: 20.0,
                                                                 color:
                                                                     darkBlueColor,
@@ -353,7 +351,7 @@ class _PerfilState extends State<Perfil> {
                                                             ),),
                                                             Text(
                                                               vehicle['placa'],
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                 fontSize: 24.0,
                                                                 color:
                                                                     darkBlueColor,
@@ -389,7 +387,7 @@ class _PerfilState extends State<Perfil> {
                                                             Text(
                                                               veiculoDetails[
                                                                   'cor'],
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                 fontSize: 18.0,
                                                                 color:
                                                                     darkBlueColor,

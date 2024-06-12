@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class CriarCarona extends StatefulWidget {
-  const CriarCarona({Key? key}) : super(key: key);
+  const CriarCarona({super.key});
 
   @override
   State<CriarCarona> createState() => _CriarCaronaState();
@@ -18,12 +18,13 @@ class _CriarCaronaState extends State<CriarCarona>
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
 
-  TextEditingController _fromController = TextEditingController();
-  TextEditingController _toController = TextEditingController();
+  final TextEditingController _fromController = TextEditingController();
+  final TextEditingController _toController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
   TextEditingController _vagasController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
+  TextEditingController _passagersController = TextEditingController();
 
   late TabController _tabController;
   final AuthService authService = AuthService(apiService: ApiService());
@@ -89,6 +90,8 @@ class _CriarCaronaState extends State<CriarCarona>
 
   @override
   Widget build(BuildContext context) {
+    // double tabWidth = ((MediaQuery.of(context).size.width + 120));
+
     return Scaffold(
         body: SingleChildScrollView(
           child: Container(
@@ -134,9 +137,29 @@ class _CriarCaronaState extends State<CriarCarona>
                             color: Colors.white),
                         child: TabBar(
                           controller: _tabController,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                50), // Ajusta o raio de borda conforme necessário
+                            color: const Color(
+                                0xFF00AFF8), // Cor de fundo da aba ativa
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
                           tabs: [
-                            Tab(child: Text('Criar carona')),
-                            Tab(child: Text('Aceitar carona'))
+                            Container(
+                              // width: tabWidth + 120,
+                              alignment: Alignment.center,
+                              child: const Tab(
+                                child: Text('Criar carona'),
+                              ),
+                            ),
+                            Container(
+                              // width: tabWidth,
+                              alignment: Alignment.center,
+                              child: const Tab(
+                                child: Text('Aceitar carona'),
+                              ),
+                            ),
                           ],
                         )),
                     Container(
@@ -217,32 +240,42 @@ class _CriarCaronaState extends State<CriarCarona>
                                   keyboardType: TextInputType.text,
                                 ),
                                 Padding(
-                                    padding: const EdgeInsets.fromLTRB(32, 0, 32, 16),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        32, 0, 32, 16),
                                     child: Center(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Row(
                                             children: [
                                               SizedBox(
                                                 height: 42,
-                                                width: MediaQuery.of(context).size.width * 0.65,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.65,
                                                 child: DropdownButton<int>(
-                                                value: selectedVehicleId,
-                                                hint: Text('Select a vehicle'),
-                                                items: vehicles.map((vehicle) {
-                                                  return DropdownMenuItem<int>(
-                                                    value: vehicle['id'],
-                                                    child: Text(vehicle['placa']),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (int? newValue) {
-                                                  setState(() {
-                                                    selectedVehicleId = newValue;
-                                                  });
-                                                },
-                                              ),
+                                                  value: selectedVehicleId,
+                                                  hint:
+                                                      Text('Select a vehicle'),
+                                                  items:
+                                                      vehicles.map((vehicle) {
+                                                    return DropdownMenuItem<
+                                                        int>(
+                                                      value: vehicle['id'],
+                                                      child: Text(
+                                                          vehicle['placa']),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (int? newValue) {
+                                                    setState(() {
+                                                      selectedVehicleId =
+                                                          newValue;
+                                                    });
+                                                  },
+                                                ),
                                               ),
                                             ],
                                           )
@@ -287,6 +320,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                         print(user_status);
                                         await storage.write(
                                             key: "isDriver", value: "true");
+                                        _showMyDialog(context);
                                       } catch (error) {
                                         print(error);
                                       }
@@ -301,7 +335,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Text("lista de caronas")
+                            const Text("lista de caronas")
                           ],
                         ))
                   ],
@@ -311,5 +345,51 @@ class _CriarCaronaState extends State<CriarCarona>
           ),
         ),
         bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1));
+  }
+
+  Future<void> _showMyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: 'Sucesso',
+          titleStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+          content: 'Carona criada com sucesso (Motorista)',
+          contentStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF00AFF8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    )),
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () {
+                  //TEM QUE ADICIONAR NO BD//
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }

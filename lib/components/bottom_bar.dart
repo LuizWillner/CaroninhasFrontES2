@@ -5,13 +5,13 @@ const Color clearBlueColor = Color(0xFF00AFF8);
 const Color darkBlueColor = Color(0xFF0E4B7C);
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  final int currentIndex;
+  int currentIndex;
   final storage = FlutterSecureStorage();
 
   CustomBottomNavigationBar({
     Key? key,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

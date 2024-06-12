@@ -12,9 +12,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-    title: "Navegação",
-    initialRoute: '/',
-    onGenerateRoute: RouteGenerator.generateRoute,
+      title: "Navegação",
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
