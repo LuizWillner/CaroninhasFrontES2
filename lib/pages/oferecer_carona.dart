@@ -22,13 +22,13 @@ class _CriarCaronaState extends State<CriarCarona>
   final TextEditingController _toController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  TextEditingController _vagasController = TextEditingController();
-  TextEditingController _priceController = TextEditingController();
-  TextEditingController _passagersController = TextEditingController();
+  final TextEditingController _vagasController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _passagersController = TextEditingController();
 
   late TabController _tabController;
   final AuthService authService = AuthService(apiService: ApiService());
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   int? selectedVehicleId;
   var vehicles = [];
   void _fetchDriverData() async {
@@ -259,7 +259,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                                 child: DropdownButton<int>(
                                                   value: selectedVehicleId,
                                                   hint:
-                                                      Text('Select a vehicle'),
+                                                      const Text('Select a vehicle'),
                                                   items:
                                                       vehicles.map((vehicle) {
                                                     return DropdownMenuItem<
@@ -309,7 +309,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                       final localDestino = _toController.text;
 
                                       try {
-                                        final user_status =
+                                        final userStatus =
                                             await authService.createRide(
                                                 veiculoId,
                                                 horaDePartida,
@@ -317,7 +317,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                                 vagas,
                                                 localPartida,
                                                 localDestino);
-                                        print(user_status);
+                                        print(userStatus);
                                         await storage.write(
                                             key: "isDriver", value: "true");
                                         _showMyDialog(context);

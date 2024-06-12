@@ -219,7 +219,7 @@ class _PerfilState extends State<Perfil> {
                                 fontWeight: FontWeight.bold,
                                 height: 0.5),
                           ),
-                          Padding(padding: EdgeInsets.all(16),
+                          Padding(padding: const EdgeInsets.all(16),
                           child: OutlinedButton(
                                       style: OutlinedButton.styleFrom(
                                         side: const BorderSide(
@@ -246,7 +246,7 @@ class _PerfilState extends State<Perfil> {
                           user['motorista'] == null
                               ? Column(
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                                       child: Text(
                                           "No momento você não tem nenhum carro. Cadastre seu e torne-se um motorista!"),
@@ -298,14 +298,14 @@ class _PerfilState extends State<Perfil> {
                                                     children: [
                                                       Padding(
                                                         padding:
-                                                            EdgeInsets.fromLTRB(
+                                                            const EdgeInsets.fromLTRB(
                                                                 10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                                            const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
                                                             child: Text(
                                                               'Carro atual',
                                                               style: TextStyle(
@@ -332,14 +332,14 @@ class _PerfilState extends State<Perfil> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            EdgeInsets.fromLTRB(
+                                                            const EdgeInsets.fromLTRB(
                                                                 10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                                            const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
                                                             child: Text(
                                                               'Placa',
                                                               style: TextStyle(
@@ -366,14 +366,14 @@ class _PerfilState extends State<Perfil> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            EdgeInsets.fromLTRB(
+                                                            const EdgeInsets.fromLTRB(
                                                                 10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                                            const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
                                                             child: Text(
                                                               'Cor',
                                                               style: TextStyle(
