@@ -8,7 +8,7 @@ class CustomAlertDialog extends StatelessWidget {
   final List<Widget> actions;
 
   const CustomAlertDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
     required this.actions,
@@ -22,7 +22,7 @@ class CustomAlertDialog extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 18,
     ),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

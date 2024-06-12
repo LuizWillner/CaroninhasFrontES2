@@ -86,20 +86,20 @@ class _PedirCaronaState extends State<PedirCarona>
                             borderRadius: BorderRadius.circular(
                                 50), // Ajusta o raio de borda conforme necessário
                             color:
-                                Color(0xFF00AFF8), // Cor de fundo da aba ativa
+                                const Color(0xFF00AFF8), // Cor de fundo da aba ativa
                           ),
                           labelColor: Colors.white,
                           unselectedLabelColor: Colors.black,
                           tabs: [
                             Container(
                               alignment: Alignment.center,
-                              child: Tab(
+                              child: const Tab(
                                 child: Text('Pedir carona'),
                               ),
                             ),
                             Container(
                               alignment: Alignment.center,
-                              child: Tab(
+                              child: const Tab(
                                 child: Text('Encontrar carona'),
                               ),
                             ),
@@ -206,13 +206,13 @@ class _PedirCaronaState extends State<PedirCarona>
       builder: (BuildContext context) {
         return CustomAlertDialog(
           title: 'Sucesso',
-          titleStyle: TextStyle(
+          titleStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
           content: 'Pedido de Carona cadastrado com sucesso (Passageiro)',
-          contentStyle: TextStyle(
+          contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -221,13 +221,8 @@ class _PedirCaronaState extends State<PedirCarona>
             SizedBox(
               width: 100,
               child: TextButton(
-                child: Text(
-                  'OK',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
-                ),
                 style: TextButton.styleFrom(
-                    backgroundColor: Color(0xFF00AFF8),
+                    backgroundColor: const Color(0xFF00AFF8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     )),
@@ -236,6 +231,11 @@ class _PedirCaronaState extends State<PedirCarona>
                   //TEM QUE ADICIONAR NO BD//
                   Navigator.of(context).pop();
                 },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
               ),
             )
           ],
