@@ -8,7 +8,6 @@ class ApiService {
   ApiService();
 
   final _storage = FlutterSecureStorage();
-  final _storage = const FlutterSecureStorage(); 
 
 
   Future<Map<String, dynamic>> postUrlencoded(
