@@ -1,10 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
+import 'package:app_uff_caronas/components/viagem.dart';
 
 class Historico extends StatefulWidget {
   const Historico({super.key});
@@ -175,7 +179,18 @@ class _HistoricoState extends State<Historico>
                         child: TabBarView(
                           controller: _tabController,
                           children: [
-                            const Text("data"),
+                            Column(
+                              children: [
+                                Viagem(
+                                  image: 'assets/login_background.png',
+                                  text: 'text teste',
+                                  onPressed: () {
+                                    print("tututu");
+                                  },
+                                ),
+                                const Text("data"),
+                              ],
+                            ),
                             const Text("lista de caronas")
                           ],
                         ))
