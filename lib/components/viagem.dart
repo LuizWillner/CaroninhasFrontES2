@@ -10,6 +10,7 @@ class Viagem extends StatelessWidget {
   final String nome;
   final DateTime data;
   final VoidCallback onPressed;
+  final String nomeBotao;
   final int price;
 
   Viagem(
@@ -18,6 +19,7 @@ class Viagem extends StatelessWidget {
       required this.nome,
       required this.data,
       required this.onPressed,
+      required this.nomeBotao,
       required this.price});
 
   @override
@@ -79,8 +81,8 @@ class Viagem extends StatelessWidget {
                       backgroundColor: clearBlueColor,
                     ),
                     onPressed: onPressed,
-                    child: const Text(
-                      'Aceitar',
+                    child: Text(
+                      nomeBotao,
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),

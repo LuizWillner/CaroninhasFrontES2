@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
@@ -189,7 +190,15 @@ class _HistoricoState extends State<Historico>
                                   onPressed: () {
                                     print("tututu");
                                   },
+                                  nomeBotao: 'Aceitar',
                                   price: 1,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _showRatingDialog(
+                                        context); // Chama a função que mostra a caixa de diálogo de avaliação
+                                  },
+                                  child: Text('Avaliar Viagem'),
                                 ),
                                 const Text("data"),
                               ],
@@ -206,46 +215,45 @@ class _HistoricoState extends State<Historico>
         bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1));
   }
 
-  Future<void> _showMyDialog(BuildContext context) async {
-    return showDialog<void>(
+  Future<void> _showRatingDialog(BuildContext context) async {
+    double rating = 0; // Inicialize a variável de avaliação
+
+    showDialog<void>(
       context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.7),
+      barrierDismissible:
+          true, // Permite fechar o diálogo ao tocar fora da caixa
       builder: (BuildContext context) {
-        return CustomAlertDialog(
-          title: 'Sucesso',
-          titleStyle: const TextStyle(
-            color: Color(0xFF0E4B7C),
-            fontWeight: FontWeight.w900,
-            fontSize: 30,
-          ),
-          content: 'Carona criada com sucesso (Motorista)',
-          contentStyle: const TextStyle(
-            color: Color(0xFF0E4B7C),
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+        return AlertDialog(
+          title: const Text('Avalie a Carona'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Por favor, avalie sua experiência com a viagem:'),
+                RatingBar.builder(
+                  initialRating: rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) =>
+                      Icon(Icons.star, color: Colors.amber),
+                  onRatingUpdate: (newRating) {
+                    rating = newRating; // Atualize a avaliação
+                  },
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
-            SizedBox(
-              width: 100,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xFF00AFF8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    )),
-                // Icon(Icons.search, color: clearBlueColor),
-                onPressed: () {
-                  //TEM QUE ADICIONAR NO BD//
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'OK',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
-                ),
-              ),
-            )
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o diálogo
+                print('Avaliação recebida: $rating');
+                // Aqui você pode salvar a avaliação no banco de dados ou realizar outra ação
+              },
+              child: const Text('Enviar Avaliação'),
+            ),
           ],
         );
       },
