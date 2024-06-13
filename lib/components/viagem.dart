@@ -6,19 +6,28 @@ const Color darkBlueColor = Color(0xFF0E4B7C);
 
 class Viagem extends StatelessWidget {
   final String image;
-  final String text;
+  final String endereco;
+  final String nome;
+  final DateTime data;
   final VoidCallback onPressed;
+  final int price;
 
-  Viagem({
-    required this.image,
-    required this.text,
-    required this.onPressed,
-  });
+  Viagem(
+      {required this.image,
+      required this.endereco,
+      required this.nome,
+      required this.data,
+      required this.onPressed,
+      required this.price});
 
   @override
   Widget build(BuildContext context) {
+    String dataLayout = '${data.day} de ${data.month}';
+    String horaLayout = '${data.hour}:${data.minute}';
+    String priceLayout = '${price},00';
+
     return Container(
-      height: 120,
+      height: 180,
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -34,33 +43,50 @@ class Viagem extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Row(
+          Column(
             children: [
-              Image.asset(
-                image,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
+              Row(
+                children: [
+                  Image.asset(
+                    image,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 15),
+                  Column(
+                    children: [
+                      Text(endereco),
+                      Text(dataLayout),
+                      Text(horaLayout),
+                      Text(nome),
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  text,
-                  style: TextStyle(fontSize: 16),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 5,
-                ),
-              ),
+              Row(
+                children: [
+                  Text(priceLayout),
+                  Spacer(),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(
+                        width: 1.0,
+                        color: clearBlueColor,
+                        style: BorderStyle.solid,
+                      ),
+                      backgroundColor: clearBlueColor,
+                    ),
+                    onPressed: onPressed,
+                    child: const Text(
+                      'Aceitar',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ),
+                ],
+              )
             ],
-          ),
-          Positioned(
-            right: 10,
-            bottom: 10,
-            child: ElevatedButton(
-              onPressed: onPressed,
-              child: Text('Botão'),
-            ),
-          ),
+          )
         ],
       ),
     );

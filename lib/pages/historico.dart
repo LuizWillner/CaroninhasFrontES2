@@ -183,10 +183,13 @@ class _HistoricoState extends State<Historico>
                               children: [
                                 Viagem(
                                   image: 'assets/login_background.png',
-                                  text: 'text teste',
+                                  endereco: 'text teste 344444',
+                                  nome: 'text teste',
+                                  data: DateTime.now(),
                                   onPressed: () {
                                     print("tututu");
                                   },
+                                  price: 1,
                                 ),
                                 const Text("data"),
                               ],
