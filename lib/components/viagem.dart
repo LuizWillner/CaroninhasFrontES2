@@ -24,7 +24,7 @@ class Viagem extends StatelessWidget {
   Widget build(BuildContext context) {
     String dataLayout = '${data.day} de ${data.month}';
     String horaLayout = '${data.hour}:${data.minute}';
-    String priceLayout = '${price},00';
+    String priceLayout = 'RS ${price},00';
 
     return Container(
       height: 180,
@@ -55,6 +55,7 @@ class Viagem extends StatelessWidget {
                   ),
                   SizedBox(width: 15),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(endereco),
                       Text(dataLayout),
