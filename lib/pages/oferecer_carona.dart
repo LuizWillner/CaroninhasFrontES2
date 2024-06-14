@@ -4,6 +4,7 @@ import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:app_uff_caronas/components/viagem.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class CriarCarona extends StatefulWidget {
@@ -22,13 +23,13 @@ class _CriarCaronaState extends State<CriarCarona>
   final TextEditingController _toController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  TextEditingController _vagasController = TextEditingController();
-  TextEditingController _priceController = TextEditingController();
-  TextEditingController _passagersController = TextEditingController();
+  final TextEditingController _vagasController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _passagersController = TextEditingController();
 
   late TabController _tabController;
   final AuthService authService = AuthService(apiService: ApiService());
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   int? selectedVehicleId;
   var vehicles = [];
   void _fetchDriverData() async {
@@ -259,7 +260,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                                 child: DropdownButton<int>(
                                                   value: selectedVehicleId,
                                                   hint:
-                                                      Text('Select a vehicle'),
+                                                      const Text('Select a vehicle'),
                                                   items:
                                                       vehicles.map((vehicle) {
                                                     return DropdownMenuItem<
@@ -309,7 +310,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                       final localDestino = _toController.text;
 
                                       try {
-                                        final user_status =
+                                        final userStatus =
                                             await authService.createRide(
                                                 veiculoId,
                                                 horaDePartida,
@@ -317,7 +318,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                                 vagas,
                                                 localPartida,
                                                 localDestino);
-                                        print(user_status);
+                                        print(userStatus);
                                         await storage.write(
                                             key: "isDriver", value: "true");
                                         _showMyDialog(context);
@@ -335,7 +336,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            const Text("lista de caronas")
+                            Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
                           ],
                         ))
                   ],

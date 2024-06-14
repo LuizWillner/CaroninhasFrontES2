@@ -131,7 +131,7 @@ class _LoginState extends State<Login> {
                                   final password = _passwordController.text;
                                   try {
                                     // TODO: mostrar loading no botão
-                                    var isDriver;
+                                    String isDriver;
                                     final token = await authService.login(
                                         username, password);
                                     await storage.write(

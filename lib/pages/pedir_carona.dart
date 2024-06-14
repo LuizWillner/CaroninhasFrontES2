@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
+import 'package:app_uff_caronas/components/viagem.dart';
 
 class PedirCarona extends StatefulWidget {
   const PedirCarona({super.key});
@@ -186,7 +187,11 @@ class _PedirCaronaState extends State<PedirCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            const Text("lista de caronas")
+                            SingleChildScrollView(child: Column(children: [
+                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
+                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
+                            ],),)
+                            
                           ],
                         ))
                   ],
