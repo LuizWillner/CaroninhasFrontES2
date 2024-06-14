@@ -1,9 +1,8 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
@@ -190,7 +189,6 @@ class _HistoricoState extends State<Historico>
                                   onPressed: () {
                                     print("tututu");
                                   },
-                                  nomeBotao: 'Aceitar',
                                   price: 1,
                                 ),
                                 ElevatedButton(
