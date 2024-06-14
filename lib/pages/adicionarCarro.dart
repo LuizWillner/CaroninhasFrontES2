@@ -17,8 +17,10 @@ class AdicionarCarro extends StatefulWidget {
 class _AdicionarCarroState extends State<AdicionarCarro> {
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
+  String? _selectedMarca;
+  List<String> _marcas = [];
   TextEditingController _cnhController = TextEditingController();
-  TextEditingController _marcaController = TextEditingController();
+  // TextEditingController _marcaController = TextEditingController();
   TextEditingController _modeloController = TextEditingController();
   TextEditingController _corController = TextEditingController();
   TextEditingController _placaController = TextEditingController();
@@ -31,7 +33,11 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
     try {
       user = await authService.getUser();
       if (user['motorista'] != null) {
+        Map<String, dynamic> response =
+            await ApiService().getApi('veiculo/marcas');
+        List<String> marcas = List<String>.from(response['data']);
         setState(() {
+          _marcas = marcas;
           _loading = false;
         });
         // _fetchDriverData();
@@ -65,7 +71,9 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
           leading: const BackButton(color: Colors.white),
           backgroundColor: clearBlueColor,
         ),
-        body: SingleChildScrollView(
+        body: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
             child: SizedBox(
                 child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -90,8 +98,8 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                         const SizedBox(height: 16.0),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
-                          child: TextField(
-                            controller: _marcaController,
+                          child: DropdownButtonFormField<String>(
+                            value: _selectedMarca,
                             decoration: const InputDecoration(
                               labelText: 'Marca',
                               labelStyle: TextStyle(color: Color(0xFF0E4B7C)),
@@ -102,6 +110,17 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                               prefixIcon: Icon(Icons.car_repair,
                                   color: Color(0xFF0E4B7C)),
                             ),
+                            items: _marcas.map((String marca) {
+                              return DropdownMenuItem<String>(
+                                value: marca,
+                                child: Text(marca),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedMarca = newValue;
+                              });
+                            },
                           ),
                         ),
                         const SizedBox(height: 16.0),
@@ -133,7 +152,7 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                                 borderSide:
                                     BorderSide(color: Color(0xFF0E4B7C)),
                               ),
-                              prefixIcon: Icon(Icons.car_repair,
+                              prefixIcon: Icon(Icons.color_lens,
                                   color: Color(0xFF0E4B7C)),
                             ),
                           ),
@@ -150,7 +169,7 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                                 borderSide:
                                     BorderSide(color: Color(0xFF0E4B7C)),
                               ),
-                              prefixIcon: Icon(Icons.car_repair,
+                              prefixIcon: Icon(Icons.numbers,
                                   color: Color(0xFF0E4B7C)),
                             ),
                           ),
@@ -167,7 +186,7 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                           ),
                           onPressed: () async {
                             print(await storage.read(key: 'login_token'));
-                            final marca = _marcaController.text;
+                            final marca = _selectedMarca;
                             final modelo = _modeloController.text;
                             final cor = _corController.text;
                             final placa = _placaController.text;
@@ -185,7 +204,7 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
 
                             try {
                               final car = await authService.createCar(
-                                  marca, modelo, cor, placa);
+                                  marca!, modelo, cor, placa);
                               print(car);
                               Navigator.of(context).pushNamed(
                                 '/Perfil',
