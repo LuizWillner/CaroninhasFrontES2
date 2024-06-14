@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -15,29 +14,29 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _cpfController = TextEditingController();
-  TextEditingController _iduffController = TextEditingController();
-   TextEditingController _phoneController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _password1Controller = TextEditingController();
-  TextEditingController _password2Controller = TextEditingController();
-  final storage = FlutterSecureStorage();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _iduffController = TextEditingController();
+   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _password1Controller = TextEditingController();
+  final TextEditingController _password2Controller = TextEditingController();
+  final storage = const FlutterSecureStorage();
 
   final AuthService authService = AuthService(apiService: ApiService());
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? _picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
 
-    if (_picked != null) {
+    if (picked != null) {
       setState(() {
-        _dateController.text = _picked.toString().split(" ")[0];
+        _dateController.text = picked.toString().split(" ")[0];
       });
     }
   }
@@ -115,14 +114,14 @@ class _CadastroState extends State<Cadastro> {
                             keyboardType: TextInputType.number,
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
+                            padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
+                                const Text(
                                   "Data de Nascimento",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Color(0xFF0E4B7C),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -137,13 +136,13 @@ class _CadastroState extends State<Cadastro> {
                                     controller: _dateController,
                                     readOnly: true,
                                     keyboardType: TextInputType.datetime,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       labelText: "xx/xx/xxxx",
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.never,
-                                      labelStyle: const TextStyle(
+                                      labelStyle: TextStyle(
                                           color: Color(0xFF0E4B7C)),
-                                      border: const UnderlineInputBorder(
+                                      border: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFF0E4B7C)),
                                       ),

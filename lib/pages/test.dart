@@ -13,13 +13,13 @@ class _TestState extends State<Test> {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/home_background.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Text("Hey, você não deveria estar vendo isso"),
+        child: const Text("Hey, você não deveria estar vendo isso"),
       ),
     );
   }

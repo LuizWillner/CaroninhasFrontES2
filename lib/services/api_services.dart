@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:app_uff_caronas/config.dart';
@@ -8,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ApiService {
   ApiService();
 
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
 
   Future<Map<String, dynamic>> postUrlencoded(
       String endpoint, Map<String, dynamic> bodyJson) async {
@@ -65,10 +63,10 @@ class ApiService {
     print(decodedResponse);
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (decodedResponse is Map<String, dynamic>) {
-      return decodedResponse;
-    } else if (decodedResponse is List<dynamic>) {
-      return {'data': decodedResponse};
-    }
+        return decodedResponse;
+      } else if (decodedResponse is List<dynamic>) {
+        return {'data': decodedResponse};
+      }
     }
     throw Exception('Failed to load data');
   }

@@ -1,7 +1,5 @@
-import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
@@ -25,7 +23,7 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
   TextEditingController _corController = TextEditingController();
   TextEditingController _placaController = TextEditingController();
   final AuthService authService = AuthService(apiService: ApiService());
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   var _loading = true;
   dynamic user;
 
@@ -193,9 +191,9 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
                             final cnh = _cnhController.text;
 
                             try {
-                              final user_status =
+                              final userStatus =
                                   await authService.becomeMotorist(cnh);
-                              print(user_status);
+                              print(userStatus);
                               await storage.write(
                                   key: "isDriver", value: "true");
                             } catch (error) {

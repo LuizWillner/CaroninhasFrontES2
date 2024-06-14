@@ -9,6 +9,7 @@ import 'package:app_uff_caronas/pages/pedir_carona.dart';
 import 'package:app_uff_caronas/pages/pedindo_carona.dart';
 import 'package:app_uff_caronas/pages/adicionarCarro.dart';
 import 'package:app_uff_caronas/pages/historico_caronas.dart';
+import 'package:app_uff_caronas/pages/historico.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -41,6 +42,8 @@ class RouteGenerator {
       case '/Adicionar_carro':
         return MaterialPageRoute(
             builder: ((context) => const AdicionarCarro()));
+      case '/Historico':
+        return MaterialPageRoute(builder: ((context) => const Historico()));
       default:
         return MaterialPageRoute(builder: ((context) => const Home()));
     }
