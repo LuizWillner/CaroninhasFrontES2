@@ -244,7 +244,6 @@ class _PerfilState extends State<Perfil> {
                               ? Column(
                                   children: [
                                     const Padding(
-                                    const Padding(
                                       padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                                       child: Text(
                                           "No momento você não tem nenhum carro. Cadastre seu e torne-se um motorista!"),
