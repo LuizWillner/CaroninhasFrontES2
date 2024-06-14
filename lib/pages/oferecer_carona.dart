@@ -5,6 +5,7 @@ import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:app_uff_caronas/components/viagem.dart';
 
 class CriarCarona extends StatefulWidget {
   const CriarCarona({Key? key}) : super(key: key);
@@ -301,7 +302,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Text("lista de caronas")
+                            Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
                           ],
                         ))
                   ],

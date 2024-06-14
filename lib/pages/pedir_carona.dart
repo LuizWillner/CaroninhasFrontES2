@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
+import 'package:app_uff_caronas/components/viagem.dart';
 
 class PedirCarona extends StatefulWidget {
   const PedirCarona({super.key});
@@ -80,7 +81,7 @@ class _PedirCaronaState extends State<PedirCarona>
                             color: Colors.white),
                         child: TabBar(
                           controller: _tabController,
-                          tabs: [
+                          tabs: const [
                             Tab(child: Text('Pedir carona')),
                             Tab(child: Text('Encontrar carona'))
                           ],
@@ -166,7 +167,11 @@ class _PedirCaronaState extends State<PedirCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Text("lista de caronas")
+                            SingleChildScrollView(child: Column(children: [
+                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
+                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
+                            ],),)
+                            
                           ],
                         ))
                   ],
