@@ -6,12 +6,12 @@ const Color darkBlueColor = Color(0xFF0E4B7C);
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
-  CustomBottomNavigationBar({
-    Key? key,
+  const CustomBottomNavigationBar({
+    super.key,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             break;
           case 2:
             if (currentIndex != 2) {
-              Navigator.of(context).pushNamed('/Detalhes_carona');
+              Navigator.of(context).pushNamed('/Historico_carona');
             }
             break;
           case 3:
