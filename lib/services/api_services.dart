@@ -6,7 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ApiService {
   ApiService();
 
-  final _storage = const FlutterSecureStorage();
+  final _storage = FlutterSecureStorage();
+
 
   Future<Map<String, dynamic>> postUrlencoded(
       String endpoint, Map<String, dynamic> bodyJson) async {
