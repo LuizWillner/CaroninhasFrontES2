@@ -63,7 +63,7 @@ class _HistoricoState extends State<Historico>
       "fk_veiculo": 2
     },
     {
-      "placa": "penisdenis",
+      "placa": "aaaaa",
       "created_at": "2024-05-26T22:42:00.693969",
       "veiculo": {
         "tipo": "CARRO",
@@ -183,7 +183,8 @@ class _HistoricoState extends State<Historico>
                               children: [
                                 Viagem(
                                   image: 'assets/login_background.png',
-                                  endereco: 'text teste 344444',
+                                  partida: 'text teste 344444',
+                                  chegada: 'aaaaaaa',
                                   nome: 'text teste',
                                   data: DateTime.now(),
                                   onPressed: () {

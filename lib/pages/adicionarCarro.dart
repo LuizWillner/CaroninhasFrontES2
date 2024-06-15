@@ -16,7 +16,7 @@ class _AdicionarCarroState extends State<AdicionarCarro> {
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
   String? _selectedMarca;
-  List<String> _marcas = [];
+  List<String> _marcas = ["AUDI", "FORD","FIAT"];
   TextEditingController _cnhController = TextEditingController();
   // TextEditingController _marcaController = TextEditingController();
   TextEditingController _modeloController = TextEditingController();

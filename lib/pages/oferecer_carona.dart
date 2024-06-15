@@ -336,7 +336,7 @@ class _CriarCaronaState extends State<CriarCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
+                            Viagem(image: "assets/login_background.png", partida: "baleia", chegada: "aaaaa", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
                           ],
                         ))
                   ],

@@ -82,7 +82,7 @@ class _HistoricoCaronaState extends State<HistoricoCarona>
             : SingleChildScrollView(
                 child: Column(
                   children: [
-                    Viagem(image: "kkkk", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
+                    Viagem(image: "kkkk", partida: "baleia",chegada: "aaaaa", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
                     // const Padding(
                     //   padding: EdgeInsets.only(top: 40.0),
                     //   child: Center(

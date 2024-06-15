@@ -1,4 +1,6 @@
 import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class AuthService {
   final ApiService apiService;
@@ -59,6 +61,47 @@ class AuthService {
         {"local_partida": localPartida, "local_destino": localDestino});
     return response;
   }
+
+  Future<Map<String, dynamic>> getRides({
+    String? motoristaId,
+    DateTime? horaMinima,
+    DateTime? horaMaxima,
+    int valorMinimo = 0,
+    int valorMaximo = 9999,
+    int vagasRestantesMinimas = 1,
+    String keywordPartida = "",
+    String keywordChegada = "",
+    String orderBy = "hora da partida",
+    bool isCrescente = true,
+    int limite = 25,
+    int deslocamento = 0,
+  }) async {
+    horaMinima ??= DateTime.now();
+    horaMaxima ??= DateTime.now().add(const Duration(days: 30));
+    var motoristaQuery = "motorista_id=$motoristaId&";
+    if (motoristaId == null) {
+      motoristaQuery = "";
+    }
+    final response = await apiService.getApi("carona?$motoristaQuery"
+        "hora_minima=$horaMinima"
+        "&hora_maxima=$horaMaxima"
+        "&valor_minimo=$valorMinimo"
+        "&valor_maximo=$valorMaximo"
+        "&vagas_restantes_minimas=$vagasRestantesMinimas"
+        "&keyword_partida=$keywordPartida"
+        "&keyword_chegada=$keywordChegada"
+        "&order_by=$orderBy"
+        "&is_crescente=$isCrescente"
+        "&limite=$limite"
+        "&deslocamento=$deslocamento");
+    return response;
+  }
+Future<Map<String, dynamic>> getAllRides() async {
+    final response = await apiService.getApi("carona");
+    return response;
+  }
+
+
 
   Future<Map<String, dynamic>> becomeMotorist(
     String cnh,

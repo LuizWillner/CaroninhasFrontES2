@@ -3,6 +3,9 @@ import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 import 'package:app_uff_caronas/components/viagem.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
+import 'package:app_uff_caronas/services/api_services.dart';
 
 class PedirCarona extends StatefulWidget {
   const PedirCarona({super.key});
@@ -24,9 +27,15 @@ class _PedirCaronaState extends State<PedirCarona>
 
   late TabController _tabController;
 
+  final AuthService authService = AuthService(apiService: ApiService());
+  final storage = const FlutterSecureStorage();
+  dynamic user;
+  var rides = [];
+
   @override
   void initState() {
     super.initState();
+    _fetchRides();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -34,6 +43,18 @@ class _PedirCaronaState extends State<PedirCarona>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _fetchRides() async {
+    try {
+      final ridesResponse = await authService.getAllRides();
+
+      setState(() {
+        rides = ridesResponse["data"];
+      });
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   @override
@@ -86,8 +107,8 @@ class _PedirCaronaState extends State<PedirCarona>
                           indicator: BoxDecoration(
                             borderRadius: BorderRadius.circular(
                                 50), // Ajusta o raio de borda conforme necessário
-                            color:
-                                const Color(0xFF00AFF8), // Cor de fundo da aba ativa
+                            color: const Color(
+                                0xFF00AFF8), // Cor de fundo da aba ativa
                           ),
                           labelColor: Colors.white,
                           unselectedLabelColor: Colors.black,
@@ -187,11 +208,21 @@ class _PedirCaronaState extends State<PedirCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            SingleChildScrollView(child: Column(children: [
-                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
-                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
-                            ],),)
-                            
+                            SingleChildScrollView(
+                              child: ListView.builder(
+                                  itemCount: rides.length,
+                                  itemBuilder: (context, index) {
+                                    final ride = rides[index];
+                                    return Viagem(
+                                        image: "assets/login_background.png",
+                                        partida: ride["local_partida"],
+                                        chegada: ride["local_destino"],
+                                        nome: ride["motorista"]["user"]["first_name"]+ride["motorista"]["user"]["last_name"],
+                                        data: ride["hora_partida"],
+                                        onPressed: () => {},
+                                        price: ride["preco"]);
+                                  }),
+                            )
                           ],
                         ))
                   ],

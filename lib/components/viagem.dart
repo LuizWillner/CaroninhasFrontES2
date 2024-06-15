@@ -6,7 +6,8 @@ const Color darkBlueColor = Color(0xFF0E4B7C);
 
 class Viagem extends StatelessWidget {
   final String image;
-  final String endereco;
+  final String partida;
+  final String chegada;
   final String nome;
   final DateTime data;
   final VoidCallback onPressed;
@@ -14,7 +15,8 @@ class Viagem extends StatelessWidget {
 
   Viagem(
       {required this.image,
-      required this.endereco,
+      required this.partida,
+      required this.chegada,
       required this.nome,
       required this.data,
       required this.onPressed,
@@ -56,10 +58,11 @@ class Viagem extends StatelessWidget {
                   SizedBox(width: 15),
                   Column(
                     children: [
-                      Text(endereco),
+                      Text("partida: $partida"),
+                      Text("chegada: $chegada"),
                       Text(dataLayout),
                       Text(horaLayout),
-                      Text(nome),
+                      Text("Nome do motorista $nome"),
                     ],
                   ),
                 ],
