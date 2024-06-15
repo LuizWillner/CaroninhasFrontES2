@@ -197,12 +197,21 @@ class _PedirCaronaState extends State<PedirCarona>
                                     backgroundColor: clearBlueColor,
                                   ),
                                   onPressed: () async {
-                                    final response =
-                                        await authService.getRides();
+                                    try {
+                                    final response = await authService.getRides(
+                                      keywordPartida: _fromController.text,
+                                      keywordChegada: _toController.text,
+                                    );
                                     setState(() {
                                       rides = response["data"];
                                     });
+                                    _tabController.animateTo(1);
+
+
+                                    } catch (error) {
                                     _showMyDialog(context);
+                                      print(error);
+                                    }
                                   },
                                   child: const Text(
                                     'Procurar',
@@ -260,7 +269,7 @@ class _PedirCaronaState extends State<PedirCarona>
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Pedido de Carona cadastrado com sucesso (Passageiro)',
+          content: 'Houve um erro ao procurar o pedido de carona',
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,

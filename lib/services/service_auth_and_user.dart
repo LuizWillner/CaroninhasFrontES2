@@ -74,6 +74,11 @@ class AuthService {
     final response = await apiService.getApi("users/me");
     return response;
   }
+  
+  Future<Map<String, dynamic>> getAllRides() async {
+    final response = await apiService.getApi("carona");
+    return response;
+  }
 
   Future<Map<String, dynamic>> getAllCars() async {
     final response = await apiService.getApi("veiculo/me/all");
@@ -116,10 +121,6 @@ class AuthService {
     return response;
   }
 
-  Future<Map<String, dynamic>> getAllRides() async {
-    final response = await apiService.getApi("carona");
-    return response;
-  }
 
   Future<Map<String, dynamic>> getRatingCaronista(idCaronista) async {
     final response = await apiService.getApi("avaliacao/passageiro/$idCaronista");
