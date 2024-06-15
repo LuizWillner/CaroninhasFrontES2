@@ -11,7 +11,7 @@ class Viagem extends StatelessWidget {
   final String nome;
   final DateTime data;
   final VoidCallback onPressed;
-  final int price;
+  final int? price;
 
   Viagem(
       {required this.image,
@@ -24,7 +24,7 @@ class Viagem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String dataLayout = '${data.day} de ${data.month}';
+    String dataLayout = '${data.day}/${data.month}';
     String horaLayout = '${data.hour}:${data.minute}';
     String priceLayout = 'R\$ ${price},00';
 

@@ -62,6 +62,25 @@ class AuthService {
     return response;
   }
 
+  Future<Map<String, dynamic>> becomeMotorist(
+    String cnh,
+  ) async {
+    final response =
+        await apiService.postApi("users/me/motorista?num_cnh=$cnh", {});
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getUser() async {
+    final response = await apiService.getApi("users/me");
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getAllCars() async {
+    final response = await apiService.getApi("veiculo/me/all");
+    return response;
+  }
+
+////////////////////////////////////////////////////////////
   Future<Map<String, dynamic>> getRides({
     String? motoristaId,
     DateTime? horaMinima,
@@ -96,28 +115,35 @@ class AuthService {
         "&deslocamento=$deslocamento");
     return response;
   }
-Future<Map<String, dynamic>> getAllRides() async {
+
+  Future<Map<String, dynamic>> getAllRides() async {
     final response = await apiService.getApi("carona");
     return response;
   }
 
-
-
-  Future<Map<String, dynamic>> becomeMotorist(
-    String cnh,
-  ) async {
-    final response =
-        await apiService.postApi("users/me/motorista?num_cnh=$cnh", {});
+  Future<Map<String, dynamic>> getRatingCaronista(idCaronista) async {
+    final response = await apiService.getApi("avaliacao/passageiro/$idCaronista");
     return response;
   }
 
-  Future<Map<String, dynamic>> getUser() async {
-    final response = await apiService.getApi("users/me");
+  Future<Map<String, dynamic>> getRatingMotorista(idMotorista) async {
+    final response = await apiService.getApi("avaliacao/motorista/$idMotorista");
     return response;
   }
 
-  Future<Map<String, dynamic>> getAllCars() async {
-    final response = await apiService.getApi("veiculo/me/all");
+  Future<Map<String, dynamic>> postRatingCaronista(caronaId,userAvaliadoId, notaPassageiro, comentarioPassageiro) async {
+    final response = await apiService.postApi("avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId", {
+      "nota_passageiro":notaPassageiro,
+      "comentario_passageiro":comentarioPassageiro
+    });
+    return response;
+  }
+
+  Future<Map<String, dynamic>> postRatingMotorista(caronaId,userAvaliadoId, notaMotorista, comentarioMotorista) async {
+    final response = await apiService.postApi("avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",{
+      "nota_motorista":notaMotorista,
+      "comentario_motorista":comentarioMotorista
+    });
     return response;
   }
 }
