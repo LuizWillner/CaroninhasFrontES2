@@ -11,7 +11,7 @@ class Viagem extends StatelessWidget {
   final String nome;
   final DateTime data;
   final VoidCallback onPressed;
-  final int? price;
+  final double price;
   final int vagasRestantes;
   final String buttonInnerText;
 
@@ -24,8 +24,7 @@ class Viagem extends StatelessWidget {
       required this.onPressed,
       required this.price,
       required this.vagasRestantes,
-      required this.buttonInnerText
-      });
+      required this.buttonInnerText});
 
   @override
   Widget build(BuildContext context) {
