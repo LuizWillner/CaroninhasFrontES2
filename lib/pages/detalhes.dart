@@ -26,12 +26,24 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
   void initState() {
     super.initState();
     _fetchRide();
+    _fetchUserData();
+  }
+
+  void _fetchUserData() async {
+    try {
+      user = await authService.getUser();
+      print('user["id"]');
+      print(user["id"]);
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   void _fetchRide() async {
     try {
       final ridesResponse = await authService.getRideById(widget.caronaId);
-
+      print('ridesResponse["fk_motorista"]');
+      print(ridesResponse['motorista']['id_fk_user']);
       setState(() {
         rideDetail = ridesResponse;
       });
@@ -139,11 +151,17 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                       const SizedBox(height: 18.0),
                       const Text("Tipo",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      const Text("Passageiro",
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: darkBlueColor,
-                              fontWeight: FontWeight.bold)),
+                      user['id'] == rideDetail['motorista']['id_fk_user']
+                          ? const Text("Motorista",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: darkBlueColor,
+                                  fontWeight: FontWeight.bold))
+                          : const Text("Passageiro",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: darkBlueColor,
+                                  fontWeight: FontWeight.bold)),
                       const SizedBox(height: 18.0),
                       const Text("passageiros",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
@@ -160,6 +178,41 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                       Text(
                           "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}"),
                       const SizedBox(height: 18.0),
+                      user['id'] == rideDetail['motorista']['id_fk_user']
+                          ? OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                  width: 1.0,
+                                  color: Color(0xFF00AFF8),
+                                  style: BorderStyle.solid,
+                                ),
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              onPressed: () async {},
+                              child: const Text(
+                                'Cancelar Corrida',
+                                style: TextStyle(
+                                    color: Color(0xFF00AFF8), fontSize: 16),
+                              ),
+                            )
+                          : OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                  width: 1.0,
+                                  color: Color(0xFF00AFF8),
+                                  style: BorderStyle.solid,
+                                ),
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              onPressed: () async {},
+                              child: const Text(
+                                'Sair da Corrida',
+                                style: TextStyle(
+                                    color: Color(0xFF00AFF8), fontSize: 16),
+                              ),
+                            ),
                     ],
                   ),
                 ),
