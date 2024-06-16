@@ -33,12 +33,12 @@ class _HistoricoCaronaState extends State<HistoricoCarona>
             await ApiService().getApi('/carona/historico/me/motorista');
         Map<String, dynamic> passager_response =
             await ApiService().getApi('/carona/historico/me/passageiro');
-        List<String> historico_somado = List<String>.from(
-            passager_response['data'] + driver_response['data']);
+        List<Map<String, dynamic>> historico_somado =
+            passager_response['data'] + driver_response['data'];
         setState(() {
           _historico = historico_somado;
           _loading = false;
-          print(_historico);
+          print("aqui $_historico");
         });
         // _fetchDriverData();
       } else {
