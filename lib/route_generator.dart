@@ -30,8 +30,11 @@ class RouteGenerator {
       case '/Criar_carona':
         return MaterialPageRoute(builder: ((context) => const CriarCarona()));
       case '/Detalhes_carona':
-        return MaterialPageRoute(
-            builder: ((context) => const DetalhesCarona()));
+        if (args is String) {
+          return MaterialPageRoute(
+              builder: (context) => DetalhesCarona(caronaId: args));
+        }
+        return MaterialPageRoute(builder: ((context) => const Text("algo deu errado")));
       case '/Historico_carona':
         return MaterialPageRoute(
             builder: ((context) => const HistoricoCarona()));

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/path_details.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
+import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:intl/intl.dart';
 
 class DetalhesCarona extends StatefulWidget {
-  const DetalhesCarona({super.key});
+  final String caronaId;
+  const DetalhesCarona({Key? key, required this.caronaId}) : super(key: key);
 
   @override
   State<DetalhesCarona> createState() => _DetalhesCaronaState();
@@ -12,41 +17,63 @@ class DetalhesCarona extends StatefulWidget {
 class _DetalhesCaronaState extends State<DetalhesCarona> {
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
+  final AuthService authService = AuthService(apiService: ApiService());
+  final storage = const FlutterSecureStorage();
+  dynamic user;
+  var rideDetail;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRide();
+  }
+
+  void _fetchRide() async {
+    try {
+      final ridesResponse = await authService.getRideById(widget.caronaId);
+
+      setState(() {
+        rideDetail = ridesResponse;
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Detalhes',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        title: const Text(
+          'Detalhes',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-          leading: const BackButton(color: Colors.white),
-          backgroundColor: clearBlueColor,
         ),
-        body: SingleChildScrollView(
-            child: Center(
+        leading: const BackButton(color: Colors.white),
+        backgroundColor: clearBlueColor,
+      ),
+      body: SingleChildScrollView(
+        child: Center(
           child: Container(
             color: Colors.white,
             child: Column(
               children: [
                 Container(
-                    height: 180.0,
-                    width: 300.0,
-                    margin: const EdgeInsets.only(
-                        top: 20.0, left: 20.0, right: 20.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: clearBlueColor,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20)),
-                        color: Colors.white),
-                    padding: const EdgeInsets.all(20.0),
-                    child: const Text("Snapshot da viagem")),
+                  height: 180.0,
+                  width: 300.0,
+                  margin:
+                      const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: clearBlueColor),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                      "Foto do mapa"), // Displaying caronaId here
+                ),
                 Container(
                   width: 300.0,
                   padding: const EdgeInsets.all(20.0),
@@ -58,22 +85,23 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
-                              child: CustomPaint(
-                                size: const Size(2, 3 * 30.0),
-                                painter: AddressesPainter([
-                                  "Rua Nóbrega",
-                                  "UFF - Bloco D (Faculdade de Engenharia)",
-                                  "casa"
-                                ]),
-                              )),
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: CustomPaint(
+                              size: const Size(2, 3 * 30.0),
+                              painter: AddressesPainter([
+                                rideDetail["local_partida"],
+                                "até",
+                                rideDetail["local_destino"],
+                              ]),
+                            ),
+                          ),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                "Rua Nóbrega",
-                                "UFF - Bloco D (Faculdade de Engenharia)",
-                                "casa"
+                                rideDetail["local_partida"],
+                                "até",
+                                rideDetail["local_destino"],
                               ]
                                   .map((address) => Padding(
                                         padding:
@@ -98,33 +126,34 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                           )
                         ],
                       ),
-                      const Text("4 de maio",
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
-                      const Text("14:00",
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
-                      const Text("R\$ 22,90",
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
+                      Text(
+                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
+                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month}",
+                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                      Text(
+                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
+                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}",
+                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                      Text("R\$ ${rideDetail["valor"]},00",
+                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
                       const SizedBox(height: 18.0),
                       const Text("Tipo",
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
+                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
                       const Text("Passageiro",
                           style: TextStyle(
                               fontSize: 18.0,
                               color: darkBlueColor,
                               fontWeight: FontWeight.bold)),
                       const SizedBox(height: 18.0),
-                      const Text("Integrantes",
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
-                      const Text("Lista da tropa",
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: darkBlueColor,
-                              fontWeight: FontWeight.bold)),
+                      const Text("passageiros",
+                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: rideDetail["passageiros"].length,
+                          itemBuilder: (context, index) {
+                            final caronista = "${rideDetail["passageiros"][index]["user"]["first_name"]} ${rideDetail["passageiros"][index]["user"]["first_name"]}";
+                            return Text(caronista);
+                          }),
                       const SizedBox(height: 18.0),
                     ],
                   ),
@@ -132,7 +161,9 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
               ],
             ),
           ),
-        )),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2));
+        ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),
+    );
   }
 }

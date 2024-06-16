@@ -6,23 +6,30 @@ const Color darkBlueColor = Color(0xFF0E4B7C);
 
 class Viagem extends StatelessWidget {
   final String image;
-  final String endereco;
+  final String partida;
+  final String chegada;
   final String nome;
   final DateTime data;
   final VoidCallback onPressed;
-  final int price;
+  final int? price;
+  final int vagasRestantes;
+  final String buttonInnerText;
 
   Viagem(
       {required this.image,
-      required this.endereco,
+      required this.partida,
+      required this.chegada,
       required this.nome,
       required this.data,
       required this.onPressed,
-      required this.price});
+      required this.price,
+      required this.vagasRestantes,
+      required this.buttonInnerText
+      });
 
   @override
   Widget build(BuildContext context) {
-    String dataLayout = '${data.day} de ${data.month}';
+    String dataLayout = '${data.day}/${data.month}';
     String horaLayout = '${data.hour}:${data.minute}';
     String priceLayout = 'R\$ ${price},00';
 
@@ -56,10 +63,12 @@ class Viagem extends StatelessWidget {
                   SizedBox(width: 15),
                   Column(
                     children: [
-                      Text(endereco),
+                      Text("partida: $partida"),
+                      Text("chegada: $chegada"),
                       Text(dataLayout),
                       Text(horaLayout),
-                      Text(nome),
+                      Text("Nome do motorista $nome"),
+                      Text("vagas restantes: $vagasRestantes")
                     ],
                   ),
                 ],
@@ -78,9 +87,9 @@ class Viagem extends StatelessWidget {
                       backgroundColor: clearBlueColor,
                     ),
                     onPressed: onPressed,
-                    child: const Text(
-                      'Aceitar',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    child: Text(
+                      buttonInnerText,
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ],

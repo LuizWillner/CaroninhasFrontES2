@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:http/http.dart';
 
 class AuthService {
   final ApiService apiService;
@@ -73,8 +78,97 @@ class AuthService {
     return response;
   }
 
+  Future<Map<String, dynamic>> getAllRides() async {
+    final response = await apiService.getApi("carona");
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getRideById(id) async {
+    final response = await apiService.getApi("carona/$id");
+    return response;
+  }
+
+  Future<Map<String, dynamic>> caronaSubscription(caronaId) async {
+    final response = await apiService.postApi("user-carona?carona_id=$caronaId", {});
+    return response;
+  }
+
+Future<Map<String, dynamic>> getHistoricoCaronista() async {
+          final response = await ApiService().getApi('carona/historico/me/passageiro');
+          return response;
+  }
+
+  Future<Map<String, dynamic>> getHistoricoMotorista() async {
+          final response = await ApiService().getApi('carona/historico/me/motorista');
+          return response;
+  }
+  
+
   Future<Map<String, dynamic>> getAllCars() async {
     final response = await apiService.getApi("veiculo/me/all");
+    return response;
+  }
+
+////////////////////////////////////////////////////////////
+  Future<Map<String, dynamic>> getRides({
+    String? motoristaId,
+    DateTime? horaMinima,
+    DateTime? horaMaxima,
+    int valorMinimo = 0,
+    int valorMaximo = 9999,
+    int vagasRestantesMinimas = 1,
+    String keywordPartida = "",
+    String keywordChegada = "",
+    String orderBy = "hora da partida",
+    bool isCrescente = true,
+    int limite = 25,
+    int deslocamento = 0,
+  }) async {
+    horaMinima ??= DateTime.now();
+    horaMaxima ??= DateTime.now().add(const Duration(days: 30));
+    var motoristaQuery = "motorista_id=$motoristaId&";
+    if (motoristaId == null) {
+      motoristaQuery = "";
+    }
+    final response = await apiService.getApi("carona?$motoristaQuery"
+        "hora_minima=$horaMinima"
+        "&hora_maxima=$horaMaxima"
+        "&valor_minimo=$valorMinimo"
+        "&valor_maximo=$valorMaximo"
+        "&vagas_restantes_minimas=$vagasRestantesMinimas"
+        "&keyword_partida=$keywordPartida"
+        "&keyword_chegada=$keywordChegada"
+        "&order_by=$orderBy"
+        "&is_crescente=$isCrescente"
+        "&limite=$limite"
+        "&deslocamento=$deslocamento");
+    return response;
+  }
+
+
+  Future<Map<String, dynamic>> getRatingCaronista(idCaronista) async {
+    final response = await apiService.getApi("avaliacao/passageiro/$idCaronista");
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getRatingMotorista(idMotorista) async {
+    final response = await apiService.getApi("avaliacao/motorista/$idMotorista");
+    return response;
+  }
+
+  Future<Map<String, dynamic>> postRatingCaronista(caronaId,userAvaliadoId, notaPassageiro, comentarioPassageiro) async {
+    final response = await apiService.postApi("avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId", {
+      "nota_passageiro":notaPassageiro,
+      "comentario_passageiro":comentarioPassageiro
+    });
+    return response;
+  }
+
+  Future<Map<String, dynamic>> postRatingMotorista(caronaId,userAvaliadoId, notaMotorista, comentarioMotorista) async {
+    final response = await apiService.postApi("avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",{
+      "nota_motorista":notaMotorista,
+      "comentario_motorista":comentarioMotorista
+    });
     return response;
   }
 }
