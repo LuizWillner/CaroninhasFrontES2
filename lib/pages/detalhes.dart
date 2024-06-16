@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 class DetalhesCarona extends StatefulWidget {
   final String caronaId;
-  const DetalhesCarona({Key? key, required this.caronaId}) : super(key: key);
+  const DetalhesCarona({super.key, required this.caronaId});
 
   @override
   State<DetalhesCarona> createState() => _DetalhesCaronaState();
@@ -71,8 +71,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                     color: Colors.white,
                   ),
                   padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                      "Foto do mapa"), // Displaying caronaId here
+                  child: const Text("Foto do mapa"),
                 ),
                 Container(
                   width: 300.0,
@@ -100,7 +99,6 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 rideDetail["local_partida"],
-                                "até",
                                 rideDetail["local_destino"],
                               ]
                                   .map((address) => Padding(
@@ -116,8 +114,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                             overflow: TextOverflow.ellipsis,
-                                            maxLines:
-                                                1, // Limit the text to 1 line with ellipses if it overflows
+                                            maxLines: 1,
                                           ),
                                         ),
                                       ))
@@ -129,13 +126,16 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                       Text(
                           "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
                           "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month}",
-                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                          style: const TextStyle(
+                              fontSize: 16.0, color: Colors.grey)),
                       Text(
                           "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
                           "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}",
-                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                          style: const TextStyle(
+                              fontSize: 16.0, color: Colors.grey)),
                       Text("R\$ ${rideDetail["valor"]},00",
-                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                          style: const TextStyle(
+                              fontSize: 16.0, color: Colors.grey)),
                       const SizedBox(height: 18.0),
                       const Text("Tipo",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
@@ -151,9 +151,14 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                           shrinkWrap: true,
                           itemCount: rideDetail["passageiros"].length,
                           itemBuilder: (context, index) {
-                            final caronista = "${rideDetail["passageiros"][index]["user"]["first_name"]} ${rideDetail["passageiros"][index]["user"]["first_name"]}";
+                            final caronista =
+                                "${rideDetail["passageiros"][index]["user"]["first_name"]} ${rideDetail["passageiros"][index]["user"]["first_name"]}";
                             return Text(caronista);
                           }),
+                      const Text("motorista",
+                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                      Text(
+                          "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}"),
                       const SizedBox(height: 18.0),
                     ],
                   ),
@@ -163,7 +168,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
     );
   }
 }

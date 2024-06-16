@@ -30,7 +30,7 @@ class Viagem extends StatelessWidget {
   Widget build(BuildContext context) {
     String dataLayout = '${data.day}/${data.month}';
     String horaLayout = '${data.hour}:${data.minute}';
-    String priceLayout = 'R\$ $price,00';
+    String priceLayout = 'R\$ ${price.toStringAsFixed(2).replaceAll(".", ",")}';
 
     return Container(
       height: 180,
