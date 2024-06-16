@@ -15,7 +15,7 @@ class Viagem extends StatelessWidget {
   final int vagasRestantes;
   final String buttonInnerText;
 
-  Viagem(
+  const Viagem(
       {required this.image,
       required this.partida,
       required this.chegada,
@@ -30,7 +30,7 @@ class Viagem extends StatelessWidget {
   Widget build(BuildContext context) {
     String dataLayout = '${data.day}/${data.month}';
     String horaLayout = '${data.hour}:${data.minute}';
-    String priceLayout = 'R\$ ${price},00';
+    String priceLayout = 'R\$ $price,00';
 
     return Container(
       height: 180,
