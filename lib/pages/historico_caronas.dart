@@ -84,34 +84,34 @@ class _HistoricoCaronaState extends State<HistoricoCarona>
                 child: Column(
                   children: [
                     ListView.builder(
-                          itemCount: _historico.length,
-                          itemBuilder: (context, index) {
-                            final ride = _historico[index];
-                            return Viagem(
-                              image: "assets/login_background.png",
-                              partida: ride["local_partida"],
-                              chegada: ride["local_destino"],
-                              nome: ride["motorista"]["user"]["first_name"] +
-                                  ride["motorista"]["user"]["last_name"],
-                              data: DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                  .parse(ride["hora_partida"]),
-                              onPressed: ()  {
-                                try {
-                                  Navigator.pushNamed(
-                                        context,
-                                        '/Detalhes_carona',
-                                        arguments: ride["id"],
-                                      );
-                                } catch (error) {
-                                  print(error);
-                                }
-                              },
-                              price: ride["valor"],
-                              vagasRestantes: ride["vagas_restantes"],
-                              buttonInnerText: "Ver detalhes",
-                            ); 
+                      itemCount: _historico.length,
+                      itemBuilder: (context, index) {
+                        final ride = _historico[index];
+                        return Viagem(
+                          image: "assets/login_background.png",
+                          partida: ride["local_partida"],
+                          chegada: ride["local_destino"],
+                          nome: ride["motorista"]["user"]["first_name"] +
+                              ride["motorista"]["user"]["last_name"],
+                          data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                              .parse(ride["hora_partida"]),
+                          onPressed: () {
+                            try {
+                              Navigator.pushNamed(
+                                context,
+                                '/Detalhes_carona',
+                                arguments: ride["id"],
+                              );
+                            } catch (error) {
+                              print(error);
+                            }
                           },
-                        ),
+                          price: ride["valor"],
+                          vagasRestantes: ride["vagas_restantes"],
+                          buttonInnerText: "Ver detalhes",
+                        );
+                      },
+                    ),
                     Container(
                         margin: EdgeInsets.only(
                             top: MediaQuery.of(context).size.height * 0.03,

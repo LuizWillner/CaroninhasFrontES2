@@ -30,23 +30,28 @@ class _HistoricoState extends State<Historico>
 
   late TabController _tabController;
 
-  void _fetchUserData() async {
+  Future _fetchUserData() async {
     try {
       final isDriver = await storage.read(key: "isDriver");
       final passagerResponse = await authService.getHistoricoCaronista();
+      // print('object tutu \n');
+      // print(passagerResponse.runtimeType);
+      // print('Driver = $isDriver');
       if (isDriver == "true") {
         final driverResponse = await authService.getHistoricoMotorista();
-        List<String> historico_somado = List<String>.from(
-            passagerResponse['data'] + driverResponse["data"]);
+        List<Map<String, dynamic>> historico_somado =
+            List<Map<String, dynamic>>.from(
+                passagerResponse['data'] + driverResponse["data"]);
         setState(() {
-         _historico = historico_somado;
-         _loading = false;
-
+          _historico = historico_somado;
+          print('O historico é passageiro: $_historico');
+          _loading = false;
         });
       } else {
         setState(() {
-        _historico = passagerResponse['data'];
-        _loading = false;
+          _historico = passagerResponse['data'];
+          print('O historico é driver: $_historico');
+          _loading = false;
         });
       }
     } catch (error) {
@@ -57,8 +62,9 @@ class _HistoricoState extends State<Historico>
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
+
     _tabController = TabController(length: 2, vsync: this);
+    Future.microtask(() => _fetchUserData());
   }
 
   @override
@@ -142,6 +148,7 @@ class _HistoricoState extends State<Historico>
   }
 
   Widget _buildHistoricoList() {
+    print('O historico é 2 : $_historico');
     return ListView.builder(
       itemCount: _historico.length,
       itemBuilder: (context, index) {
