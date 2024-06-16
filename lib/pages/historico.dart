@@ -42,8 +42,8 @@ class _HistoricoState extends State<Historico>
         List<dynamic> historico_somado =
             passagerResponse['data'] + driverResponse['data'];
         setState(() {
-         _historico = historico_somado;
-         _loading = false;
+          _historico = historico_somado;
+          _loading = false;
         });
       } else {
         setState(() {
@@ -133,8 +133,8 @@ class _HistoricoState extends State<Historico>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        _buildHistoricoList(),
-                        Center(child: Text("lista de caronas")),
+                        _buildHistoricoList(true, _historico),
+                        _buildHistoricoList(false, _historico)
                       ],
                     ),
                   ),
@@ -145,12 +145,31 @@ class _HistoricoState extends State<Historico>
     );
   }
 
-  Widget _buildHistoricoList() {
-    print('O historico é 2 : $_historico');
+  Widget _buildHistoricoList(current, historico) {
+    if (current) {
+      List<dynamic> historicoAtual = [];
+      for (int i = 0; i < historico.length; i++) {
+        if (!DateTime.parse(historico[i]["hora_partida"])
+            .isBefore(DateTime.now())) {
+          historicoAtual.add(historico[i]);
+        }
+      }
+      historico = historicoAtual;
+    } else {
+      List<dynamic> historicoAtual = [];
+      for (int i = 0; i < historico.length; i++) {
+        if (!DateTime.parse(historico[i]["hora_partida"])
+            .isAfter(DateTime.now())) {
+          historicoAtual.add(historico[i]);
+        }
+      }
+      historico = historicoAtual;
+    }
+    print(current);
     return ListView.builder(
-      itemCount: _historico.length,
+      itemCount: historico.length,
       itemBuilder: (context, index) {
-        final ride = _historico[index];
+        final ride = historico[index];
         return Viagem(
           image: "assets/login_background.png",
           partida: ride["local_partida"],
