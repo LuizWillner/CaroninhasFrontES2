@@ -39,13 +39,11 @@ class _HistoricoState extends State<Historico>
       // print('Driver = $isDriver');
       if (isDriver == "true") {
         final driverResponse = await authService.getHistoricoMotorista();
-        List<Map<String, dynamic>> historico_somado =
-            List<Map<String, dynamic>>.from(
-                passagerResponse['data'] + driverResponse["data"]);
+        List<dynamic> historico_somado =
+            passagerResponse['data'] + driverResponse['data'];
         setState(() {
-          _historico = historico_somado;
-          print('O historico é passageiro: $_historico');
-          _loading = false;
+         _historico = historico_somado;
+         _loading = false;
         });
       } else {
         setState(() {
@@ -143,7 +141,7 @@ class _HistoricoState extends State<Historico>
                 ),
               ],
             ),
-      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1),
+      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),
     );
   }
 

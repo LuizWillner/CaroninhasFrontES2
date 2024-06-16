@@ -1,12 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-const Color clearBlueColor = Color(0xFF00AFF8);
-const Color darkBlueColor = Color(0xFF0E4B7C);
-
-class CustomBottomNavigationBar extends StatelessWidget {
+class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
-  final storage = const FlutterSecureStorage();
 
   const CustomBottomNavigationBar({
     super.key,
@@ -14,64 +12,92 @@ class CustomBottomNavigationBar extends StatelessWidget {
   });
 
   @override
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState();
+}
+
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+  static const clearBlueColor = Color(0xFF00AFF8);
+  static const darkBlueColor = Color(0xFF0E4B7C);
+  final storage = const FlutterSecureStorage();
+  String? isDriver;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadIsDriver();
+  }
+
+  Future<void> _loadIsDriver() async {
+    final driverStatus = await storage.read(key: "isDriver");
+    setState(() {
+      isDriver = driverStatus;
+    });
+  }
+
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        if (widget.currentIndex != 0) {
+          Navigator.of(context).pushNamed('/Pedir_carona');
+        }
+        break;
+      case 1:
+        if (widget.currentIndex != 1 && (isDriver == "true")) {
+          Navigator.of(context).pushNamed('/Criar_carona');
+        }
+        break;
+      case 2:
+        if (widget.currentIndex != 2) {
+          Navigator.of(context).pushNamed('/Historico');
+        }
+        break;
+      case 3:
+        if (widget.currentIndex != 3) {
+          null;
+        }
+        break;
+      case 4:
+        if (widget.currentIndex != 4) {
+          Navigator.of(context).pushNamed('/Perfil');
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      onTap: (int index) async {
-        final isDriver = await storage.read(key: "isDriver");
-        switch (index) {
-          case 0:
-            if (currentIndex != 0) {
-              Navigator.of(context).pushNamed('/Pedir_carona');
-            }
-            break;
-          case 1:
-            if (currentIndex != 1 && (isDriver == "true")) {
-              Navigator.of(context).pushNamed('/Criar_carona');
-            }
-            break;
-          case 2:
-            if (currentIndex != 2) {
-              Navigator.of(context).pushNamed('/Historico');
-            }
-            break;
-          case 3:
-            if (currentIndex != 3) {
-              null;
-            }
-            break;
-          case 4:
-            if (currentIndex != 4) {
-              Navigator.of(context).pushNamed('/Perfil');
-            }
-            break;
-          default:
-            break;
-        }
-      },
+      onTap: _onItemTapped,
       type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
+      items: <BottomNavigationBarItem>[
+        const BottomNavigationBarItem(
           icon: Icon(Icons.search, color: clearBlueColor),
           label: 'Procurar',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle_outline, color: clearBlueColor),
+          icon: Icon(
+            Icons.add_circle_outline,
+            color: (isDriver != "true") ? Colors.grey : clearBlueColor,            
+          ),
           label: 'Oferecer',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.list, color: clearBlueColor),
           label: 'Viagens',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.message_outlined, color: clearBlueColor),
           label: 'Mensagens',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.person_outline, color: clearBlueColor),
           label: 'Perfil',
         ),
       ],
-      currentIndex: currentIndex,
+      currentIndex: widget.currentIndex,
       selectedItemColor: darkBlueColor,
     );
   }
