@@ -164,7 +164,7 @@ class _CriarCaronaState extends State<CriarCarona>
                           ],
                         )),
                     Container(
-                        height: 450,
+                        height: 550,
                         margin: const EdgeInsets.only(left: 30.0, right: 30.0),
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -259,8 +259,8 @@ class _CriarCaronaState extends State<CriarCarona>
                                                     0.65,
                                                 child: DropdownButton<int>(
                                                   value: selectedVehicleId,
-                                                  hint:
-                                                      const Text('Select a vehicle'),
+                                                  hint: const Text(
+                                                      'Select a vehicle'),
                                                   items:
                                                       vehicles.map((vehicle) {
                                                     return DropdownMenuItem<
@@ -336,7 +336,17 @@ class _CriarCaronaState extends State<CriarCarona>
                                 const SizedBox(height: 18.0),
                               ],
                             ),
-                            Viagem(image: "assets/login_background.png", partida: "baleia", chegada: "aaaaa", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34, vagasRestantes: 2, buttonInnerText: "Aceitar",),
+                            Viagem(
+                              image: "assets/login_background.png",
+                              partida: "baleia",
+                              chegada: "aaaaa",
+                              nome: "ggeold",
+                              data: DateTime.now(),
+                              onPressed: () => {_showMyDialog(context)},
+                              price: 34,
+                              vagasRestantes: 2,
+                              buttonInnerText: "Aceitar",
+                            ),
                           ],
                         ))
                   ],
@@ -355,13 +365,13 @@ class _CriarCaronaState extends State<CriarCarona>
       barrierColor: Colors.black.withOpacity(0.7),
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          title: 'Sucesso',
+          title: '',
           titleStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Carona criada com sucesso (Motorista)',
+          content: 'Você tem certeza que deseja aceitar essa carona?',
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,
@@ -382,12 +392,34 @@ class _CriarCaronaState extends State<CriarCarona>
                   Navigator.of(context).pop();
                 },
                 child: const Text(
-                  'OK',
+                  'SIM',
                   style: TextStyle(
                       color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: BorderSide(color: Color(0xFF00AFF8), width: 2),
+                    )),
+
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () {
+                  //TEM QUE ADICIONAR NO BD//
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'NÃO',
+                  style:
+                      TextStyle(color: const Color(0xFF00AFF8), fontSize: 24),
+                ),
+              ),
+            ),
           ],
         );
       },

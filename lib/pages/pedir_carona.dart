@@ -236,14 +236,20 @@ class _PedirCaronaState extends State<PedirCarona>
                                   ride["motorista"]["user"]["last_name"],
                               data: DateFormat("yyyy-MM-ddTHH:mm:ss")
                                   .parse(ride["hora_partida"]),
-                              onPressed: () async {
-                                try {
-                                  await authService
-                                      .caronaSubscription(ride["id"]);
-                                } catch (error) {
-                                  print(error);
-                                }
+                              onPressed: () {
+                                print(ride["id"].runtimeType);
+                                int id = ride["id"];
+                                _showConfirmationDialog(context, id, ride);
                               },
+                              // async {
+                              //   try {
+
+                              //     await authService
+                              //         .caronaSubscription(ride["id"]);
+                              //   } catch (error) {
+                              //     print(error);
+                              //   }
+                              // },
                               price: ride["valor"],
                               vagasRestantes: ride["vagas_restantes"],
                               buttonInnerText: "Aceitar",
@@ -303,6 +309,82 @@ class _PedirCaronaState extends State<PedirCarona>
                 ),
               ),
             )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showConfirmationDialog(
+      BuildContext context, int id, var ride) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: '',
+          titleStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+          content: 'Você tem certeza que deseja aceitar essa carona?',
+          contentStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF00AFF8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    )),
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: ()
+                    //TEM QUE ADICIONAR NO BD//
+                    async {
+                  try {
+                    await authService.caronaSubscription(ride["id"]);
+                  } catch (error) {
+                    print(error);
+                  }
+                  Navigator.of(context).pop();
+                },
+
+                child: const Text(
+                  'SIM',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: BorderSide(color: Color(0xFF00AFF8), width: 2),
+                    )),
+
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () {
+                  //TEM QUE ADICIONAR NO BD//
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'NÃO',
+                  style:
+                      TextStyle(color: const Color(0xFF00AFF8), fontSize: 24),
+                ),
+              ),
+            ),
           ],
         );
       },
