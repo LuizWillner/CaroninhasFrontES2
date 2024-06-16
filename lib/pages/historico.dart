@@ -9,6 +9,7 @@ import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 import 'package:app_uff_caronas/components/viagem.dart';
+import 'package:intl/intl.dart';
 
 class Historico extends StatefulWidget {
   const Historico({super.key});
@@ -21,69 +22,43 @@ class _HistoricoState extends State<Historico>
     with SingleTickerProviderStateMixin {
   static const clearBlueColor = Color(0xFF00AFF8);
   static const darkBlueColor = Color(0xFF0E4B7C);
-
-  final TextEditingController _fromController = TextEditingController();
-  final TextEditingController _toController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
-  final TextEditingController _vagasController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _passagersController = TextEditingController();
+  final storage = const FlutterSecureStorage();
+  final AuthService authService = AuthService(apiService: ApiService());
+  var _loading = false;
+  dynamic user;
+  var _historico = [];
 
   late TabController _tabController;
-  final AuthService authService = AuthService(apiService: ApiService());
-  final storage = const FlutterSecureStorage();
-  int? selectedVehicleId;
-  var vehicles = [];
-  void _fetchDriverData() async {
+
+  void _fetchUserData() async {
     try {
-      final vehiclesResponse = (await ApiService().getApi('veiculo/me/all'));
-      setState(() {
-        vehicles = vehiclesResponse["data"];
-      });
+      final isDriver = await storage.read(key: "isDriver");
+      final passagerResponse = await authService.getHistoricoCaronista();
+      if (isDriver == "true") {
+        final driverResponse = await authService.getHistoricoMotorista();
+        List<String> historico_somado = List<String>.from(
+            passagerResponse['data'] + driverResponse["data"]);
+        setState(() {
+         _historico = historico_somado;
+         _loading = false;
+
+        });
+      } else {
+        setState(() {
+        _historico = passagerResponse['data'];
+        _loading = false;
+        });
+      }
     } catch (error) {
       print(error.toString());
     }
   }
 
-  late List<dynamic> mockVehicles = [
-    {
-      "placa": "DOG4444",
-      "created_at": "2024-05-26T22:42:00.693969",
-      "veiculo": {
-        "tipo": "CARRO",
-        "marca": "MITSUBISHI",
-        "modelo": "LANCER",
-        "cor": "BRANCO",
-        "id": 2,
-        "created_at": "2024-05-26T22:42:00.653325"
-      },
-      "id": 2,
-      "fk_motorista": 22,
-      "fk_veiculo": 2
-    },
-    {
-      "placa": "penisdenis",
-      "created_at": "2024-05-26T22:42:00.693969",
-      "veiculo": {
-        "tipo": "CARRO",
-        "marca": "MITSUBISHI",
-        "modelo": "LANCER",
-        "cor": "BRANCO",
-        "id": 4,
-        "created_at": "2024-05-26T22:42:00.653325"
-      },
-      "id": 4,
-      "fk_motorista": 22,
-      "fk_veiculo": 4
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
+    _fetchUserData();
     _tabController = TabController(length: 2, vsync: this);
-    _fetchDriverData();
   }
 
   @override
@@ -94,123 +69,108 @@ class _HistoricoState extends State<Historico>
 
   @override
   Widget build(BuildContext context) {
-    // double tabWidth = ((MediaQuery.of(context).size.width + 120));
-
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Suas Viagens',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          leading: const BackButton(color: Colors.white),
-          backgroundColor: clearBlueColor,
-        ),
-        body: SingleChildScrollView(
-          child: Container(
+      appBar: AppBar(
+        title: const Text(
+          'Suas Viagens',
+          style: TextStyle(
             color: Colors.white,
-            child: Stack(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: const BackButton(color: Colors.white),
+        backgroundColor: clearBlueColor,
+      ),
+      body: _loading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
               children: [
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 0.0),
-                      child: Center(
-                        child: Text(
-                          "Dê uma caroninha pra que ta precisando!", // TODO: mudar cor do fundo
-                          style: TextStyle(
-                            fontSize: 30.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                  child: Center(
+                    child: Text(
+                      "Dê uma caroninha pra quem está precisando!",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: darkBlueColor,
+                        fontWeight: FontWeight.bold,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    Container(
-                        margin: EdgeInsets.only(left: 30.0, right: 30.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: clearBlueColor,
-                            ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            color: Colors.white),
-                        child: TabBar(
-                          controller: _tabController,
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                50), // Ajusta o raio de borda conforme necessário
-                            color: const Color(
-                                0xFF00AFF8), // Cor de fundo da aba ativa
-                          ),
-                          labelColor: Colors.white,
-                          unselectedLabelColor: Colors.black,
-                          tabs: [
-                            Container(
-                              // width: tabWidth + 120,
-                              alignment: Alignment.center,
-                              child: const Tab(
-                                child: Text('Corridas Atuais'),
-                              ),
-                            ),
-                            Container(
-                              // width: tabWidth,
-                              alignment: Alignment.center,
-                              child: const Tab(
-                                child: Text('Histórico'),
-                              ),
-                            ),
-                          ],
-                        )),
-                    Container(
-                        height: 450,
-                        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: clearBlueColor,
-                            ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            color: Colors.white),
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            Column(
-                              children: [
-                                Viagem(
-                                  image: 'assets/login_background.png',
-                                  endereco: 'text teste 344444',
-                                  nome: 'text teste',
-                                  data: DateTime.now(),
-                                  onPressed: () {
-                                    print("tututu");
-                                  },
-                                  price: 1,
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    _showRatingDialog(
-                                        context); // Chama a função que mostra a caixa de diálogo de avaliação
-                                  },
-                                  child: Text('Avaliar Viagem'),
-                                ),
-                                const Text("data"),
-                              ],
-                            ),
-                            const Text("lista de caronas")
-                          ],
-                        ))
-                  ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 30.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: clearBlueColor),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: TabBar(
+                    controller: _tabController,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: clearBlueColor,
+                    ),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.black,
+                    tabs: [
+                      Tab(child: Text('Corridas Atuais')),
+                      Tab(child: Text('Histórico')),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 30.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: clearBlueColor),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildHistoricoList(),
+                        Center(child: Text("lista de caronas")),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-        ),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1));
+      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1),
+    );
+  }
+
+  Widget _buildHistoricoList() {
+    return ListView.builder(
+      itemCount: _historico.length,
+      itemBuilder: (context, index) {
+        final ride = _historico[index];
+        return Viagem(
+          image: "assets/login_background.png",
+          partida: ride["local_partida"],
+          chegada: ride["local_destino"],
+          nome: ride["motorista"]["user"]["first_name"] +
+              " " +
+              ride["motorista"]["user"]["last_name"],
+          data: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(ride["hora_partida"]),
+          onPressed: () {
+            try {
+              Navigator.pushNamed(
+                context,
+                '/Detalhes_carona',
+                arguments: ride["id"].toString(),
+              );
+            } catch (error) {
+              print(error);
+            }
+          },
+          price: ride["valor"],
+          vagasRestantes: ride["vagas_restantes"],
+          buttonInnerText: "Ver detalhes",
+        );
+      },
+    );
   }
 
   Future<void> _showRatingDialog(BuildContext context) async {
@@ -218,8 +178,7 @@ class _HistoricoState extends State<Historico>
 
     showDialog<void>(
       context: context,
-      barrierDismissible:
-          true, // Permite fechar o diálogo ao tocar fora da caixa
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Avalie a Carona'),

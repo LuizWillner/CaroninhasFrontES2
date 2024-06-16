@@ -1,8 +1,13 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 import 'package:app_uff_caronas/components/viagem.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:app_uff_caronas/services/service_auth_and_user.dart';
+import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:intl/intl.dart';
 
 class PedirCarona extends StatefulWidget {
   const PedirCarona({super.key});
@@ -24,9 +29,15 @@ class _PedirCaronaState extends State<PedirCarona>
 
   late TabController _tabController;
 
+  final AuthService authService = AuthService(apiService: ApiService());
+  final storage = const FlutterSecureStorage();
+  dynamic user;
+  var rides = [];
+
   @override
   void initState() {
     super.initState();
+    _fetchRides();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -36,171 +47,220 @@ class _PedirCaronaState extends State<PedirCarona>
     super.dispose();
   }
 
+  void _fetchRides() async {
+    try {
+      final ridesResponse = await authService.getAllRides();
+
+      setState(() {
+        rides = ridesResponse["data"];
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Stack(
+      body: Container(
+        color: Colors.white,
+        child: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * (5 / 10),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/login_background.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Column(
               children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * (5 / 10),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/login_background.png'),
-                      fit: BoxFit.cover,
+                const Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: Center(
+                    child: Text(
+                      "Está procurando uma caroninha?",
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 40.0),
-                      child: Center(
-                        child: Text(
-                          "Está procurando uma caroninha?",
-                          style: TextStyle(
-                            fontSize: 30.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
+                Container(
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.03,
+                    left: 30.0,
+                    right: 30.0,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: clearBlueColor,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    color: Colors.white,
+                  ),
+                  child: TabBar(
+                    controller: _tabController,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: const Color(0xFF00AFF8),
+                    ),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.black,
+                    tabs: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: const Tab(
+                          child: Text('Pedir carona'),
                         ),
                       ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: const Tab(
+                          child: Text('Encontrar carona'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: clearBlueColor,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white,
                     ),
-                    Container(
-                        margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.03,
-                            left: 30.0,
-                            right: 30.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: clearBlueColor,
-                            ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            color: Colors.white),
-                        child: TabBar(
-                          controller: _tabController,
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                50), // Ajusta o raio de borda conforme necessário
-                            color:
-                                const Color(0xFF00AFF8), // Cor de fundo da aba ativa
-                          ),
-                          labelColor: Colors.white,
-                          unselectedLabelColor: Colors.black,
-                          tabs: [
-                            Container(
-                              alignment: Alignment.center,
-                              child: const Tab(
-                                child: Text('Pedir carona'),
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              FormInput(
+                                controller: _fromController,
+                                isObscured: false,
+                                placeholderText: "De (endereço completo)",
+                                fieldIcon: Icons.circle_outlined,
+                                keyboardType: TextInputType.text,
                               ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              child: const Tab(
-                                child: Text('Encontrar carona'),
+                              FormInput(
+                                controller: _toController,
+                                isObscured: false,
+                                placeholderText: "Para (endereço completo)",
+                                fieldIcon: Icons.circle,
+                                keyboardType: TextInputType.text,
                               ),
-                            ),
-                          ],
-                        )),
-                    Container(
-                        height: 400,
-                        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: clearBlueColor,
-                            ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            color: Colors.white),
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                FormInput(
-                                  controller: _fromController,
-                                  isObscured: false,
-                                  placeholderText: "De (endereço completo)",
-                                  fieldIcon: Icons.circle_outlined,
-                                  keyboardType: TextInputType.text,
-                                ),
-                                FormInput(
-                                  controller: _toController,
-                                  isObscured: false,
-                                  placeholderText: "Para (endereço completo)",
-                                  fieldIcon: Icons.circle,
-                                  keyboardType: TextInputType.text,
-                                ),
-                                FormInput(
-                                  controller: _dateController,
-                                  isObscured: false,
-                                  placeholderText: "Data",
-                                  fieldIcon: Icons.calendar_month,
-                                  keyboardType: TextInputType.datetime,
-                                ),
-                                FormInput(
-                                  controller: _timeController,
-                                  isObscured: false,
-                                  placeholderText: "Hora",
-                                  fieldIcon: Icons.lock_clock,
-                                  keyboardType: TextInputType.number,
-                                ),
-                                FormInput(
-                                  controller: _passagersController,
-                                  isObscured: false,
-                                  fieldIcon: Icons.person,
-                                  placeholderText: "Passageiros",
-                                  keyboardType: TextInputType.text,
-                                ),
-                                const SizedBox(height: 16.0),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                        width: 1.0,
-                                        color: clearBlueColor,
-                                        style: BorderStyle.solid,
-                                      ),
-                                      backgroundColor: clearBlueColor,
+                              FormInput(
+                                controller: _dateController,
+                                isObscured: false,
+                                placeholderText: "Data",
+                                fieldIcon: Icons.calendar_month,
+                                keyboardType: TextInputType.datetime,
+                              ),
+                              FormInput(
+                                controller: _timeController,
+                                isObscured: false,
+                                placeholderText: "Hora",
+                                fieldIcon: Icons.lock_clock,
+                                keyboardType: TextInputType.number,
+                              ),
+                              FormInput(
+                                controller: _passagersController,
+                                isObscured: false,
+                                fieldIcon: Icons.person,
+                                placeholderText: "Passageiros",
+                                keyboardType: TextInputType.text,
+                              ),
+                              const SizedBox(height: 16.0),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                      width: 1.0,
+                                      color: clearBlueColor,
+                                      style: BorderStyle.solid,
                                     ),
-                                    onPressed: () =>
-                                        // Navigator.of(context)
-                                        //     .pushNamed('/Pedindo_carona')
-                                        _showMyDialog(context),
-                                    // _showConfirmationDialog(context),
-                                    child: const Text(
-                                      'Procurar',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 24),
+                                    backgroundColor: clearBlueColor,
+                                  ),
+                                  onPressed: () async {
+                                    try {
+                                      final response =
+                                          await authService.getRides(
+                                        keywordPartida: _fromController.text,
+                                        keywordChegada: _toController.text,
+                                      );
+                                      setState(() {
+                                        rides = response["data"];
+                                      });
+                                      _tabController.animateTo(1);
+                                    } catch (error) {
+                                      _showMyDialog(context);
+                                      print(error);
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Procurar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 18.0),
-                              ],
-                            ),
-                            SingleChildScrollView(child: Column(children: [
-                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
-                              Viagem(image: "assets/login_background.png", endereco: "baleia", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
-                            ],),)
-                            
-                          ],
-                        ))
-                  ],
+                              ),
+                              const SizedBox(height: 18.0),
+                            ],
+                          ),
+                        ),
+                        ListView.builder(
+                          itemCount: rides.length,
+                          itemBuilder: (context, index) {
+                            final ride = rides[index];
+                            return Viagem(
+                              image: "assets/login_background.png",
+                              partida: ride["local_partida"],
+                              chegada: ride["local_destino"],
+                              nome: ride["motorista"]["user"]["first_name"] +
+                                  ride["motorista"]["user"]["last_name"],
+                              data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                  .parse(ride["hora_partida"]),
+                              onPressed: () async {
+                                try {
+                                  await authService
+                                      .caronaSubscription(ride["id"]);
+                                } catch (error) {
+                                  print(error);
+                                }
+                              },
+                              price: ride["valor"],
+                              vagasRestantes: ride["vagas_restantes"],
+                              buttonInnerText: "Aceitar",
+                            ); // Replace this with your actual widget to display ride information
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
+          ],
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0));
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0),
+    );
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -216,7 +276,7 @@ class _PedirCaronaState extends State<PedirCarona>
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Pedido de Carona cadastrado com sucesso (Passageiro)',
+          content: 'Houve um erro ao procurar o pedido de carona',
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,

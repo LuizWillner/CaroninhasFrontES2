@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -196,7 +195,8 @@ class _PerfilState extends State<Perfil> {
                                   const SizedBox(height: 8.0),
                                   const Text(
                                     // TODO: adicionar nota no modelo do banco
-                                    '4.8' ' ⭐',
+                                    '4.8'
+                                    ' ⭐',
                                     style: TextStyle(
                                         fontSize: 24.0,
                                         color: darkBlueColor,
@@ -295,7 +295,8 @@ class _PerfilState extends State<Perfil> {
                                                     children: [
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.fromLTRB(
+                                                            const EdgeInsets
+                                                                .fromLTRB(
                                                                 10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
@@ -323,7 +324,8 @@ class _PerfilState extends State<Perfil> {
                                                             ),
                                                             Text(
                                                               '${veiculoDetails['marca']} ${veiculoDetails['modelo']}',
-                                                              style: const TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 20.0,
                                                                 color:
                                                                     darkBlueColor,
@@ -338,7 +340,8 @@ class _PerfilState extends State<Perfil> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.fromLTRB(
+                                                            const EdgeInsets
+                                                                .fromLTRB(
                                                                 10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
@@ -366,7 +369,8 @@ class _PerfilState extends State<Perfil> {
                                                             ),
                                                             Text(
                                                               vehicle['placa'],
-                                                              style: const TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 24.0,
                                                                 color:
                                                                     darkBlueColor,
@@ -381,7 +385,8 @@ class _PerfilState extends State<Perfil> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.fromLTRB(
+                                                            const EdgeInsets
+                                                                .fromLTRB(
                                                                 10, 10, 10, 5),
                                                         child: Column(
                                                           crossAxisAlignment:
@@ -410,7 +415,8 @@ class _PerfilState extends State<Perfil> {
                                                             Text(
                                                               veiculoDetails[
                                                                   'cor'],
-                                                              style: const TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontSize: 18.0,
                                                                 color:
                                                                     darkBlueColor,
