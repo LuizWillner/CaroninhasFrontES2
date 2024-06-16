@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:app_uff_caronas/components/bottom_bar.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
@@ -198,18 +197,17 @@ class _PedirCaronaState extends State<PedirCarona>
                                   ),
                                   onPressed: () async {
                                     try {
-                                    final response = await authService.getRides(
-                                      keywordPartida: _fromController.text,
-                                      keywordChegada: _toController.text,
-                                    );
-                                    setState(() {
-                                      rides = response["data"];
-                                    });
-                                    _tabController.animateTo(1);
-
-
+                                      final response =
+                                          await authService.getRides(
+                                        keywordPartida: _fromController.text,
+                                        keywordChegada: _toController.text,
+                                      );
+                                      setState(() {
+                                        rides = response["data"];
+                                      });
+                                      _tabController.animateTo(1);
                                     } catch (error) {
-                                    _showMyDialog(context);
+                                      _showMyDialog(context);
                                       print(error);
                                     }
                                   },
@@ -231,16 +229,25 @@ class _PedirCaronaState extends State<PedirCarona>
                           itemBuilder: (context, index) {
                             final ride = rides[index];
                             return Viagem(
-                                image: "assets/login_background.png",
-                                partida: ride["local_partida"],
-                                chegada: ride["local_destino"],
-                                nome: ride["motorista"]["user"]["first_name"] +
-                                    ride["motorista"]["user"]["last_name"],
-                                data: DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                    .parse(ride["hora_partida"]),
-                                onPressed: () => {},
-                                price: ride[
-                                    "valor"]); // Replace this with your actual widget to display ride information
+                              image: "assets/login_background.png",
+                              partida: ride["local_partida"],
+                              chegada: ride["local_destino"],
+                              nome: ride["motorista"]["user"]["first_name"] +
+                                  ride["motorista"]["user"]["last_name"],
+                              data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                  .parse(ride["hora_partida"]),
+                              onPressed: () async {
+                                try {
+                                  await authService
+                                      .caronaSubscription(ride["id"]);
+                                } catch (error) {
+                                  print(error);
+                                }
+                              },
+                              price: ride["valor"],
+                              vagasRestantes: ride["vagas_restantes"],
+                              buttonInnerText: "Aceitar",
+                            ); // Replace this with your actual widget to display ride information
                           },
                         ),
                       ],

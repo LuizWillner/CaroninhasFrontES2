@@ -5,6 +5,7 @@ import 'package:app_uff_caronas/components/path_details.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/components/viagem.dart';
+import 'package:intl/intl.dart';
 
 class HistoricoCarona extends StatefulWidget {
   const HistoricoCarona({Key? key}) : super(key: key);
@@ -82,21 +83,35 @@ class _HistoricoCaronaState extends State<HistoricoCarona>
             : SingleChildScrollView(
                 child: Column(
                   children: [
-                    Viagem(image: "kkkk", partida: "baleia",chegada: "aaaaa", nome: "ggeold", data: DateTime.now(), onPressed: () => {}, price: 34),
-                    // const Padding(
-                    //   padding: EdgeInsets.only(top: 40.0),
-                    //   child: Center(
-                    //     child: Text(
-                    //       "Está procurando uma caroninha?",
-                    //       style: TextStyle(
-                    //         fontSize: 30.0,
-                    //         color: Colors.white,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //       textAlign: TextAlign.center,
-                    //     ),
-                    //   ),
-                    // ),
+                    ListView.builder(
+                          itemCount: _historico.length,
+                          itemBuilder: (context, index) {
+                            final ride = _historico[index];
+                            return Viagem(
+                              image: "assets/login_background.png",
+                              partida: ride["local_partida"],
+                              chegada: ride["local_destino"],
+                              nome: ride["motorista"]["user"]["first_name"] +
+                                  ride["motorista"]["user"]["last_name"],
+                              data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                  .parse(ride["hora_partida"]),
+                              onPressed: ()  {
+                                try {
+                                  Navigator.pushNamed(
+                                        context,
+                                        '/Detalhes_carona',
+                                        arguments: ride["id"],
+                                      );
+                                } catch (error) {
+                                  print(error);
+                                }
+                              },
+                              price: ride["valor"],
+                              vagasRestantes: ride["vagas_restantes"],
+                              buttonInnerText: "Ver detalhes",
+                            ); 
+                          },
+                        ),
                     Container(
                         margin: EdgeInsets.only(
                             top: MediaQuery.of(context).size.height * 0.03,

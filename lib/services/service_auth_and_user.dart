@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 
 class AuthService {
@@ -74,11 +77,32 @@ class AuthService {
     final response = await apiService.getApi("users/me");
     return response;
   }
-  
+
   Future<Map<String, dynamic>> getAllRides() async {
     final response = await apiService.getApi("carona");
     return response;
   }
+
+  Future<Map<String, dynamic>> getRideById(id) async {
+    final response = await apiService.getApi("carona/$id");
+    return response;
+  }
+
+  Future<Map<String, dynamic>> caronaSubscription(caronaId) async {
+    final response = await apiService.postApi("user-carona?carona_id=$caronaId", {});
+    return response;
+  }
+
+Future<Map<String, dynamic>> getHistoricoCaronista() async {
+          final response = await ApiService().getApi('carona/historico/me/passageiro');
+          return response;
+  }
+
+  Future<Map<String, dynamic>> getHistoricoMotorista() async {
+          final response = await ApiService().getApi('carona/historico/me/motorista');
+          return response;
+  }
+  
 
   Future<Map<String, dynamic>> getAllCars() async {
     final response = await apiService.getApi("veiculo/me/all");

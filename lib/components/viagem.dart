@@ -12,6 +12,8 @@ class Viagem extends StatelessWidget {
   final DateTime data;
   final VoidCallback onPressed;
   final int? price;
+  final int vagasRestantes;
+  final String buttonInnerText;
 
   Viagem(
       {required this.image,
@@ -20,7 +22,10 @@ class Viagem extends StatelessWidget {
       required this.nome,
       required this.data,
       required this.onPressed,
-      required this.price});
+      required this.price,
+      required this.vagasRestantes,
+      required this.buttonInnerText
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +68,7 @@ class Viagem extends StatelessWidget {
                       Text(dataLayout),
                       Text(horaLayout),
                       Text("Nome do motorista $nome"),
+                      Text("vagas restantes: $vagasRestantes")
                     ],
                   ),
                 ],
@@ -81,9 +87,9 @@ class Viagem extends StatelessWidget {
                       backgroundColor: clearBlueColor,
                     ),
                     onPressed: onPressed,
-                    child: const Text(
-                      'Aceitar',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    child: Text(
+                      buttonInnerText,
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ],
