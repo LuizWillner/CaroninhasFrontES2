@@ -209,42 +209,43 @@ class _PerfilState extends State<Perfil> {
                             ],
                           ),
                           const SizedBox(height: 32.0),
-                          const Text(
-                            'Carros do Motorista',
-                            style: TextStyle(
-                                fontSize: 28.0,
-                                color: darkBlueColor,
-                                fontWeight: FontWeight.bold,
-                                height: 0.5),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                  width: 1.0,
-                                  color: Color(0xFF00AFF8),
-                                  style: BorderStyle.solid,
-                                ),
-                                backgroundColor: const Color(0xFF00AFF8),
-                              ),
-                              onPressed: () async {
-                                Navigator.of(context).pushNamed(
-                                  '/Adicionar_carro',
-                                );
-                              },
-                              child: const Text(
-                                'Adicionar Carro',
-                                style: TextStyle(
-                                    color: Color(0xFFFAFAFA), fontSize: 24),
-                              ),
-                            ),
-                          ),
+                          // const Text(
+                          //   'Carros do Motorista',
+                          //   style: TextStyle(
+                          //       fontSize: 28.0,
+                          //       color: darkBlueColor,
+                          //       fontWeight: FontWeight.bold,
+                          //       height: 0.5),
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(16),
+                          //   child: OutlinedButton(
+                          //     style: OutlinedButton.styleFrom(
+                          //       side: const BorderSide(
+                          //         width: 1.0,
+                          //         color: Color(0xFF00AFF8),
+                          //         style: BorderStyle.solid,
+                          //       ),
+                          //       backgroundColor: const Color(0xFF00AFF8),
+                          //     ),
+                          //     onPressed: () async {
+                          //       Navigator.of(context).pushNamed(
+                          //         '/Adicionar_carro',
+                          //       );
+                          //     },
+                          //     child: const Text(
+                          //       'Adicionar Carro',
+                          //       style: TextStyle(
+                          //           color: Color(0xFFFAFAFA), fontSize: 24),
+                          //     ),
+                          //   ),
+                          // ),
                           user['motorista'] == null
                               ? Column(
                                   children: [
                                     const Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 16, 0, 16),
                                       child: Text(
                                           "No momento você não tem nenhum carro. Cadastre seu e torne-se um motorista!"),
                                     ),
@@ -264,7 +265,7 @@ class _PerfilState extends State<Perfil> {
                                         );
                                       },
                                       child: const Text(
-                                        'Adicionar Carro',
+                                        'Cadastro Motorista',
                                         style: TextStyle(
                                             color: Color(0xFFFAFAFA),
                                             fontSize: 24),
@@ -274,173 +275,224 @@ class _PerfilState extends State<Perfil> {
                                 )
                               : vehicles == []
                                   ? const Text("Cadastre um novo carro!")
-                                  : Row(
+                                  : Column(
                                       children: [
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 150.0,
-                                            child: ListView.builder(
-                                              itemCount: vehicles.length,
-                                              itemBuilder: (context, index) {
-                                                final vehicle = vehicles[index];
-                                                final veiculoDetails =
-                                                    vehicle['veiculo'];
-                                                return Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 8.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                10, 10, 10, 5),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0,
-                                                                          0,
-                                                                          0,
-                                                                          4),
-                                                              child: Text(
-                                                                'Carro atual',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14.0,
-                                                                    color:
-                                                                        darkBlueColor,
-                                                                    height:
-                                                                        0.5),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              '${veiculoDetails['marca']} ${veiculoDetails['modelo']}',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 20.0,
-                                                                color:
-                                                                    darkBlueColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                height: 1.0,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                10, 10, 10, 5),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0,
-                                                                          0,
-                                                                          0,
-                                                                          4),
-                                                              child: Text(
-                                                                'Placa',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14.0,
-                                                                    color:
-                                                                        darkBlueColor,
-                                                                    height:
-                                                                        0.5),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              vehicle['placa'],
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 24.0,
-                                                                color:
-                                                                    darkBlueColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                height: 1.0,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                10, 10, 10, 5),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0,
-                                                                          0,
-                                                                          0,
-                                                                          4),
-                                                              child: Text(
-                                                                'Cor',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14.0,
-                                                                    color:
-                                                                        darkBlueColor,
-                                                                    height:
-                                                                        0.5),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              veiculoDetails[
-                                                                  'cor'],
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 18.0,
-                                                                color:
-                                                                    darkBlueColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                height: 1.0,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 24,
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
+                                        const Text(
+                                          'Carros do Motorista',
+                                          style: TextStyle(
+                                              fontSize: 28.0,
+                                              color: darkBlueColor,
+                                              fontWeight: FontWeight.bold,
+                                              height: 0.5),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              side: const BorderSide(
+                                                width: 1.0,
+                                                color: Color(0xFF00AFF8),
+                                                style: BorderStyle.solid,
+                                              ),
+                                              backgroundColor:
+                                                  const Color(0xFF00AFF8),
+                                            ),
+                                            onPressed: () async {
+                                              Navigator.of(context).pushNamed(
+                                                '/Adicionar_carro',
+                                              );
+                                            },
+                                            child: const Text(
+                                              'Adicionar Carro',
+                                              style: TextStyle(
+                                                  color: Color(0xFFFAFAFA),
+                                                  fontSize: 24),
                                             ),
                                           ),
                                         ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                height: 150.0,
+                                                child: ListView.builder(
+                                                  itemCount: vehicles.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final vehicle =
+                                                        vehicles[index];
+                                                    final veiculoDetails =
+                                                        vehicle['veiculo'];
+                                                    return Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 8.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    10,
+                                                                    10,
+                                                                    10,
+                                                                    5),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          4),
+                                                                  child: Text(
+                                                                    'Carro atual',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14.0,
+                                                                        color:
+                                                                            darkBlueColor,
+                                                                        height:
+                                                                            0.5),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${veiculoDetails['marca']} ${veiculoDetails['modelo']}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        20.0,
+                                                                    color:
+                                                                        darkBlueColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    height: 1.0,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    10,
+                                                                    10,
+                                                                    10,
+                                                                    5),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          4),
+                                                                  child: Text(
+                                                                    'Placa',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14.0,
+                                                                        color:
+                                                                            darkBlueColor,
+                                                                        height:
+                                                                            0.5),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  vehicle[
+                                                                      'placa'],
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        24.0,
+                                                                    color:
+                                                                        darkBlueColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    height: 1.0,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    10,
+                                                                    10,
+                                                                    10,
+                                                                    5),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          4),
+                                                                  child: Text(
+                                                                    'Cor',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14.0,
+                                                                        color:
+                                                                            darkBlueColor,
+                                                                        height:
+                                                                            0.5),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  veiculoDetails[
+                                                                      'cor'],
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        18.0,
+                                                                    color:
+                                                                        darkBlueColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    height: 1.0,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 24,
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
+
                           Column(
                             // retirar qnd for perfil de outro user
                             crossAxisAlignment: CrossAxisAlignment.start,
