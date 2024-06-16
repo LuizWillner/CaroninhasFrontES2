@@ -164,7 +164,7 @@ class _CriarCaronaState extends State<CriarCarona>
                           ],
                         )),
                     Container(
-                        height: 450,
+                        height: 550,
                         margin: const EdgeInsets.only(left: 30.0, right: 30.0),
                         decoration: BoxDecoration(
                             border: Border.all(
