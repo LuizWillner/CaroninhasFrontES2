@@ -24,7 +24,8 @@ class _PedirCaronaState extends State<PedirCarona>
   final TextEditingController _fromController = TextEditingController();
   final TextEditingController _toController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _timeMinController = TextEditingController();
+  final TextEditingController _timeMaxController = TextEditingController();
   final TextEditingController _passagersController = TextEditingController();
 
   late TabController _tabController;
@@ -56,6 +57,49 @@ class _PedirCaronaState extends State<PedirCarona>
       });
     } catch (error) {
       print(error.toString());
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _dateController.text = picked.toString().split(" ")[0];
+      });
+    }
+  }
+
+  Future<void> _selectTimeMin(BuildContext context) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+        context: context,
+        initialTime:
+            TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+        initialEntryMode: TimePickerEntryMode.dial);
+    if (timeOfDay != null) {
+      setState(() {
+        print(timeOfDay);
+        _timeMinController.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+      });
+    }
+  }
+
+  Future<void> _selectTimeMax(BuildContext context) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+        context: context,
+        initialTime:
+            TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+        initialEntryMode: TimePickerEntryMode.dial);
+    if (timeOfDay != null) {
+      setState(() {
+        print(timeOfDay);
+        _timeMaxController.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+      });
     }
   }
 
@@ -166,14 +210,30 @@ class _PedirCaronaState extends State<PedirCarona>
                                 isObscured: false,
                                 placeholderText: "Data",
                                 fieldIcon: Icons.calendar_month,
-                                keyboardType: TextInputType.datetime,
+                                keyboardType: TextInputType.text,
+                                onTap: () {
+                                  _selectDate(context);
+                                },
                               ),
                               FormInput(
-                                controller: _timeController,
+                                controller: _timeMinController,
                                 isObscured: false,
-                                placeholderText: "Hora",
+                                placeholderText: "Hora mínima",
                                 fieldIcon: Icons.lock_clock,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
+                                onTap: () {
+                                  _selectTimeMin(context);
+                                },
+                              ),
+                              FormInput(
+                                controller: _timeMaxController,
+                                isObscured: false,
+                                placeholderText: "Hora máxima",
+                                fieldIcon: Icons.lock_clock,
+                                keyboardType: TextInputType.text,
+                                onTap: () {
+                                  _selectTimeMax(context);
+                                },
                               ),
                               FormInput(
                                 controller: _passagersController,

@@ -261,8 +261,14 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                               shrinkWrap: true,
                               itemCount: rideDetail["passageiros"].length,
                               itemBuilder: (context, index) {
+                                final firstName = rideDetail["passageiros"]
+                                    [index]["user"]["first_name"];
+                                final LastName = rideDetail["passageiros"]
+                                    [index]["user"]["last_name"];
+                                final rate = rideDetail["passageiros"][index]
+                                    ["nota_passageiro"];
                                 final caronista =
-                                    "${rideDetail["passageiros"][index]["user"]["first_name"]} ${rideDetail["passageiros"][index]["user"]["first_name"]}";
+                                    "$firstName $LastName - $rate";
 
                                 return Row(children: [
                                   CircleAvatar(
