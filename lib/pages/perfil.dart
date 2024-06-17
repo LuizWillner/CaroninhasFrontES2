@@ -127,7 +127,7 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   Text(
                                     user['first_name'] +
@@ -145,7 +145,7 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   Text(
                                     user['email'],
@@ -161,7 +161,7 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   Text(
                                     user['phone'],
@@ -177,7 +177,7 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   const SizedBox(height: 8.0),
                                   Text(
@@ -186,7 +186,7 @@ class _PerfilState extends State<Perfil> {
                                         fontSize: fontSize,
                                         color: darkBlueColor,
                                         fontWeight: FontWeight.bold,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   const SizedBox(height: 32.0),
                                 ],

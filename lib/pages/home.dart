@@ -28,8 +28,9 @@ class _HomeState extends State<Home> {
               height: MediaQuery.of(context).size.height * (0.4),
                 color: Colors.white,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox( height: MediaQuery.of(context).size.height * (0.04),),
                     const Padding(
                         padding: EdgeInsets.all(16),
                         child: Text(
@@ -88,7 +89,8 @@ class _HomeState extends State<Home> {
                                   color: Color(0xFF00AFF8), fontSize: 24),
                             ))),
                   ],
-                )),
+                ))
+            
           ],
         ),
       ),
