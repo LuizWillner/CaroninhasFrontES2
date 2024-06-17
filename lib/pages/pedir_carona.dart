@@ -58,7 +58,10 @@ class _PedirCaronaState extends State<PedirCarona>
 
   void _fetchRides() async {
     try {
-      final ridesResponse = await authService.getAllRides();
+      final ridesResponse = await authService.getRides(
+                                        horaMinima: DateTime.now(),
+                                        horaMaxima: DateTime.now().add(const Duration(days: 15)),
+                                      );
 
       setState(() {
         rides = ridesResponse["data"];
