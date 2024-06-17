@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 
 const Color clearBlueColor = Color(0xFF00AFF8);
 const Color darkBlueColor = Color(0xFF0E4B7C);
@@ -28,54 +30,98 @@ class Viagem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String dataLayout = '${data.day}/${data.month}';
-    String horaLayout = '${data.hour}:${data.minute}';
+    String dataLayout = DateFormat('dd/MM/yyyy').format(data);
+    String horaLayout = DateFormat('HH:mm').format(data);
     String priceLayout = 'R\$ ${price.toStringAsFixed(2).replaceAll(".", ",")}';
 
     return Container(
-      height: 180,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: clearBlueColor,
+          width: 1.0,
+        ),
       ),
-      child: Stack(
+      height: 210,
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: Column(
         children: [
-          Column(
+          Row(
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    image,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(width: 15),
-                  Column(
-                    children: [
-                      Text("partida: $partida"),
-                      Text("chegada: $chegada"),
-                      Text(dataLayout),
-                      Text(horaLayout),
-                      Text("Nome do motorista $nome"),
-                      Text("vagas restantes: $vagasRestantes")
-                    ],
-                  ),
-                ],
+              Image.asset(
+                image,
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
               ),
-              Row(
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(width: 8),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "De: ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: partida,
+                          ),
+                          const TextSpan(
+                            text: "\nPara: ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: chegada,
+                          ),
+                        ],
+                      ),
+                      style:
+                          const TextStyle(fontSize: 16, color: darkBlueColor),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                    ),
+                    Text(
+                      dataLayout,
+                      style:
+                          const TextStyle(fontSize: 14, color: darkBlueColor),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      horaLayout,
+                      style:
+                          const TextStyle(fontSize: 14, color: darkBlueColor),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      "Motorista: $nome",
+                      style:
+                          const TextStyle(fontSize: 14, color: darkBlueColor),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+              child: Row(
                 children: [
-                  Text(priceLayout),
-                  Spacer(),
+                  Text(
+                    priceLayout,
+                    style: const TextStyle(fontSize: 14, color: darkBlueColor),
+                  ),
+                  const Spacer(),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(
@@ -92,9 +138,8 @@ class Viagem extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
-            ],
-          )
+              )),
+          const Spacer()
         ],
       ),
     );
