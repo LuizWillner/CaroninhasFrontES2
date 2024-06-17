@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:app_uff_caronas/components/cadastro_input.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -14,11 +14,12 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _iduffController = TextEditingController();
-   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _password1Controller = TextEditingController();
   final TextEditingController _password2Controller = TextEditingController();
@@ -80,10 +81,17 @@ class _CadastroState extends State<Cadastro> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           CadastroInput(
-                            controller: _nameController,
+                            controller: _firstNameController,
                             isObscured: false,
-                            placeholderText: "Nome Completo",
                             labelText: "Nome",
+                            placeholderText: "João",
+                            keyboardType: TextInputType.text,
+                          ),
+                          CadastroInput(
+                            controller: _lastNameController,
+                            isObscured: false,
+                            labelText: "Sobrenome",
+                            placeholderText: "Silva Motors",
                             keyboardType: TextInputType.text,
                           ),
                           CadastroInput(
@@ -99,7 +107,8 @@ class _CadastroState extends State<Cadastro> {
                             placeholderText: "xxx.xxx.xxx-xx",
                             labelText: "CPF",
                             keyboardType: TextInputType.number,
-                          ),CadastroInput(
+                          ),
+                          CadastroInput(
                             controller: _phoneController,
                             isObscured: false,
                             placeholderText: "(xx) xxxxx-xxxx",
@@ -140,8 +149,8 @@ class _CadastroState extends State<Cadastro> {
                                       labelText: "xx/xx/xxxx",
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.never,
-                                      labelStyle: TextStyle(
-                                          color: Color(0xFF0E4B7C)),
+                                      labelStyle:
+                                          TextStyle(color: Color(0xFF0E4B7C)),
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFF0E4B7C)),
@@ -179,23 +188,39 @@ class _CadastroState extends State<Cadastro> {
                                 backgroundColor: const Color(0xFF00AFF8),
                               ),
                               onPressed: () async {
-                                print(await storage.read(key: 'login_token'));
-                                final email = _emailController.text;
-                                final firstName = _nameController.text;
-                                final lastName = _nameController.text;
-                                final cpf = _cpfController.text;
-                                final birthdate = _dateController.text;
-                                final phone = _phoneController.text;
-                                final iduff = _iduffController.text;
-                                final password = _password1Controller.text;
-                                try {
-                                  final user = await authService.createUser(email, firstName, lastName,cpf,birthdate,phone, iduff, password);
-                                  print(user);
-                                   Navigator.of(context).pushNamed(
-                                        '/Login',
-                                      ); //TODO notificação de sucesso/falha
-                                } catch (error) {
-                                  print(error);
+                                if (_password1Controller.text !=
+                                    _password2Controller.text) {
+                                  _showMyDialog(
+                                      context, "As duas senhas não coinsidem");
+                                } else {
+                                  print(await storage.read(key: 'login_token'));
+                                  final email = _emailController.text;
+                                  final firstName = _firstNameController.text;
+                                  final lastName = _lastNameController.text;
+                                  final cpf = _cpfController.text;
+                                  final birthdate = _dateController.text;
+                                  final phone = _phoneController.text;
+                                  final iduff = _iduffController.text;
+                                  final password = _password1Controller.text;
+                                  try {
+                                    final user = await authService.createUser(
+                                        email,
+                                        firstName,
+                                        lastName,
+                                        cpf,
+                                        birthdate,
+                                        phone,
+                                        iduff,
+                                        password);
+                                    print(user);
+                                    Navigator.of(context).pushNamed(
+                                      '/Login',
+                                    );
+                                  } catch (error) {
+                                    print(error);
+                                    _showMyDialog(context,
+                                        "Erro ao criar o cadastro, verifique todos os seus dados");
+                                  }
                                 }
                               },
                               child: const Text(
@@ -241,6 +266,50 @@ class _CadastroState extends State<Cadastro> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showMyDialog(BuildContext context, String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: 'Erro',
+          titleStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+          content: message,
+          contentStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF00AFF8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    )),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

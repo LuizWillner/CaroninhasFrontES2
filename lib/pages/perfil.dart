@@ -194,37 +194,6 @@ class _PerfilState extends State<Perfil> {
                             ],
                           ),
                           const SizedBox(height: 32.0),
-                          // const Text(
-                          //   'Carros do Motorista',
-                          //   style: TextStyle(
-                          //       fontSize: 28.0,
-                          //       color: darkBlueColor,
-                          //       fontWeight: FontWeight.bold,
-                          //       height: 0.5),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(16),
-                          //   child: OutlinedButton(
-                          //     style: OutlinedButton.styleFrom(
-                          //       side: const BorderSide(
-                          //         width: 1.0,
-                          //         color: Color(0xFF00AFF8),
-                          //         style: BorderStyle.solid,
-                          //       ),
-                          //       backgroundColor: const Color(0xFF00AFF8),
-                          //     ),
-                          //     onPressed: () async {
-                          //       Navigator.of(context).pushNamed(
-                          //         '/Adicionar_carro',
-                          //       );
-                          //     },
-                          //     child: const Text(
-                          //       'Adicionar Carro',
-                          //       style: TextStyle(
-                          //           color: Color(0xFFFAFAFA), fontSize: 24),
-                          //     ),
-                          //   ),
-                          // ),
                           user['motorista'] == null
                               ? Column(
                                   children: [
@@ -232,7 +201,7 @@ class _PerfilState extends State<Perfil> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 16, 0, 16),
                                       child: Text(
-                                          "No momento você não tem nenhum carro. Cadastre seu e torne-se um motorista!"),
+                                          "No momento você não tem nenhum carro. Cadastre seu carro e torne-se um motorista!"),
                                     ),
                                     OutlinedButton(
                                       style: OutlinedButton.styleFrom(
@@ -509,15 +478,17 @@ class _PerfilState extends State<Perfil> {
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero),
                                   onPressed: () {
-                                    null;
+                                    Navigator.of(context).pushNamed(
+                                      '/Alterar_dados',
+                                    );
                                   },
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Alterar senha',
+                                      'Alterar dados',
                                       style: TextStyle(
                                         fontSize: 14.0,
-                                        color: Colors.grey.withOpacity(0.6),
+                                        color: Colors.grey,
                                         height: 0.5,
                                       ),
                                     ),

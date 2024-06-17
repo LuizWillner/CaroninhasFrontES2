@@ -4,9 +4,11 @@ import 'package:app_uff_caronas/components/path_details.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class DetalhesCarona extends StatefulWidget {
   final String caronaId;
@@ -28,12 +30,24 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
   void initState() {
     super.initState();
     _fetchRide();
+    _fetchUserData();
+  }
+
+  void _fetchUserData() async {
+    try {
+      user = await authService.getUser();
+      print('user["id"]');
+      print(user["id"]);
+    } catch (error) {
+      print(error.toString());
+    }
   }
 
   void _fetchRide() async {
     try {
       final ridesResponse = await authService.getRideById(widget.caronaId);
-
+      print('ridesResponse["fk_motorista"]');
+      print(ridesResponse['motorista']['id_fk_user']);
       setState(() {
         rideDetail = ridesResponse;
       });
@@ -140,11 +154,17 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                       const SizedBox(height: 18.0),
                       const Text("Tipo",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      const Text("Passageiro",
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: darkBlueColor,
-                              fontWeight: FontWeight.bold)),
+                      user['id'] == rideDetail['motorista']['id_fk_user']
+                          ? const Text("Motorista",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: darkBlueColor,
+                                  fontWeight: FontWeight.bold))
+                          : const Text("Passageiro",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: darkBlueColor,
+                                  fontWeight: FontWeight.bold)),
                       const SizedBox(height: 18.0),
                       const Text("passageiros",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
@@ -191,7 +211,56 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                             throw 'Could not launch $url';
                           }
                         },
-                      )
+                      ),
+                      user['id'] == rideDetail['motorista']['id_fk_user']
+                          ? OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                  width: 1.0,
+                                  color: Color(0xFF00AFF8),
+                                  style: BorderStyle.solid,
+                                ),
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              onPressed: () async {
+                                int id = rideDetail["id"];
+                                _showConfirmationDialog(
+                                    context, id, rideDetail, 1, 'cancelar');
+                                // authService.deleteCaronabyID(rideDetail["id"]);
+                              },
+                              child: const Text(
+                                'Cancelar Corrida',
+                                style: TextStyle(
+                                    color: Color(0xFF00AFF8), fontSize: 16),
+                              ),
+                            )
+                          : OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                  width: 1.0,
+                                  color: Color(0xFF00AFF8),
+                                  style: BorderStyle.solid,
+                                ),
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              onPressed: () async {
+                                // print('\nteste\n');
+                                // print('rideDetail["passageiros"]["id"]');
+                                // print(rideDetail["passageiros"]);
+                                print('\n\nrideDetail["id"]');
+                                print(rideDetail["id"]);
+                                int id = rideDetail["id"];
+                                _showConfirmationDialog(
+                                    context, id, rideDetail, 2, 'sair');
+                              },
+                              child: const Text(
+                                'Sair da Corrida',
+                                style: TextStyle(
+                                    color: Color(0xFF00AFF8), fontSize: 16),
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -201,6 +270,91 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
         ),
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
+    );
+  }
+
+  Future<void> _showConfirmationDialog(
+      BuildContext context, int id, var ride, int role, String word) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: '',
+          titleStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+          content: 'Você tem certeza que deseja $word essa carona?',
+          contentStyle: const TextStyle(
+            color: Color(0xFF0E4B7C),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF00AFF8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    )),
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () async {
+                  if (role == 1) {
+                    try {
+                      authService.deleteCaronabyID(rideDetail["id"]);
+                    } catch (error) {
+                      print(error);
+                    }
+                  } else {
+                    try {
+                      authService.deletePassFromCarona(
+                          user["id"], rideDetail["id"]);
+                    } catch (error) {
+                      print(error);
+                    }
+                  }
+                  Navigator.of(context).pushNamed(
+                    '/Historico',
+                  );
+                },
+
+                child: const Text(
+                  'SIM',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 100,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: BorderSide(color: Color(0xFF00AFF8), width: 2),
+                    )),
+
+                // Icon(Icons.search, color: clearBlueColor),
+                onPressed: () {
+                  //TEM QUE ADICIONAR NO BD//
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'NÃO',
+                  style:
+                      TextStyle(color: const Color(0xFF00AFF8), fontSize: 24),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
