@@ -54,11 +54,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         break;
       case 3:
         if (widget.currentIndex != 3) {
-          null;
-        }
-        break;
-      case 4:
-        if (widget.currentIndex != 4) {
           Navigator.of(context).pushNamed('/Perfil');
         }
         break;
@@ -87,10 +82,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         const BottomNavigationBarItem(
           icon: Icon(Icons.list, color: clearBlueColor),
           label: 'Viagens',
-        ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.message_outlined, color: clearBlueColor),
-          label: 'Mensagens',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.person_outline, color: clearBlueColor),
