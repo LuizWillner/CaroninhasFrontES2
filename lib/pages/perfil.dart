@@ -453,24 +453,6 @@ class _PerfilState extends State<Perfil> {
                               const SizedBox(
                                 height: 30.0,
                               ),
-                              TextButton(
-                                  style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed('/Historico_carona');
-                                  },
-                                  child: const Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Histórico de caronas',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.grey,
-                                        height: 0.5,
-                                      ),
-                                    ),
-                                  )),
                               const Divider(
                                 color: Colors.grey,
                               ),

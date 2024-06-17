@@ -14,8 +14,9 @@ class Viagem extends StatelessWidget {
   final DateTime data;
   final VoidCallback onPressed;
   final double price;
-  final int vagasRestantes;
+  final int? vagasRestantes;
   final String buttonInnerText;
+  final String role;
 
   const Viagem(
       {required this.image,
@@ -26,7 +27,9 @@ class Viagem extends StatelessWidget {
       required this.onPressed,
       required this.price,
       required this.vagasRestantes,
-      required this.buttonInnerText});
+      required this.buttonInnerText,
+      this.role = "Motorista"
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class Viagem extends StatelessWidget {
           width: 1.0,
         ),
       ),
-      height: 210,
+      height: 250,
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Column(
         children: [
@@ -107,6 +110,13 @@ class Viagem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
+                    Text(
+                      vagasRestantes==null?"":"Vagas: $vagasRestantes",
+                      style:
+                          const TextStyle(fontSize: 14, color: darkBlueColor),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    )
                   ],
                 ),
               ),

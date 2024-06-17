@@ -188,12 +188,11 @@ class _AlterarDadosState extends State<AlterarDados> {
                                 try {
                                   final userStatus =
                                       await authService.updateUserInfo(
-                                        firstName,
-                                        lastName,
-                                        userInfo['birthdate'],
-                                        passwordOld,
-                                        password1
-                                      );
+                                          firstName,
+                                          lastName,
+                                          userInfo['birthdate'],
+                                          passwordOld,
+                                          password1);
                                   print(userStatus);
                                 } catch (error) {
                                   print(error);
@@ -207,6 +206,6 @@ class _AlterarDadosState extends State<AlterarDados> {
                             ),
                           ],
                         )))),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4));
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 3));
   }
 }
