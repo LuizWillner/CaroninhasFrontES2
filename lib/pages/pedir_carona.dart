@@ -84,7 +84,8 @@ class _PedirCaronaState extends State<PedirCarona>
     if (timeOfDay != null) {
       setState(() {
         print(timeOfDay);
-        _timeMinController.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+        _timeMinController.text =
+            '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
       });
     }
   }
@@ -98,7 +99,8 @@ class _PedirCaronaState extends State<PedirCarona>
     if (timeOfDay != null) {
       setState(() {
         print(timeOfDay);
-        _timeMaxController.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+        _timeMaxController.text =
+            '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
       });
     }
   }
@@ -292,8 +294,8 @@ class _PedirCaronaState extends State<PedirCarona>
                               image: "assets/login_background.png",
                               partida: ride["local_partida"],
                               chegada: ride["local_destino"],
-                              nome: ride["motorista"]["user"]["first_name"] +
-                                  ride["motorista"]["user"]["last_name"],
+                              nome:
+                                  "${ride["motorista"]["user"]["first_name"]} ${ride["motorista"]["user"]["last_name"]}",
                               data: DateFormat("yyyy-MM-ddTHH:mm:ss")
                                   .parse(ride["hora_partida"]),
                               onPressed: () {
