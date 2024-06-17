@@ -209,37 +209,6 @@ class _PerfilState extends State<Perfil> {
                             ],
                           ),
                           const SizedBox(height: 32.0),
-                          // const Text(
-                          //   'Carros do Motorista',
-                          //   style: TextStyle(
-                          //       fontSize: 28.0,
-                          //       color: darkBlueColor,
-                          //       fontWeight: FontWeight.bold,
-                          //       height: 0.5),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(16),
-                          //   child: OutlinedButton(
-                          //     style: OutlinedButton.styleFrom(
-                          //       side: const BorderSide(
-                          //         width: 1.0,
-                          //         color: Color(0xFF00AFF8),
-                          //         style: BorderStyle.solid,
-                          //       ),
-                          //       backgroundColor: const Color(0xFF00AFF8),
-                          //     ),
-                          //     onPressed: () async {
-                          //       Navigator.of(context).pushNamed(
-                          //         '/Adicionar_carro',
-                          //       );
-                          //     },
-                          //     child: const Text(
-                          //       'Adicionar Carro',
-                          //       style: TextStyle(
-                          //           color: Color(0xFFFAFAFA), fontSize: 24),
-                          //     ),
-                          //   ),
-                          // ),
                           user['motorista'] == null
                               ? Column(
                                   children: [
@@ -492,7 +461,6 @@ class _PerfilState extends State<Perfil> {
                                         ),
                                       ],
                                     ),
-
                           Column(
                             // retirar qnd for perfil de outro user
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -595,6 +563,6 @@ class _PerfilState extends State<Perfil> {
                   ),
                 )),
               ),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4));
+        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 3));
   }
 }

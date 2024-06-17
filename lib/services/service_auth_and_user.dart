@@ -89,24 +89,41 @@ class AuthService {
   }
 
   Future<Map<String, dynamic>> caronaSubscription(caronaId) async {
-    final response = await apiService.postApi("user-carona?carona_id=$caronaId", {});
+    final response =
+        await apiService.postApi("user-carona?carona_id=$caronaId", {});
     return response;
   }
 
-Future<Map<String, dynamic>> getHistoricoCaronista() async {
-          final response = await ApiService().getApi('carona/historico/me/passageiro');
-          return response;
+  Future<Map<String, dynamic>> getHistoricoCaronista() async {
+    final response =
+        await ApiService().getApi('carona/historico/me/passageiro');
+    return response;
   }
 
   Future<Map<String, dynamic>> getHistoricoMotorista() async {
-          final response = await ApiService().getApi('carona/historico/me/motorista');
-          return response;
+    final response = await ApiService().getApi('carona/historico/me/motorista');
+    return response;
   }
-  
 
   Future<Map<String, dynamic>> getAllCars() async {
     final response = await apiService.getApi("veiculo/me/all");
     return response;
+  }
+
+  void deleteCaronabyID(caronaID) async {
+    try {
+      await apiService.deleteApi("carona/$caronaID");
+    } catch (e) {
+      print('Erro ao deletar avaliação: $e');
+    }
+  }
+
+  void deletePassFromCarona(userID, userCaronaID) async {
+    try {
+      await apiService.deleteApi("user-carona/$userID?carona_id=$userCaronaID");
+    } catch (e) {
+      print('Erro ao deletar avaliação: $e');
+    }
   }
 
 ////////////////////////////////////////////////////////////
@@ -145,30 +162,37 @@ Future<Map<String, dynamic>> getHistoricoCaronista() async {
     return response;
   }
 
-
   Future<Map<String, dynamic>> getRatingCaronista(idCaronista) async {
-    final response = await apiService.getApi("avaliacao/passageiro/$idCaronista");
+    final response =
+        await apiService.getApi("avaliacao/passageiro/$idCaronista");
     return response;
   }
 
   Future<Map<String, dynamic>> getRatingMotorista(idMotorista) async {
-    final response = await apiService.getApi("avaliacao/motorista/$idMotorista");
+    final response =
+        await apiService.getApi("avaliacao/motorista/$idMotorista");
     return response;
   }
 
-  Future<Map<String, dynamic>> postRatingCaronista(caronaId,userAvaliadoId, notaPassageiro, comentarioPassageiro) async {
-    final response = await apiService.postApi("avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId", {
-      "nota_passageiro":notaPassageiro,
-      "comentario_passageiro":comentarioPassageiro
-    });
+  Future<Map<String, dynamic>> postRatingCaronista(
+      caronaId, userAvaliadoId, notaPassageiro, comentarioPassageiro) async {
+    final response = await apiService.postApi(
+        "avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",
+        {
+          "nota_passageiro": notaPassageiro,
+          "comentario_passageiro": comentarioPassageiro
+        });
     return response;
   }
 
-  Future<Map<String, dynamic>> postRatingMotorista(caronaId,userAvaliadoId, notaMotorista, comentarioMotorista) async {
-    final response = await apiService.postApi("avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",{
-      "nota_motorista":notaMotorista,
-      "comentario_motorista":comentarioMotorista
-    });
+  Future<Map<String, dynamic>> postRatingMotorista(
+      caronaId, userAvaliadoId, notaMotorista, comentarioMotorista) async {
+    final response = await apiService.postApi(
+        "avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",
+        {
+          "nota_motorista": notaMotorista,
+          "comentario_motorista": comentarioMotorista
+        });
     return response;
   }
 
