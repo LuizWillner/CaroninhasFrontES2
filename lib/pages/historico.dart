@@ -118,8 +118,18 @@ class _HistoricoState extends State<Historico>
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.black,
                     tabs: [
-                      Tab(child: Text('Corridas Atuais')),
-                      Tab(child: Text('Histórico')),
+                      Container(
+                        alignment: Alignment.center,
+                        child: const Tab(
+                          child: Text('Corridas Atuais'),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: const Tab(
+                          child: Text('Histórico'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
