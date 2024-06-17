@@ -22,9 +22,10 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * (2 / 3),
+              height: MediaQuery.of(context).size.height * (0.6),
             ),
             Container(
+              height: MediaQuery.of(context).size.height * (0.4),
                 color: Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
