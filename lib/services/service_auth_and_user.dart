@@ -208,7 +208,7 @@ class AuthService {
   Future<Map<String, dynamic>> postRatingMotorista(
       caronaId, userAvaliadoId, notaMotorista, comentarioMotorista) async {
     final response = await apiService.postApi(
-        "avaliacao/passageiro?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",
+        "avaliacao/motorista?carona_id=$caronaId&motorista_avaliado_id=$userAvaliadoId",
         {
           "nota_motorista": notaMotorista,
           "comentario_motorista": comentarioMotorista
@@ -216,15 +216,15 @@ class AuthService {
     return response;
   }
 
-  Future<Map<String, dynamic>> updateUserInfo(first_name, last_name, birthdate, old_password, new_password) async {
-    final response = await apiService.patchApi( "users/me",{
-                                                "first_name": first_name,
-                                                "last_name": last_name,
-                                                "birthdate": birthdate,
-                                                "old_password": old_password,
-                                                "new_password": new_password
-                                              });
+  Future<Map<String, dynamic>> updateUserInfo(
+      first_name, last_name, birthdate, old_password, new_password) async {
+    final response = await apiService.patchApi("users/me", {
+      "first_name": first_name,
+      "last_name": last_name,
+      "birthdate": birthdate,
+      "old_password": old_password,
+      "new_password": new_password
+    });
     return response;
   }
-
 }
