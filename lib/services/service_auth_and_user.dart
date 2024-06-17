@@ -154,11 +154,12 @@ class AuthService {
         "&valor_maximo=$valorMaximo"
         "&vagas_restantes_minimas=$vagasRestantesMinimas"
         "&keyword_partida=$keywordPartida"
-        "&keyword_chegada=$keywordChegada"
+        "&keyword_destino=$keywordChegada"
         "&order_by=$orderBy"
         "&is_crescente=$isCrescente"
         "&limite=$limite"
-        "&deslocamento=$deslocamento");
+        "&deslocamento=$deslocamento"
+        );
     return response;
   }
 
