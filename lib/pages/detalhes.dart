@@ -267,8 +267,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                     [index]["user"]["last_name"];
                                 final rate = rideDetail["passageiros"][index]
                                     ["nota_passageiro"];
-                                final caronista =
-                                    "$firstName $LastName - $rate";
+                                final caronista = "$firstName $LastName";
 
                                 return Row(children: [
                                   CircleAvatar(
@@ -285,10 +284,10 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                              Text("Eu ($caronista)"),
+                                              Text("Eu ($caronista) $rate"),
                                             ])
                                       : Column(children: [
-                                          Text("$caronista"),
+                                          Text("$caronista $rate"),
                                           (!DateTime.parse(rideDetail[
                                                       "hora_partida"])
                                                   .isAfter(DateTime.now()))
