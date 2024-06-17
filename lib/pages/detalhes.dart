@@ -564,7 +564,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                   authService.postRatingCaronista(
                       rideDetail["id"], id, rating, "comentarioPassageiro");
                 }
-                // Aqui você pode salvar a avaliação no banco de dados ou realizar outra ação
+                  Navigator.of(context).pop();
               },
               child: const Text('Enviar Avaliação'),
             ),
