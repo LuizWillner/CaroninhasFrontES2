@@ -6,6 +6,8 @@ import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 
 class DetalhesCarona extends StatefulWidget {
@@ -103,7 +105,6 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                               size: const Size(2, 3 * 30.0),
                               painter: AddressesPainter([
                                 rideDetail["local_partida"],
-                                "até",
                                 rideDetail["local_destino"],
                               ]),
                             ),
@@ -180,6 +181,32 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                       Text(
                           "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}"),
                       const SizedBox(height: 18.0),
+                      ElevatedButton.icon(
+                        icon: const FaIcon(FontAwesomeIcons.whatsapp,
+                            color: Colors.white),
+                        label: const Text(
+                          'Enviar mensagem',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: clearBlueColor,
+                        ),
+                        onPressed: () async {
+                          String url =
+                              "https://wa.me/+${rideDetail['motorista']['user']['phone']}/?text=Queria conversar sobre a viagem do dia ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
+                              "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month} ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
+                              "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).minute}";
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                      ),
                       user['id'] == rideDetail['motorista']['id_fk_user']
                           ? OutlinedButton(
                               style: OutlinedButton.styleFrom(

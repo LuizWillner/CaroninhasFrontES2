@@ -561,6 +561,6 @@ class _PerfilState extends State<Perfil> {
                   ),
                 )),
               ),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4));
+        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 3));
   }
 }
