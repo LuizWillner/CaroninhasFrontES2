@@ -25,6 +25,8 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
   final storage = const FlutterSecureStorage();
   dynamic user;
   var rideDetail;
+  var _userLoading = true;
+  var _rideLoading = true;
 
   @override
   void initState() {
@@ -38,6 +40,9 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
       user = await authService.getUser();
       print('user["id"]');
       print(user["id"]);
+      setState(() {
+        _userLoading = false;
+      });      
     } catch (error) {
       print(error.toString());
     }
@@ -50,6 +55,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
       print(ridesResponse['motorista']['id_fk_user']);
       setState(() {
         rideDetail = ridesResponse;
+        _rideLoading = false;
       });
     } catch (error) {
       print(error.toString());
@@ -70,7 +76,9 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
         leading: const BackButton(color: Colors.white),
         backgroundColor: clearBlueColor,
       ),
-      body: SingleChildScrollView(
+      body: _userLoading || _rideLoading
+            ? const Center(child: CircularProgressIndicator())
+            :SingleChildScrollView(
         child: Center(
           child: Container(
             color: Colors.white,
@@ -172,13 +180,13 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                           shrinkWrap: true,
                           itemCount: rideDetail["passageiros"].length,
                           itemBuilder: (context, index) {
-                            final firstName = rideDetail["passageiros"][index]["user"]
-                                ["first_name"];
-                            final LastName = rideDetail["passageiros"][index]["user"]
-                                ["last_name"];
-                            final rate = rideDetail["passageiros"][index]["nota_passageiro"];
-                            final caronista =
-                                "$firstName $LastName - $rate";
+                            final firstName = rideDetail["passageiros"][index]
+                                ["user"]["first_name"];
+                            final LastName = rideDetail["passageiros"][index]
+                                ["user"]["last_name"];
+                            final rate = rideDetail["passageiros"][index]
+                                ["nota_passageiro"];
+                            final caronista = "$firstName $LastName - $rate";
                             return Text(caronista);
                           }),
                       const Text("motorista",

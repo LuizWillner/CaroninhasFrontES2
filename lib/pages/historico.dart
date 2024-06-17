@@ -24,7 +24,7 @@ class _HistoricoState extends State<Historico>
   static const darkBlueColor = Color(0xFF0E4B7C);
   final storage = const FlutterSecureStorage();
   final AuthService authService = AuthService(apiService: ApiService());
-  var _loading = false;
+  var _loading = true;
   dynamic user;
   var _historico = [];
 
@@ -93,7 +93,7 @@ class _HistoricoState extends State<Historico>
                   padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
                   child: Center(
                     child: Text(
-                      "Dê uma caroninha pra quem está precisando!",
+                      "Dê uma caroninha!",
                       style: TextStyle(
                         fontSize: 20.0,
                         color: darkBlueColor,
@@ -151,7 +151,7 @@ class _HistoricoState extends State<Historico>
                 ),
               ],
             ),
-      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
     );
   }
 
