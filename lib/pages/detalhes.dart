@@ -43,7 +43,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
       print(user["id"]);
       setState(() {
         _userLoading = false;
-      });      
+      });
     } catch (error) {
       print(error.toString());
     }
@@ -81,300 +81,347 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
         backgroundColor: clearBlueColor,
       ),
       body: _userLoading || _rideLoading
-            ? const Center(child: CircularProgressIndicator())
-            :SingleChildScrollView(
-        child: Center(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                Container(
-                  height: 180.0,
-                  width: 300.0,
-                  margin:
-                      const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: clearBlueColor),
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: Colors.white,
-                  ),
-                  padding: const EdgeInsets.all(20.0),
-                  child: const Text("Foto do mapa"),
-                ),
-                Container(
-                  width: 300.0,
-                  padding: const EdgeInsets.all(20.0),
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  color: Colors.white,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      (!DateTime.parse(rideDetail["hora_partida"])
-                              .isAfter(DateTime.now()))
-                          ? TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 255, 255, 255),
-                              ),
-                              onPressed: () async {},
-                              child: const Text(
-                                'Corrida Concluida',
-                                style: TextStyle(
-                                    color: Color(0xFF00AFF8),
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : Text(""),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: CustomPaint(
-                              size: const Size(2, 3 * 30.0),
-                              painter: AddressesPainter([
-                                rideDetail["local_partida"],
-                                rideDetail["local_destino"],
-                              ]),
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
+                      Container(
+                        height: 180.0,
+                        width: 300.0,
+                        margin: const EdgeInsets.only(
+                            top: 20.0, left: 20.0, right: 20.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: clearBlueColor),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
+                          color: Colors.white,
+                        ),
+                        padding: const EdgeInsets.all(20.0),
+                        child: const Text("Foto do mapa"),
+                      ),
+                      Container(
+                        width: 300.0,
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            (!DateTime.parse(rideDetail["hora_partida"])
+                                    .isAfter(DateTime.now()))
+                                ? TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                    onPressed: () async {},
+                                    child: const Text(
+                                      'Corrida Concluida',
+                                      style: TextStyle(
+                                          color: Color(0xFF00AFF8),
+                                          fontSize: 26,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                : Text(""),
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                rideDetail["local_partida"],
-                                rideDetail["local_destino"],
-                              ]
-                                  .map((address) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20.0),
-                                        child: Tooltip(
-                                          message: address,
-                                          child: Text(
-                                            address,
-                                            style: const TextStyle(
-                                              fontSize: 18.0,
-                                              color: darkBlueColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          )
-                        ],
-                      ),
-                      Text(
-                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
-                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month}",
-                          style: const TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
-                      Text(
-                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
-                          "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}",
-                          style: const TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
-                      Text("R\$ ${rideDetail["valor"]},00",
-                          style: const TextStyle(
-                              fontSize: 16.0, color: Colors.grey)),
-                      const SizedBox(height: 18.0),
-                      const Text("Tipo",
-                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      user['id'] == rideDetail['motorista']['id_fk_user']
-                          ? const Text("Motorista",
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: darkBlueColor,
-                                  fontWeight: FontWeight.bold))
-                          : const Text("Passageiro",
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: darkBlueColor,
-                                  fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 20.0),
-                      const Text("Motorista",
-                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      const SizedBox(height: 10.0),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 50.0,
-                            child: ClipOval(
-                                child: Image.network(
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
-                          ),
-                          const SizedBox(width: 18.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              user['id'] ==
-                                      rideDetail['motorista']['id_fk_user']
-                                  ? Column(children: [
-                                      Text(
-                                          "Eu (${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']})")
-                                    ])
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                          Text(
-                                            "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}",
-                                          ),
-                                          (!DateTime.parse(rideDetail[
-                                                      "hora_partida"])
-                                                  .isAfter(DateTime.now()))
-                                              ? OutlinedButton(
-                                                  style:
-                                                      OutlinedButton.styleFrom(
-                                                    side: const BorderSide(
-                                                      width: 1.0,
-                                                      color: clearBlueColor,
-                                                      style: BorderStyle.solid,
-                                                    ),
-                                                    backgroundColor:
-                                                        clearBlueColor,
-                                                  ),
-                                                  onPressed: () async {
-                                                    int id =
-                                                        rideDetail['motorista']
-                                                            ['id_fk_user'];
-                                                    print(
-                                                        "TAUAUAUAAUAUUAUAUAUAUAUAUAU $id");
-                                                    _showRatingDialog(
-                                                        context, id, 1);
-                                                  },
-                                                  child: const Text(
-                                                    'Avalie Motorista',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                )
-                                              : Text(""),
-                                        ]),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20.0),
-                      const Text("Passageiros",
-                          style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      const SizedBox(height: 10.0),
-                      rideDetail["passageiros"].isEmpty
-                          ? const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Nenhum passageiro cadastrado nessa viagem",
-                                style: TextStyle(
-                                    fontSize: 16.0, color: Colors.grey),
-                              ),
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: rideDetail["passageiros"].length,
-                              itemBuilder: (context, index) {
-                                final firstName = rideDetail["passageiros"]
-                                    [index]["user"]["first_name"];
-                                final LastName = rideDetail["passageiros"]
-                                    [index]["user"]["last_name"];
-                                final rate = rideDetail["passageiros"][index]
-                                    ["nota_passageiro"];
-                                final caronista = "$firstName $LastName";
-
-                                return Row(children: [
-                                  CircleAvatar(
-                                    radius: 50.0,
-                                    child: ClipOval(
-                                        child: Image.network(
-                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: CustomPaint(
+                                    size: const Size(2, 3 * 30.0),
+                                    painter: AddressesPainter([
+                                      rideDetail["local_partida"],
+                                      rideDetail["local_destino"],
+                                    ]),
                                   ),
-                                  const SizedBox(width: 18.0),
-                                  user["iduff"] ==
-                                          rideDetail['passageiros'][index]
-                                              ["user"]["iduff"]
-                                      ? Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                              Text("Eu ($caronista) $rate"),
-                                            ])
-                                      : Column(children: [
-                                          Text("$caronista $rate"),
-                                          (!DateTime.parse(rideDetail[
-                                                      "hora_partida"])
-                                                  .isAfter(DateTime.now()))
-                                              ? OutlinedButton(
-                                                  style:
-                                                      OutlinedButton.styleFrom(
-                                                    side: const BorderSide(
-                                                      width: 1.0,
-                                                      color: clearBlueColor,
-                                                      style: BorderStyle.solid,
-                                                    ),
-                                                    backgroundColor:
-                                                        clearBlueColor,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      rideDetail["local_partida"],
+                                      rideDetail["local_destino"],
+                                    ]
+                                        .map((address) => Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 20.0),
+                                              child: Tooltip(
+                                                message: address,
+                                                child: Text(
+                                                  address,
+                                                  style: const TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: darkBlueColor,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  onPressed: () async {
-                                                    int id = rideDetail[
-                                                            "passageiros"]
-                                                        [index]["user"]["id"];
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Text(
+                                "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
+                                "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month}",
+                                style: const TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                            Text(
+                                "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
+                                "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}",
+                                style: const TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                            Text("R\$ ${rideDetail["valor"]},00",
+                                style: const TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                            const SizedBox(height: 18.0),
+                            const Text("Tipo",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                            user['id'] == rideDetail['motorista']['id_fk_user']
+                                ? const Text("Motorista",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: darkBlueColor,
+                                        fontWeight: FontWeight.bold))
+                                : const Text("Passageiro",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: darkBlueColor,
+                                        fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 20.0),
+                            const Text("Motorista",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 50.0,
+                                  child: ClipOval(
+                                      child: Image.network(
+                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
+                                ),
+                                const SizedBox(width: 18.0),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    user['id'] ==
+                                            rideDetail['motorista']
+                                                ['id_fk_user']
+                                        ? Column(children: [
+                                            Text(
+                                                "Eu (${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']})")
+                                          ])
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                                Text(
+                                                  "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}",
+                                                ),
+                                                (!DateTime.parse(rideDetail[
+                                                            "hora_partida"])
+                                                        .isAfter(
+                                                            DateTime.now()))
+                                                    ? OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          side:
+                                                              const BorderSide(
+                                                            width: 1.0,
+                                                            color:
+                                                                clearBlueColor,
+                                                            style: BorderStyle
+                                                                .solid,
+                                                          ),
+                                                          backgroundColor:
+                                                              clearBlueColor,
+                                                        ),
+                                                        onPressed: () async {
+                                                          int id = rideDetail[
+                                                                  'motorista']
+                                                              ['id_fk_user'];
+                                                          _showRatingDialog(
+                                                              context, id, 1);
+                                                        },
+                                                        child: const Text(
+                                                          'Avalie Motorista',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Text(""),
+                                              ]),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20.0),
+                            const Text("Passageiros",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                            const SizedBox(height: 10.0),
+                            rideDetail["passageiros"].isEmpty
+                                ? const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Nenhum passageiro cadastrado nessa viagem",
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.grey),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: rideDetail["passageiros"].length,
+                                    itemBuilder: (context, index) {
+                                      final firstName =
+                                          rideDetail["passageiros"][index]
+                                              ["user"]["first_name"];
+                                      final LastName = rideDetail["passageiros"]
+                                          [index]["user"]["last_name"];
+                                      final rate = rideDetail["passageiros"]
+                                          [index]["nota_passageiro"];
+                                      final caronista = "$firstName $LastName";
 
-                                                    print(
-                                                        'Cavaloooooooooooooooooooo        ${rideDetail["passageiros"][index]["user"]["id"]}');
-                                                    _showRatingDialog(
-                                                        context, id, 2);
-                                                  },
-                                                  child: const Text(
-                                                    'Avalie o Passageiro',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                )
-                                              : Text(""),
-                                        ]),
-                                ]);
-                              }),
-                      const SizedBox(height: 18.0),
-                      ElevatedButton.icon(
-                        icon: const FaIcon(FontAwesomeIcons.whatsapp,
-                            color: Colors.white),
-                        label: const Text(
-                          'Enviar mensagem',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                                      return Row(children: [
+                                        CircleAvatar(
+                                          radius: 50.0,
+                                          child: ClipOval(
+                                              child: Image.network(
+                                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
+                                        ),
+                                        const SizedBox(width: 18.0),
+                                        user["iduff"] ==
+                                                rideDetail['passageiros'][index]
+                                                    ["user"]["iduff"]
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                    Text(
+                                                        "Eu ($caronista) $rate"),
+                                                  ])
+                                            : Column(children: [
+                                                Text("$caronista $rate"),
+                                                (!DateTime.parse(rideDetail[
+                                                            "hora_partida"])
+                                                        .isAfter(
+                                                            DateTime.now()))
+                                                    ? OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          side:
+                                                              const BorderSide(
+                                                            width: 1.0,
+                                                            color:
+                                                                clearBlueColor,
+                                                            style: BorderStyle
+                                                                .solid,
+                                                          ),
+                                                          backgroundColor:
+                                                              clearBlueColor,
+                                                        ),
+                                                        onPressed: () async {
+                                                          int id = rideDetail[
+                                                                  "passageiros"]
+                                                              [
+                                                              index]["user"]["id"];
+
+                                                          _showRatingDialog(
+                                                              context, id, 2);
+                                                        },
+                                                        child: const Text(
+                                                          'Avalie o Passageiro',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Text(""),
+                                              ]),
+                                      ]);
+                                    }),
+                            const SizedBox(height: 18.0),
+                            ElevatedButton.icon(
+                              icon: const FaIcon(FontAwesomeIcons.whatsapp,
+                                  color: Colors.white),
+                              label: const Text(
+                                'Enviar mensagem',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: clearBlueColor,
+                              ),
+                              onPressed: () async {
+                                String url =
+                                    "https://wa.me/+${rideDetail['motorista']['user']['phone']}/?text=Queria conversar sobre a viagem do dia ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
+                                    "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month} ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
+                                    "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).minute}";
+                                if (await canLaunchUrl(Uri.parse(url))) {
+                                  await launchUrl(Uri.parse(url));
+                                } else {
+                                  throw 'Could not launch $url';
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 12.0),
+                            ElevatedButton.icon(
+                              icon: const FaIcon(FontAwesomeIcons.exclamation,
+                                  color: Colors.white),
+                              label: Text(
+                                user['id'] == rideDetail['motorista']['id_fk_user']?'Deletar carona':'sair da carona',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: clearBlueColor,
+                              ),
+                              onPressed: () async {
+                                if (user['id'] == rideDetail['motorista']['id_fk_user']) {
+                                  _showConfirmationDialog(
+                                      context,
+                                      rideDetail['id'],
+                                      rideDetail,
+                                      1,
+                                      "deletar essa carona");
+                                } else {
+                                  _showConfirmationDialog(
+                                      context,
+                                      rideDetail['id'],
+                                      rideDetail,
+                                      0,
+                                      "sair dessa carona");
+                                }
+                              },
+                            )
+                          ],
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: clearBlueColor,
-                        ),
-                        onPressed: () async {
-                          String url =
-                              "https://wa.me/+${rideDetail['motorista']['user']['phone']}/?text=Queria conversar sobre a viagem do dia ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}/"
-                              "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).month} ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).hour}:"
-                              "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).minute}";
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url));
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        },
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
       bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
     );
   }
@@ -393,7 +440,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Você tem certeza que deseja $word essa carona?',
+          content: 'Você tem certeza que deseja ${word}?',
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,
