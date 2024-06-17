@@ -46,8 +46,10 @@ class _CriarCaronaState extends State<CriarCarona>
   }
 
   void _fetchPedidos() async {
+    var horaMinima = DateTime.now();
+    var horaMaxima = horaMinima.add(const Duration(days: 30));
     try {
-      final pedidosResponse = await ApiService().getApi('pedido-carona');
+      final pedidosResponse = await ApiService().getApi('pedido-carona?hora_minima=$horaMinima&hora_maxima=$horaMaxima');
       setState(() {
         pedidos = pedidosResponse["data"];
       });
@@ -88,7 +90,8 @@ class _CriarCaronaState extends State<CriarCarona>
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+      initialTime:
+          TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
       initialEntryMode: TimePickerEntryMode.dial,
     );
     if (timeOfDay != null) {
@@ -149,7 +152,8 @@ class _CriarCaronaState extends State<CriarCarona>
                       controller: _tabController,
                       indicator: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: const Color(0xFF00AFF8), // Cor de fundo da aba ativa
+                        color: const Color(
+                            0xFF00AFF8), // Cor de fundo da aba ativa
                       ),
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
@@ -246,10 +250,14 @@ class _CriarCaronaState extends State<CriarCarona>
                                       children: [
                                         SizedBox(
                                           height: 42,
-                                          width: MediaQuery.of(context).size.width * 0.65,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.65,
                                           child: DropdownButton<int>(
                                             value: selectedVehicleId,
-                                            hint: const Text('Select a vehicle'),
+                                            hint:
+                                                const Text('Select a vehicle'),
                                             items: vehicles.map((vehicle) {
                                               return DropdownMenuItem<int>(
                                                 value: vehicle['id'],
@@ -284,24 +292,30 @@ class _CriarCaronaState extends State<CriarCarona>
                                 onPressed: () async {
                                   print(await storage.read(key: 'login_token'));
                                   final veiculoId = selectedVehicleId;
-                                  final horaDePartida = DateTime.parse(_dateController.text).add(Duration(
-                                      hours: int.parse(_selectedTime.text.split("")[0]),
-                                      minutes: int.parse(_selectedTime.text.split("")[1])));
+                                  final horaDePartida = DateTime.parse(
+                                          _dateController.text)
+                                      .add(Duration(
+                                          hours: int.parse(
+                                              _selectedTime.text.split("")[0]),
+                                          minutes: int.parse(_selectedTime.text
+                                              .split("")[1])));
                                   final precoCarona = _priceController.text;
                                   final vagas = _vagasController.text;
                                   final localPartida = _fromController.text;
                                   final localDestino = _toController.text;
 
                                   try {
-                                    final userStatus = await authService.createRide(
-                                        veiculoId,
-                                        horaDePartida,
-                                        precoCarona,
-                                        vagas,
-                                        localPartida,
-                                        localDestino);
+                                    final userStatus =
+                                        await authService.createRide(
+                                            veiculoId,
+                                            horaDePartida,
+                                            precoCarona,
+                                            vagas,
+                                            localPartida,
+                                            localDestino);
                                     print(userStatus);
-                                    await storage.write(key: "isDriver", value: "true");
+                                    await storage.write(
+                                        key: "isDriver", value: "true");
                                     _showMyDialog(context);
                                   } catch (error) {
                                     print(error);
@@ -309,7 +323,8 @@ class _CriarCaronaState extends State<CriarCarona>
                                 },
                                 child: const Text(
                                   'Oferecer',
-                                  style: TextStyle(color: Colors.white, fontSize: 24),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 24),
                                 ),
                               ),
                             ),
@@ -321,19 +336,20 @@ class _CriarCaronaState extends State<CriarCarona>
                           itemBuilder: (context, index) {
                             final pedido = pedidos[index];
                             return Viagem(
-                              image: "assets/login_background.png",
-                              partida: pedido["local_partida"],
-                              chegada: pedido["local_destino"],
-                              nome: pedido["motorista"]["user"]["first_name"] + pedido["user"]["last_name"],
-                              data: DateFormat("yyyy-MM-ddTHH:mm:ss").parse(pedido["hora_partida_minima"]),
-                              onPressed: () {
-                                print(pedido["id"].runtimeType);
-                                int id = pedido["id"];
-                              },
-                              price: pedido["valor"],
-                              vagasRestantes: 0,
-                              buttonInnerText: "Aceitar"
-                            );
+                                image: "assets/login_background.png",
+                                partida: pedido["local_partida"],
+                                chegada: pedido["local_destino"],
+                                nome: pedido["user"]["first_name"] + pedido["user"]["last_name"],
+                                data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                    .parse(pedido["hora_partida_minima"]),
+                                onPressed: () {
+                                  print(pedido["id"].runtimeType);
+                                  int id = pedido["id"];
+                                },
+                                price: pedido["valor"],
+                                vagasRestantes: null,
+                                buttonInnerText: "Aceitar",
+                                role: "Solicitante",);
                             // TODO: criar carona com o pedido
                           },
                         ),
@@ -386,7 +402,8 @@ class _CriarCaronaState extends State<CriarCarona>
                 },
                 child: const Text(
                   'SIM',
-                  style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
                 ),
               ),
             ),
