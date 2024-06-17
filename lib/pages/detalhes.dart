@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetalhesCarona extends StatefulWidget {
   final String caronaId;
@@ -58,6 +59,9 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime dataPartida = DateTime.parse(rideDetail['hora_partida']);
+    DateTime agora = DateTime.now();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -96,6 +100,23 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      (!DateTime.parse(rideDetail["hora_partida"])
+                              .isAfter(DateTime.now()))
+                          ? TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              onPressed: () async {},
+                              child: const Text(
+                                'Corrida Concluida',
+                                style: TextStyle(
+                                    color: Color(0xFF00AFF8),
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          : Text(""),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -165,21 +186,130 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                   fontSize: 18.0,
                                   color: darkBlueColor,
                                   fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 18.0),
-                      const Text("passageiros",
+                      const SizedBox(height: 20.0),
+                      const Text("Motorista",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: rideDetail["passageiros"].length,
-                          itemBuilder: (context, index) {
-                            final caronista =
-                                "${rideDetail["passageiros"][index]["user"]["first_name"]} ${rideDetail["passageiros"][index]["user"]["first_name"]}";
-                            return Text(caronista);
-                          }),
-                      const Text("motorista",
+                      const SizedBox(height: 10.0),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 50.0,
+                            child: ClipOval(
+                                child: Image.network(
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
+                          ),
+                          const SizedBox(width: 18.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              user['id'] ==
+                                      rideDetail['motorista']['id_fk_user']
+                                  ? Column(children: [
+                                      Text(
+                                          "Eu (${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']})")
+                                    ])
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                          Text(
+                                            "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}",
+                                          ),
+                                          (!DateTime.parse(rideDetail[
+                                                      "hora_partida"])
+                                                  .isAfter(DateTime.now()))
+                                              ? OutlinedButton(
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    side: const BorderSide(
+                                                      width: 1.0,
+                                                      color: clearBlueColor,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                    backgroundColor:
+                                                        clearBlueColor,
+                                                  ),
+                                                  onPressed: () async {},
+                                                  child: const Text(
+                                                    'Avalie Motorista',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Text(""),
+                                        ]),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20.0),
+                      const Text("Passageiros",
                           style: TextStyle(fontSize: 16.0, color: Colors.grey)),
-                      Text(
-                          "${rideDetail['motorista']['user']['first_name']} ${rideDetail['motorista']['user']['last_name']}"),
+                      const SizedBox(height: 10.0),
+                      rideDetail["passageiros"].isEmpty
+                          ? const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Nenhum passageiro cadastrado nessa viagem",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey),
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: rideDetail["passageiros"].length,
+                              itemBuilder: (context, index) {
+                                final caronista =
+                                    "${rideDetail["passageiros"][index]["user"]["first_name"]} ${rideDetail["passageiros"][index]["user"]["first_name"]}";
+
+                                return Row(children: [
+                                  CircleAvatar(
+                                    radius: 50.0,
+                                    child: ClipOval(
+                                        child: Image.network(
+                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
+                                  ),
+                                  const SizedBox(width: 18.0),
+                                  user["iduff"] ==
+                                          rideDetail['passageiros'][index]
+                                              ["user"]["iduff"]
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                              Text("Eu ($caronista)"),
+                                            ])
+                                      : Column(children: [
+                                          Text("$caronista"),
+                                          (!DateTime.parse(rideDetail[
+                                                      "hora_partida"])
+                                                  .isAfter(DateTime.now()))
+                                              ? OutlinedButton(
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    side: const BorderSide(
+                                                      width: 1.0,
+                                                      color: clearBlueColor,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                    backgroundColor:
+                                                        clearBlueColor,
+                                                  ),
+                                                  onPressed: () async {},
+                                                  child: const Text(
+                                                    'Avalie o Passageiro',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Text(""),
+                                        ]),
+                                ]);
+                              }),
                       const SizedBox(height: 18.0),
                       ElevatedButton.icon(
                         icon: const FaIcon(FontAwesomeIcons.whatsapp,
@@ -207,55 +337,6 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                           }
                         },
                       ),
-                      user['id'] == rideDetail['motorista']['id_fk_user']
-                          ? OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                  width: 1.0,
-                                  color: Color(0xFF00AFF8),
-                                  style: BorderStyle.solid,
-                                ),
-                                backgroundColor:
-                                    Color.fromARGB(255, 255, 255, 255),
-                              ),
-                              onPressed: () async {
-                                int id = rideDetail["id"];
-                                _showConfirmationDialog(
-                                    context, id, rideDetail, 1, 'cancelar');
-                                // authService.deleteCaronabyID(rideDetail["id"]);
-                              },
-                              child: const Text(
-                                'Cancelar Corrida',
-                                style: TextStyle(
-                                    color: Color(0xFF00AFF8), fontSize: 16),
-                              ),
-                            )
-                          : OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                  width: 1.0,
-                                  color: Color(0xFF00AFF8),
-                                  style: BorderStyle.solid,
-                                ),
-                                backgroundColor:
-                                    Color.fromARGB(255, 255, 255, 255),
-                              ),
-                              onPressed: () async {
-                                // print('\nteste\n');
-                                // print('rideDetail["passageiros"]["id"]');
-                                // print(rideDetail["passageiros"]);
-                                print('\n\nrideDetail["id"]');
-                                print(rideDetail["id"]);
-                                int id = rideDetail["id"];
-                                _showConfirmationDialog(
-                                    context, id, rideDetail, 2, 'sair');
-                              },
-                              child: const Text(
-                                'Sair da Corrida',
-                                style: TextStyle(
-                                    color: Color(0xFF00AFF8), fontSize: 16),
-                              ),
-                            ),
                     ],
                   ),
                 ),
@@ -346,6 +427,50 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                       TextStyle(color: const Color(0xFF00AFF8), fontSize: 24),
                 ),
               ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showRatingDialog(BuildContext context) async {
+    double rating = 0; // Inicialize a variável de avaliação
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Avalie a Carona'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Por favor, avalie sua experiência com a viagem:'),
+                RatingBar.builder(
+                  initialRating: rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) =>
+                      Icon(Icons.star, color: Colors.amber),
+                  onRatingUpdate: (newRating) {
+                    rating = newRating; // Atualize a avaliação
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o diálogo
+                print('Avaliação recebida: $rating');
+                // Aqui você pode salvar a avaliação no banco de dados ou realizar outra ação
+              },
+              child: const Text('Enviar Avaliação'),
             ),
           ],
         );
