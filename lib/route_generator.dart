@@ -11,6 +11,7 @@ import 'package:app_uff_caronas/pages/adicionarCarro.dart';
 import 'package:app_uff_caronas/pages/historico_caronas.dart';
 import 'package:app_uff_caronas/pages/historico.dart';
 import 'package:app_uff_caronas/pages/alterarDados.dart';
+import 'package:app_uff_caronas/pages/avaliacao.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -35,7 +36,8 @@ class RouteGenerator {
           return MaterialPageRoute(
               builder: (context) => DetalhesCarona(caronaId: args));
         }
-        return MaterialPageRoute(builder: ((context) => const Text("algo deu errado")));
+        return MaterialPageRoute(
+            builder: ((context) => const Text("algo deu errado")));
       case '/Historico_carona':
         return MaterialPageRoute(
             builder: ((context) => const HistoricoCarona()));
@@ -48,6 +50,13 @@ class RouteGenerator {
             builder: ((context) => const AdicionarCarro()));
       case '/Historico':
         return MaterialPageRoute(builder: ((context) => const Historico()));
+      case '/Avaliacao':
+        if (args is String) {
+          return MaterialPageRoute(
+              builder: (context) => Avaliacao(caronaId: args));
+        }
+        return MaterialPageRoute(
+            builder: ((context) => const Text("algo deu errado")));
       case '/Alterar_dados':
         return MaterialPageRoute(builder: ((context) => const AlterarDados()));
       default:
