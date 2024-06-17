@@ -61,6 +61,7 @@ class FormInput extends StatelessWidget {
   final TextInputType keyboardType;
   final IconData fieldIcon;
   static const darkBlueColor = Color(0xFF0E4B7C);
+  final onTap;
 
   const FormInput(
       {super.key,
@@ -68,7 +69,8 @@ class FormInput extends StatelessWidget {
       required this.placeholderText,
       required this.isObscured,
       required this.controller,
-      required this.keyboardType});
+      required this.keyboardType,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +87,7 @@ class FormInput extends StatelessWidget {
                     height: 42,
                     width: MediaQuery.of(context).size.width * 0.65,
                     child: TextField(
+                      onTap: onTap,
                       obscureText: isObscured,
                       controller: controller,
                       keyboardType: keyboardType,
