@@ -21,11 +21,10 @@ class _CriarCaronaState extends State<CriarCarona>
 
   final TextEditingController _fromController = TextEditingController();
   final TextEditingController _toController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _selectedTime = TextEditingController();
   final TextEditingController _vagasController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _passagersController = TextEditingController();
 
   late TabController _tabController;
   final AuthService authService = AuthService(apiService: ApiService());
@@ -43,39 +42,6 @@ class _CriarCaronaState extends State<CriarCarona>
     }
   }
 
-  late List<dynamic> mockVehicles = [
-    {
-      "placa": "DOG4444",
-      "created_at": "2024-05-26T22:42:00.693969",
-      "veiculo": {
-        "tipo": "CARRO",
-        "marca": "MITSUBISHI",
-        "modelo": "LANCER",
-        "cor": "BRANCO",
-        "id": 2,
-        "created_at": "2024-05-26T22:42:00.653325"
-      },
-      "id": 2,
-      "fk_motorista": 22,
-      "fk_veiculo": 2
-    },
-    {
-      "placa": "penisdenis",
-      "created_at": "2024-05-26T22:42:00.693969",
-      "veiculo": {
-        "tipo": "CARRO",
-        "marca": "MITSUBISHI",
-        "modelo": "LANCER",
-        "cor": "BRANCO",
-        "id": 4,
-        "created_at": "2024-05-26T22:42:00.653325"
-      },
-      "id": 4,
-      "fk_motorista": 22,
-      "fk_veiculo": 4
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -87,6 +53,35 @@ class _CriarCaronaState extends State<CriarCarona>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _dateController.text = picked.toString().split(" ")[0];
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+        context: context,
+        initialTime:
+            TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+        initialEntryMode: TimePickerEntryMode.dial);
+    if (timeOfDay != null) {
+      setState(() {
+        print(timeOfDay);
+        _selectedTime.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+      });
+    }
   }
 
   @override
@@ -195,37 +190,26 @@ class _CriarCaronaState extends State<CriarCarona>
                                   fieldIcon: Icons.circle,
                                   keyboardType: TextInputType.text,
                                 ),
-                                TextButton(
-                                    onPressed: () async {
-                                      final DateTime? dateTime =
-                                          await showDatePicker(
-                                              context: context,
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(3000));
-                                      if (dateTime != null) {
-                                        setState(() {
-                                          _selectedDate = dateTime;
-                                        });
-                                      }
-                                    },
-                                    child: Text(
-                                        "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}")),
-                                TextButton(
-                                    onPressed: () async {
-                                      final TimeOfDay? timeOfDay =
-                                          await showTimePicker(
-                                              context: context,
-                                              initialTime: _selectedTime,
-                                              initialEntryMode:
-                                                  TimePickerEntryMode.dial);
-                                      if (timeOfDay != null) {
-                                        setState(() {
-                                          _selectedTime = timeOfDay;
-                                        });
-                                      }
-                                    },
-                                    child: Text(
-                                        "${_selectedTime.hour}:${_selectedTime.minute}")),
+                                FormInput(
+                                  controller: _dateController,
+                                  isObscured: false,
+                                  placeholderText: "Data",
+                                  fieldIcon: Icons.calendar_month,
+                                  keyboardType: TextInputType.text,
+                                  onTap: () {
+                                    _selectDate(context);
+                                  },
+                                ),
+                                FormInput(
+                                  controller: _selectedTime,
+                                  isObscured: false,
+                                  placeholderText: "Hora",
+                                  fieldIcon: Icons.lock_clock,
+                                  keyboardType: TextInputType.text,
+                                  onTap: () {
+                                    _selectTime(context);
+                                  },
+                                ),
                                 FormInput(
                                   controller: _vagasController,
                                   isObscured: false,
@@ -300,10 +284,12 @@ class _CriarCaronaState extends State<CriarCarona>
                                       print(await storage.read(
                                           key: 'login_token'));
                                       final veiculoId = selectedVehicleId;
-                                      final horaDePartida = _selectedDate.add(
-                                          Duration(
-                                              hours: _selectedTime.hour,
-                                              minutes: _selectedTime.minute));
+                                      final horaDePartida =
+                                          DateTime.parse(_dateController.text)
+                                              .add(Duration(
+                                                  hours: int.parse(_selectedTime.text.split("")[0]),
+                                                  minutes:
+                                                      int.parse(_selectedTime.text.split("")[1])));
                                       final precoCarona = _priceController.text;
                                       final vagas = _vagasController.text;
                                       final localPartida = _fromController.text;
@@ -355,7 +341,7 @@ class _CriarCaronaState extends State<CriarCarona>
             ),
           ),
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1));
+        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 1));
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -371,7 +357,7 @@ class _CriarCaronaState extends State<CriarCarona>
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Você tem certeza que deseja aceitar essa carona?',
+          content: 'Você tem certeza que deseja oferecer essa carona?',
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,

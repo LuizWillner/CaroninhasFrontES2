@@ -19,42 +19,12 @@ class _PerfilState extends State<Perfil> {
   var _loading = true;
   dynamic user;
   var vehicles = [];
-  late List<dynamic> mock_vehicles = [
-    {
-      "placa": "DOG4444",
-      "created_at": "2024-05-26T22:42:00.693969",
-      "veiculo": {
-        "tipo": "CARRO",
-        "marca": "MITSUBISHI",
-        "modelo": "LANCER",
-        "cor": "BRANCO",
-        "id": 2,
-        "created_at": "2024-05-26T22:42:00.653325"
-      },
-      "id": 2,
-      "fk_motorista": 22,
-      "fk_veiculo": 2
-    },
-    {
-      "placa": "penisdenis",
-      "created_at": "2024-05-26T22:42:00.693969",
-      "veiculo": {
-        "tipo": "CARRO",
-        "marca": "MITSUBISHI",
-        "modelo": "LANCER",
-        "cor": "BRANCO",
-        "id": 4,
-        "created_at": "2024-05-26T22:42:00.653325"
-      },
-      "id": 4,
-      "fk_motorista": 22,
-      "fk_veiculo": 4
-    },
-  ];
+  var rating = 5.0;
 
   void _fetchUserData() async {
     try {
       user = await authService.getUser();
+      _fetchRating(user["id"]);
       if (user['motorista'] != null) {
         setState(() {
           _loading = false;
@@ -81,6 +51,20 @@ class _PerfilState extends State<Perfil> {
     }
   }
 
+  void _fetchRating(id) async {
+    try {
+      final ratingResponse =
+          (await ApiService().getApi('avaliacao/passageiro/$id'));
+      setState(() {
+        if (ratingResponse["data"]["nota_media"] != null) {
+          rating = ratingResponse["data"];
+        }
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -89,6 +73,8 @@ class _PerfilState extends State<Perfil> {
 
   @override
   Widget build(BuildContext context) {
+    var fontSize = MediaQuery.of(context).size.width * 0.05;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -117,7 +103,8 @@ class _PerfilState extends State<Perfil> {
                               Column(
                                 children: [
                                   CircleAvatar(
-                                    radius: 85.0,
+                                    radius: MediaQuery.of(context).size.width *
+                                        0.18,
                                     child: ClipOval(
                                         child: Image.network(
                                             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0sCAvrW1yFi0UYMgTZb113I0SwtW0dpby8Q&usqp=CAU')),
@@ -140,14 +127,14 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   Text(
                                     user['first_name'] +
                                         ' ' +
                                         user['last_name'],
-                                    style: const TextStyle(
-                                        fontSize: 24.0,
+                                    style: TextStyle(
+                                        fontSize: fontSize,
                                         color: darkBlueColor,
                                         fontWeight: FontWeight.bold,
                                         height: 1.0),
@@ -158,12 +145,12 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   Text(
                                     user['email'],
-                                    style: const TextStyle(
-                                        fontSize: 24.0,
+                                    style: TextStyle(
+                                        fontSize: fontSize,
                                         color: darkBlueColor,
                                         fontWeight: FontWeight.bold,
                                         height: 1.0),
@@ -174,12 +161,12 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   Text(
                                     user['phone'],
-                                    style: const TextStyle(
-                                        fontSize: 24.0,
+                                    style: TextStyle(
+                                        fontSize: fontSize,
                                         color: darkBlueColor,
                                         fontWeight: FontWeight.bold,
                                         height: 1.0),
@@ -190,18 +177,16 @@ class _PerfilState extends State<Perfil> {
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: darkBlueColor,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   const SizedBox(height: 8.0),
-                                  const Text(
-                                    // TODO: adicionar nota no modelo do banco
-                                    '4.8'
-                                    ' ⭐',
+                                  Text(
+                                    '${rating.toStringAsFixed(1)} ⭐',
                                     style: TextStyle(
-                                        fontSize: 24.0,
+                                        fontSize: fontSize,
                                         color: darkBlueColor,
                                         fontWeight: FontWeight.bold,
-                                        height: 0.5),
+                                        height: 0.8),
                                   ),
                                   const SizedBox(height: 32.0),
                                 ],
