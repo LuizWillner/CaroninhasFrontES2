@@ -126,6 +126,25 @@ class AuthService {
     }
   }
 
+  Future<Map<String, dynamic>> createPedido(
+    int valorSugerido,
+    DateTime horaPartidaMaxima,
+    {DateTime? horaPartidaMinima,
+    String? keywordPartida,
+    String? keywordChegada,}
+    
+) async {
+    final response =
+        await apiService.postApi("pedido-carona?hora_partida_minima=$horaPartidaMinima&hora_partida_maxima=$horaPartidaMaxima&valor_sugerido=$valorSugerido", 
+        {
+          "local_partida": keywordPartida,
+          "local_destino": keywordChegada
+}
+        );
+    return response;
+  }
+
+
 ////////////////////////////////////////////////////////////
   Future<Map<String, dynamic>> getRides({
     String? motoristaId,
@@ -154,11 +173,12 @@ class AuthService {
         "&valor_maximo=$valorMaximo"
         "&vagas_restantes_minimas=$vagasRestantesMinimas"
         "&keyword_partida=$keywordPartida"
-        "&keyword_chegada=$keywordChegada"
+        "&keyword_destino=$keywordChegada"
         "&order_by=$orderBy"
         "&is_crescente=$isCrescente"
         "&limite=$limite"
-        "&deslocamento=$deslocamento");
+        "&deslocamento=$deslocamento"
+        );
     return response;
   }
 
