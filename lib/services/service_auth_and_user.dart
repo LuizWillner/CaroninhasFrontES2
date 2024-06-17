@@ -126,6 +126,25 @@ class AuthService {
     }
   }
 
+  Future<Map<String, dynamic>> createPedido(
+    int valorSugerido,
+    DateTime horaPartidaMaxima,
+    {DateTime? horaPartidaMinima,
+    String? keywordPartida,
+    String? keywordChegada,}
+    
+) async {
+    final response =
+        await apiService.postApi("pedido-carona?hora_partida_minima=$horaPartidaMinima&hora_partida_maxima=$horaPartidaMaxima&valor_sugerido=$valorSugerido", 
+        {
+          "local_partida": keywordPartida,
+          "local_destino": keywordChegada
+}
+        );
+    return response;
+  }
+
+
 ////////////////////////////////////////////////////////////
   Future<Map<String, dynamic>> getRides({
     String? motoristaId,
