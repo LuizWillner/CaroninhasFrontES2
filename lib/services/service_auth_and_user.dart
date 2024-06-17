@@ -195,4 +195,16 @@ class AuthService {
         });
     return response;
   }
+
+  Future<Map<String, dynamic>> updateUserInfo(first_name, last_name, birthdate, old_password, new_password) async {
+    final response = await apiService.patchApi( "users/me",{
+                                                "first_name": first_name,
+                                                "last_name": last_name,
+                                                "birthdate": birthdate,
+                                                "old_password": old_password,
+                                                "new_password": new_password
+                                              });
+    return response;
+  }
+
 }

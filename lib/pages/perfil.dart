@@ -216,7 +216,7 @@ class _PerfilState extends State<Perfil> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 16, 0, 16),
                                       child: Text(
-                                          "No momento você não tem nenhum carro. Cadastre seu e torne-se um motorista!"),
+                                          "No momento você não tem nenhum carro. Cadastre seu carro e torne-se um motorista!"),
                                     ),
                                     OutlinedButton(
                                       style: OutlinedButton.styleFrom(
@@ -493,15 +493,17 @@ class _PerfilState extends State<Perfil> {
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero),
                                   onPressed: () {
-                                    null;
+                                    Navigator.of(context).pushNamed(
+                                      '/Alterar_dados',
+                                    );
                                   },
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Alterar senha',
+                                      'Alterar dados',
                                       style: TextStyle(
                                         fontSize: 14.0,
-                                        color: Colors.grey.withOpacity(0.6),
+                                        color: Colors.grey,
                                         height: 0.5,
                                       ),
                                     ),

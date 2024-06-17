@@ -78,7 +78,7 @@ class ApiService {
     final token = await _storage.read(key: "token_bearer") ?? '';
     print(url);
     print(bodyJson);
-    final response = await http.patch(
+    final response = await http.put(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json',
