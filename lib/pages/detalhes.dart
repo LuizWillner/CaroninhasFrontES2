@@ -229,7 +229,13 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                     backgroundColor:
                                                         clearBlueColor,
                                                   ),
-                                                  onPressed: () async {},
+                                                  onPressed: () async {
+                                                    int id =
+                                                        rideDetail['motorista']
+                                                            ['id_fk_user'];
+                                                    _showRatingDialog(
+                                                        context, id);
+                                                  },
                                                   child: const Text(
                                                     'Avalie Motorista',
                                                     style: TextStyle(
@@ -302,7 +308,10 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                     backgroundColor:
                                                         clearBlueColor,
                                                   ),
-                                                  onPressed: () async {},
+                                                  onPressed: () async {
+                                                    _showRatingDialog(
+                                                        context, 2);
+                                                  },
                                                   child: const Text(
                                                     'Avalie o Passageiro',
                                                     style: TextStyle(
@@ -439,7 +448,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
     );
   }
 
-  Future<void> _showRatingDialog(BuildContext context) async {
+  Future<void> _showRatingDialog(BuildContext context, int id) async {
     double rating = 0; // Inicialize a variável de avaliação
 
     showDialog<void>(
@@ -447,11 +456,23 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Avalie a Carona'),
+          title: const Text(
+            'Avalie o Usuario',
+            style: TextStyle(
+                color: darkBlueColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w800),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Por favor, avalie sua experiência com a viagem:'),
+                Text(
+                  'Por favor, avalie sua experiência com esse usuario durante a viagem:',
+                  style: TextStyle(
+                      color: Color(0xFF00AFF8),
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold),
+                ),
                 RatingBar.builder(
                   initialRating: rating,
                   minRating: 1,
@@ -460,7 +481,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                   itemCount: 5,
                   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
                   itemBuilder: (context, _) =>
-                      Icon(Icons.star, color: Colors.amber),
+                      Icon(Icons.star, color: darkBlueColor),
                   onRatingUpdate: (newRating) {
                     rating = newRating; // Atualize a avaliação
                   },
@@ -471,6 +492,8 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                authService.postRatingMotorista(
+                    rideDetail["id"], 4, rating, "teste");
                 Navigator.of(context).pop(); // Fecha o diálogo
                 print('Avaliação recebida: $rating');
                 // Aqui você pode salvar a avaliação no banco de dados ou realizar outra ação
