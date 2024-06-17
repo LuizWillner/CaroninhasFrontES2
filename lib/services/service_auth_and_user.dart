@@ -188,7 +188,7 @@ class AuthService {
   Future<Map<String, dynamic>> postRatingMotorista(
       caronaId, userAvaliadoId, notaMotorista, comentarioMotorista) async {
     final response = await apiService.postApi(
-        "avaliacao/motorista?carona_id=$caronaId&user_avaliado_id=$userAvaliadoId",
+        "avaliacao/motorista?carona_id=$caronaId&motorista_avaliado_id=$userAvaliadoId",
         {
           "nota_motorista": notaMotorista,
           "comentario_motorista": comentarioMotorista

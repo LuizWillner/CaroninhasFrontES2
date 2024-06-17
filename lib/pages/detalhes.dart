@@ -233,8 +233,10 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                     int id =
                                                         rideDetail['motorista']
                                                             ['id_fk_user'];
+                                                    print(
+                                                        "TAUAUAUAAUAUUAUAUAUAUAUAUAU $id");
                                                     _showRatingDialog(
-                                                        context, id);
+                                                        context, id, 1);
                                                   },
                                                   child: const Text(
                                                     'Avalie Motorista',
@@ -309,8 +311,14 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                         clearBlueColor,
                                                   ),
                                                   onPressed: () async {
+                                                    int id = rideDetail[
+                                                            "passageiros"]
+                                                        [index]["user"]["id"];
+
+                                                    print(
+                                                        'Cavaloooooooooooooooooooo        ${rideDetail["passageiros"][index]["user"]["id"]}');
                                                     _showRatingDialog(
-                                                        context, 2);
+                                                        context, id, 2);
                                                   },
                                                   child: const Text(
                                                     'Avalie o Passageiro',
@@ -448,7 +456,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
     );
   }
 
-  Future<void> _showRatingDialog(BuildContext context, int id) async {
+  Future<void> _showRatingDialog(BuildContext context, int id, int role) async {
     double rating = 0; // Inicialize a variável de avaliação
 
     showDialog<void>(
@@ -492,10 +500,15 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                authService.postRatingMotorista(
-                    rideDetail["id"], 4, rating, "teste");
-                Navigator.of(context).pop(); // Fecha o diálogo
-                print('Avaliação recebida: $rating');
+                if (role == 1) {
+                  authService.postRatingMotorista(
+                      rideDetail["id"], 4, rating, "teste");
+                  Navigator.of(context).pop(); // Fecha o diálogo
+                  print('Avaliação recebida: $rating');
+                } else {
+                  authService.postRatingCaronista(
+                      rideDetail["id"], id, rating, "comentarioPassageiro");
+                }
                 // Aqui você pode salvar a avaliação no banco de dados ou realizar outra ação
               },
               child: const Text('Enviar Avaliação'),
