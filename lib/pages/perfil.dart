@@ -525,7 +525,9 @@ class _PerfilState extends State<Perfil> {
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero),
                                   onPressed: () {
-                                    null;
+                                    Navigator.of(context).pushNamed(
+                                      '/Alterar_dados',
+                                    );
                                   },
                                   child: Align(
                                     alignment: Alignment.centerLeft,
@@ -533,7 +535,7 @@ class _PerfilState extends State<Perfil> {
                                       'Alterar dados',
                                       style: TextStyle(
                                         fontSize: 14.0,
-                                        color: Colors.grey.withOpacity(0.6),
+                                        color: Colors.grey,
                                         height: 0.5,
                                       ),
                                     ),
