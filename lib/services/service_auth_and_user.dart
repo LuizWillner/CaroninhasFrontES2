@@ -94,6 +94,12 @@ class AuthService {
     return response;
   }
 
+    Future<Map<String, dynamic>> otherUserSubscription(userId, caronaId) async {
+    final response =
+        await apiService.postApi("/user-carona/{user_carona_id}?user_id=$userId&carona_id=$caronaId", {});
+    return response;
+  }
+
   Future<Map<String, dynamic>> getHistoricoCaronista() async {
     final response =
         await ApiService().getApi('carona/historico/me/passageiro');
@@ -114,7 +120,15 @@ class AuthService {
     try {
       await apiService.deleteApi("carona/$caronaID?enforce=true");
     } catch (e) {
-      print('Erro ao deletar avaliação: $e');
+      print('Erro ao deletar carona: $e');
+    }
+  }
+
+    void deletePedidoByID(pedidoID) async {
+    try {
+      await apiService.deleteApi("pedido-carona/$pedidoID");
+    } catch (e) {
+      print('Erro ao deletar pedido: $e');
     }
   }
 
