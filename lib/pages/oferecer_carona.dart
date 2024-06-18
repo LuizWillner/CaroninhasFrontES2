@@ -49,7 +49,8 @@ class _CriarCaronaState extends State<CriarCarona>
     var horaMinima = DateTime.now();
     var horaMaxima = horaMinima.add(const Duration(days: 30));
     try {
-      final pedidosResponse = await ApiService().getApi('pedido-carona?hora_minima=$horaMinima&hora_maxima=$horaMaxima');
+      final pedidosResponse = await ApiService().getApi(
+          'pedido-carona?hora_minima=$horaMinima&hora_maxima=$horaMaxima');
       setState(() {
         pedidos = pedidosResponse["data"];
       });
@@ -290,21 +291,26 @@ class _CriarCaronaState extends State<CriarCarona>
                                   backgroundColor: clearBlueColor,
                                 ),
                                 onPressed: () async {
-                                  print(await storage.read(key: 'login_token'));
-                                  final veiculoId = selectedVehicleId;
-                                  final horaDePartida = DateTime.parse(
-                                          _dateController.text)
-                                      .add(Duration(
-                                          hours: int.parse(
-                                              _selectedTime.text.split("")[0]),
-                                          minutes: int.parse(_selectedTime.text
-                                              .split("")[1])));
-                                  final precoCarona = _priceController.text;
-                                  final vagas = _vagasController.text;
-                                  final localPartida = _fromController.text;
-                                  final localDestino = _toController.text;
-
                                   try {
+                                    print(
+                                        await storage.read(key: 'login_token'));
+                                    final veiculoId = selectedVehicleId;
+                                    final horaDePartida =
+                                        DateTime.parse(_dateController.text)
+                                            .add(Duration(
+                                                hours: int.parse(_selectedTime
+                                                    .text
+                                                    .split("")[0]),
+                                                minutes: int.parse(_selectedTime
+                                                    .text
+                                                    .split("")[1])));
+                                    final precoCarona = _priceController.text;
+                                    final vagas = _vagasController.text;
+                                    final localPartida = _fromController.text;
+                                    final localDestino = _toController.text;
+                                    print(
+                                        "tatatataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\n\n\n\n\n\n");
+
                                     final userStatus =
                                         await authService.createRide(
                                             veiculoId,
@@ -314,10 +320,15 @@ class _CriarCaronaState extends State<CriarCarona>
                                             localPartida,
                                             localDestino);
                                     print(userStatus);
+                                    print(
+                                        "tatatataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\n\n\n\n\n\n");
                                     await storage.write(
                                         key: "isDriver", value: "true");
-                                    _showMyDialog(context);
+                                    _showMyDialog(context, "Sucesso",
+                                        "Carona adicionada com sucesso");
                                   } catch (error) {
+                                    _showMyDialog(context, "Erro",
+                                        "Houve um erro ao adicionar o pedido de carona");
                                     print(error);
                                   }
                                 },
@@ -336,20 +347,22 @@ class _CriarCaronaState extends State<CriarCarona>
                           itemBuilder: (context, index) {
                             final pedido = pedidos[index];
                             return Viagem(
-                                image: "assets/login_background.png",
-                                partida: pedido["local_partida"],
-                                chegada: pedido["local_destino"],
-                                nome: pedido["user"]["first_name"] + pedido["user"]["last_name"],
-                                data: DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                    .parse(pedido["hora_partida_minima"]),
-                                onPressed: () {
-                                  print(pedido["id"].runtimeType);
-                                  int id = pedido["id"];
-                                },
-                                price: pedido["valor"],
-                                vagasRestantes: null,
-                                buttonInnerText: "Aceitar",
-                                role: "Solicitante",);
+                              image: "assets/login_background.png",
+                              partida: pedido["local_partida"],
+                              chegada: pedido["local_destino"],
+                              nome: pedido["user"]["first_name"] +
+                                  pedido["user"]["last_name"],
+                              data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                  .parse(pedido["hora_partida_minima"]),
+                              onPressed: () {
+                                print(pedido["id"].runtimeType);
+                                int id = pedido["id"];
+                              },
+                              price: pedido["valor"],
+                              vagasRestantes: null,
+                              buttonInnerText: "Aceitar",
+                              role: "Solicitante",
+                            );
                             // TODO: criar carona com o pedido
                           },
                         ),
@@ -366,47 +379,26 @@ class _CriarCaronaState extends State<CriarCarona>
     );
   }
 
-  Future<void> _showMyDialog(BuildContext context) async {
+  Future<void> _showMyDialog(BuildContext context, String type, message) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.7),
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          title: '',
+          title: type,
           titleStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Você tem certeza que deseja oferecer essa carona?',
+          content: message,
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
           actions: <Widget>[
-            SizedBox(
-              width: 100,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xFF00AFF8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                // Icon(Icons.search, color: clearBlueColor),
-                onPressed: () {
-                  // TEM QUE ADICIONAR NO BD //
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'SIM',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 24),
-                ),
-              ),
-            ),
             SizedBox(
               width: 100,
               child: TextButton(
@@ -423,7 +415,7 @@ class _CriarCaronaState extends State<CriarCarona>
                   Navigator.of(context).pop();
                 },
                 child: const Text(
-                  'NÃO',
+                  'OK',
                   style: TextStyle(color: Color(0xFF00AFF8), fontSize: 24),
                 ),
               ),

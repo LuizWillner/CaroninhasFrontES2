@@ -30,11 +30,12 @@ class _PedirCaronaState extends State<PedirCarona>
 
   final TextEditingController _toCreateController = TextEditingController();
   final TextEditingController _fromCreateController = TextEditingController();
-  final TextEditingController _timeMinCreateController = TextEditingController();
-  final TextEditingController _timeMaxCreateController = TextEditingController();
+  final TextEditingController _timeMinCreateController =
+      TextEditingController();
+  final TextEditingController _timeMaxCreateController =
+      TextEditingController();
   final TextEditingController _dateCreateController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
-  
 
   late TabController _tabController;
 
@@ -59,9 +60,9 @@ class _PedirCaronaState extends State<PedirCarona>
   void _fetchRides() async {
     try {
       final ridesResponse = await authService.getRides(
-                                        horaMinima: DateTime.now(),
-                                        horaMaxima: DateTime.now().add(const Duration(days: 15)),
-                                      );
+        horaMinima: DateTime.now(),
+        horaMaxima: DateTime.now().add(const Duration(days: 15)),
+      );
 
       setState(() {
         rides = ridesResponse["data"];
@@ -130,7 +131,8 @@ class _PedirCaronaState extends State<PedirCarona>
       });
     }
   }
-    Future<void> _selectCreateTimeMin(BuildContext context) async {
+
+  Future<void> _selectCreateTimeMin(BuildContext context) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
         context: context,
         initialTime:
@@ -139,7 +141,8 @@ class _PedirCaronaState extends State<PedirCarona>
     if (timeOfDay != null) {
       setState(() {
         print(timeOfDay);
-        _timeMinCreateController.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+        _timeMinCreateController.text =
+            '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
       });
     }
   }
@@ -153,7 +156,8 @@ class _PedirCaronaState extends State<PedirCarona>
     if (timeOfDay != null) {
       setState(() {
         print(timeOfDay);
-        _timeMaxCreateController.text = '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+        _timeMaxCreateController.text =
+            '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
       });
     }
   }
@@ -225,7 +229,8 @@ class _PedirCaronaState extends State<PedirCarona>
                         child: const Tab(
                           child: Text('Lista de caronas'),
                         ),
-                      ),Container(
+                      ),
+                      Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: const Tab(
@@ -314,15 +319,24 @@ class _PedirCaronaState extends State<PedirCarona>
                                   onPressed: () async {
                                     var horaMinima;
                                     var horaMaxima;
-                                    try{
-                                      horaMinima = DateFormat("yyyy-MM-dd HH:mm").parse(_dateController.text +" "+ _timeMinController.text);
-                                    }catch(erro){
+                                    try {
+                                      horaMinima =
+                                          DateFormat("yyyy-MM-dd HH:mm").parse(
+                                              _dateController.text +
+                                                  " " +
+                                                  _timeMinController.text);
+                                    } catch (erro) {
                                       horaMinima = DateTime.now();
                                     }
-                                    try{
-                                      horaMaxima = DateFormat("yyyy-MM-dd HH:mm").parse(_dateController.text +" "+ _timeMaxController.text);
-                                    }catch(erro){
-                                      horaMaxima = DateTime.now().add(const Duration(days: 15));
+                                    try {
+                                      horaMaxima =
+                                          DateFormat("yyyy-MM-dd HH:mm").parse(
+                                              _dateController.text +
+                                                  " " +
+                                                  _timeMaxController.text);
+                                    } catch (erro) {
+                                      horaMaxima = DateTime.now()
+                                          .add(const Duration(days: 15));
                                     }
 
                                     try {
@@ -338,7 +352,8 @@ class _PedirCaronaState extends State<PedirCarona>
                                       });
                                       _tabController.animateTo(1);
                                     } catch (error) {
-                                      _showMyDialog(context, "Houve um erro ao procurar o pedido de carona");
+                                      _showMyDialog(context, "Erro",
+                                          "Houve um erro ao procurar o pedido de carona");
                                       print(error);
                                     }
                                   },
@@ -372,7 +387,6 @@ class _PedirCaronaState extends State<PedirCarona>
                                 print(ride["id"].runtimeType);
                                 int id = ride["id"];
                                 _showConfirmationDialog(context, id, ride);
-                              
                               },
                               price: ride["valor"],
                               vagasRestantes: ride["vagas_restantes"],
@@ -454,19 +468,28 @@ class _PedirCaronaState extends State<PedirCarona>
                                       final response =
                                           await authService.createPedido(
                                         int.tryParse(_valueController.text)!,
-                                        DateFormat("yyyy-MM-dd HH:mm").parse(_dateCreateController.text +" "+ _timeMaxCreateController.text),
-                                        keywordPartida: _fromCreateController.text,
-                                        keywordChegada: _toCreateController.text,
-                                        horaPartidaMinima: DateFormat("yyyy-MM-dd HH:mm").parse(_dateCreateController.text +" "+ _timeMinCreateController.text),
+                                        DateFormat("yyyy-MM-dd HH:mm").parse(
+                                            _dateCreateController.text +
+                                                " " +
+                                                _timeMaxCreateController.text),
+                                        keywordPartida:
+                                            _fromCreateController.text,
+                                        keywordChegada:
+                                            _toCreateController.text,
+                                        horaPartidaMinima: DateFormat(
+                                                "yyyy-MM-dd HH:mm")
+                                            .parse(_dateCreateController.text +
+                                                " " +
+                                                _timeMinCreateController.text),
                                       );
                                       print(response);
-                                    _showMyDialog(context, "Pedido de carona criado com sucesso");
-
+                                      _showMyDialog(context, "Sucesso",
+                                          "Pedido de carona criado com sucesso");
                                     } catch (error) {
-                                      _showMyDialog(context, "Houve um erro ao criar pedido de carona");
+                                      _showMyDialog(context, "Erro",
+                                          "Houve um erro ao criar pedido de carona");
                                       print(error);
                                     }
-
                                   },
                                   child: const Text(
                                     'Procurar',
@@ -494,14 +517,14 @@ class _PedirCaronaState extends State<PedirCarona>
     );
   }
 
-  Future<void> _showMyDialog(BuildContext context, message) async {
+  Future<void> _showMyDialog(BuildContext context, String type, message) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.7),
       builder: (BuildContext context) {
         return CustomAlertDialog(
-          title: 'Sucesso',
+          title: type,
           titleStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.w900,
