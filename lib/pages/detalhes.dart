@@ -439,11 +439,11 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                       final firstName =
                                           rideDetail["passageiros"][index]
                                               ["user"]["first_name"];
-                                      final LastName = rideDetail["passageiros"]
+                                      final lastName = rideDetail["passageiros"]
                                           [index]["user"]["last_name"];
                                       final rate = rideDetail["passageiros"]
-                                          [index]["nota_passageiro"];
-                                      final caronista = "$firstName $LastName";
+                                          [index]["nota_passageiro"]?? "";
+                                      final caronista = "$firstName $lastName";
 
                                       return Row(children: [
                                         CircleAvatar(
@@ -460,11 +460,11 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                    Text(
+                                                    Text(softWrap: true,
                                                         "Eu ($caronista) $rate"),
                                                   ])
                                             : Column(children: [
-                                                Text("$caronista $rate"),
+                                                Text(softWrap: true, "$caronista $rate"),
                                                 (!DateTime.parse(rideDetail[
                                                             "hora_partida"])
                                                         .isAfter(
@@ -547,7 +547,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: clearBlueColor,
+                                backgroundColor: Colors.red,
                               ),
                               onPressed: () async {
                                 if (user['id'] ==
