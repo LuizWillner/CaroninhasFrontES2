@@ -11,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:app_uff_caronas/components/map.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
