@@ -218,18 +218,21 @@ class _PedirCaronaState extends State<PedirCarona>
                     tabs: [
                       Container(
                         alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: const Tab(
                           child: Text('Procurar carona'),
                         ),
                       ),
                       Container(
                         alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: const Tab(
-                          child: Text('Encontrar carona'),
+                          child: Text('Lista de caronas'),
                         ),
                       ),
                       Container(
                         alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: const Tab(
                           child: Text('Pedir Carona'),
                         ),
@@ -353,7 +356,6 @@ class _PedirCaronaState extends State<PedirCarona>
                                           "Houve um erro ao procurar o pedido de carona");
                                       print(error);
                                     }
-                                    if (rides.length == 0) {}
                                   },
                                   child: const Text(
                                     'Procurar',
@@ -368,6 +370,7 @@ class _PedirCaronaState extends State<PedirCarona>
                             ],
                           ),
                         ),
+                        rides.length > 0 ? 
                         ListView.builder(
                           itemCount: rides.length,
                           itemBuilder: (context, index) {
@@ -390,7 +393,7 @@ class _PedirCaronaState extends State<PedirCarona>
                               buttonInnerText: "Aceitar",
                             );
                           },
-                        ),
+                        ) : Center(child: Text("Não encontramos caronas!")),
                         SingleChildScrollView(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
