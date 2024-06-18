@@ -203,6 +203,8 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
   Widget build(BuildContext context) {
     DateTime dataPartida = DateTime.parse(rideDetail['hora_partida']);
     DateTime agora = DateTime.now();
+    String priceLayout =
+        'R\$ ${rideDetail['valor'].toStringAsFixed(2).replaceAll(".", ",")}';
 
     return Scaffold(
       appBar: AppBar(
@@ -327,7 +329,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                 "${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(rideDetail["hora_partida"]).day}",
                                 style: const TextStyle(
                                     fontSize: 16.0, color: Colors.grey)),
-                            Text("R\$ ${rideDetail["valor"]},00",
+                            Text("$priceLayout",
                                 style: const TextStyle(
                                     fontSize: 16.0, color: Colors.grey)),
                             const SizedBox(height: 18.0),
