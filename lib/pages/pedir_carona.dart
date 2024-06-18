@@ -58,7 +58,10 @@ class _PedirCaronaState extends State<PedirCarona>
 
   void _fetchRides() async {
     try {
-      final ridesResponse = await authService.getAllRides();
+      final ridesResponse = await authService.getRides(
+                                        horaMinima: DateTime.now(),
+                                        horaMaxima: DateTime.now().add(const Duration(days: 15)),
+                                      );
 
       setState(() {
         rides = ridesResponse["data"];
@@ -292,13 +295,6 @@ class _PedirCaronaState extends State<PedirCarona>
                                   _selectTimeMax(context);
                                 },
                               ),
-                              FormInput(
-                                controller: _passagersController,
-                                isObscured: false,
-                                fieldIcon: Icons.person,
-                                placeholderText: "Passageiros",
-                                keyboardType: TextInputType.text,
-                              ),
                               const SizedBox(height: 16.0),
                               Padding(
                                 padding:
@@ -313,14 +309,26 @@ class _PedirCaronaState extends State<PedirCarona>
                                     backgroundColor: clearBlueColor,
                                   ),
                                   onPressed: () async {
+                                    var horaMinima;
+                                    var horaMaxima;
+                                    try{
+                                      horaMinima = DateFormat("yyyy-MM-dd HH:mm").parse(_dateController.text +" "+ _timeMinController.text);
+                                    }catch(erro){
+                                      horaMinima = DateTime.now();
+                                    }
+                                    try{
+                                      horaMaxima = DateFormat("yyyy-MM-dd HH:mm").parse(_dateController.text +" "+ _timeMaxController.text);
+                                    }catch(erro){
+                                      horaMaxima = DateTime.now().add(const Duration(days: 15));
+                                    }
+
                                     try {
                                       final response =
                                           await authService.getRides(
                                         keywordPartida: _fromController.text,
                                         keywordChegada: _toController.text,
-                                        horaMinima: DateFormat("yyyy-MM-dd HH:mm").parse(_dateController.text +" "+ _timeMinController.text),
-                                        horaMaxima: DateFormat("yyyy-MM-dd HH:mm").parse(_dateController.text +" "+ _timeMaxController.text),
-                                        vagasRestantesMinimas: int.tryParse(_passagersController.text)!
+                                        horaMinima: horaMinima,
+                                        horaMaxima: horaMaxima,
                                       );
                                       setState(() {
                                         rides = response["data"];
@@ -363,20 +371,12 @@ class _PedirCaronaState extends State<PedirCarona>
                                 print(ride["id"].runtimeType);
                                 int id = ride["id"];
                                 _showConfirmationDialog(context, id, ride);
+                              
                               },
-                              // async {
-                              //   try {
-
-                              //     await authService
-                              //         .caronaSubscription(ride["id"]);
-                              //   } catch (error) {
-                              //     print(error);
-                              //   }
-                              // },
                               price: ride["valor"],
                               vagasRestantes: ride["vagas_restantes"],
                               buttonInnerText: "Aceitar",
-                            ); // Replace this with your actual widget to display ride information
+                            );
                           },
                         ),
                         SingleChildScrollView(
