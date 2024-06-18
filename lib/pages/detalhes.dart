@@ -11,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:app_uff_caronas/components/map.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -440,11 +439,11 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                       final firstName =
                                           rideDetail["passageiros"][index]
                                               ["user"]["first_name"];
-                                      final LastName = rideDetail["passageiros"]
+                                      final lastName = rideDetail["passageiros"]
                                           [index]["user"]["last_name"];
                                       final rate = rideDetail["passageiros"]
-                                          [index]["nota_passageiro"];
-                                      final caronista = "$firstName $LastName";
+                                          [index]["nota_passageiro"]?? "";
+                                      final caronista = "$firstName $lastName";
 
                                       return Row(children: [
                                         CircleAvatar(
@@ -461,11 +460,11 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                    Text(
+                                                    Text(softWrap: true,
                                                         "Eu ($caronista) $rate"),
                                                   ])
                                             : Column(children: [
-                                                Text("$caronista $rate"),
+                                                Text(softWrap: true, "$caronista $rate"),
                                                 (!DateTime.parse(rideDetail[
                                                             "hora_partida"])
                                                         .isAfter(
@@ -548,7 +547,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: clearBlueColor,
+                                backgroundColor: Colors.red,
                               ),
                               onPressed: () async {
                                 if (user['id'] ==

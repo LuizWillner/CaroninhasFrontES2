@@ -58,7 +58,7 @@ class AuthService {
       String vagas,
       String localPartida,
       String localDestino) async {
-    final stringHoraDePartida = horaDePartida.toString().replaceAll(":", "%3A");
+    final stringHoraDePartida = Uri.encodeComponent(horaDePartida.toIso8601String());
     final response = await apiService.postApi(
         'carona?veiculo_id=$veiculoId&hora_de_partida=$stringHoraDePartida&preco_carona=$precoCarona&vagas=$vagas',
         {"local_partida": localPartida, "local_destino": localDestino});

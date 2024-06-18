@@ -29,6 +29,7 @@ class _LoginState extends State<Login> {
               Container(
                 height: MediaQuery.of(context).size.height * (4 / 10),
                 decoration: const BoxDecoration(
+                  color: Colors.white,
                   image: DecorationImage(
                     image: AssetImage('assets/login_background.png'),
                     fit: BoxFit.cover,
