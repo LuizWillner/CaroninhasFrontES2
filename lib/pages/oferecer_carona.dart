@@ -6,6 +6,7 @@ import 'package:app_uff_caronas/services/service_auth_and_user.dart';
 import 'package:app_uff_caronas/services/api_services.dart';
 import 'package:app_uff_caronas/components/viagem.dart';
 import 'package:app_uff_caronas/components/custom_alert.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 class CriarCarona extends StatefulWidget {
@@ -39,6 +40,7 @@ class _CriarCaronaState extends State<CriarCarona>
       final vehiclesResponse = await ApiService().getApi('veiculo/me/all');
       setState(() {
         vehicles = vehiclesResponse["data"];
+        selectedVehicleId = vehicles[0]['id'];
       });
     } catch (error) {
       print(error.toString());
@@ -49,7 +51,8 @@ class _CriarCaronaState extends State<CriarCarona>
     var horaMinima = DateTime.now();
     var horaMaxima = horaMinima.add(const Duration(days: 30));
     try {
-      final pedidosResponse = await ApiService().getApi('pedido-carona?hora_minima=$horaMinima&hora_maxima=$horaMaxima');
+      final pedidosResponse = await ApiService().getApi(
+          'pedido-carona?hora_minima=$horaMinima&hora_maxima=$horaMaxima');
       setState(() {
         pedidos = pedidosResponse["data"];
       });
@@ -335,21 +338,44 @@ class _CriarCaronaState extends State<CriarCarona>
                           itemCount: pedidos.length,
                           itemBuilder: (context, index) {
                             final pedido = pedidos[index];
+                            final vehicleId = selectedVehicleId;
                             return Viagem(
-                                image: "assets/login_background.png",
-                                partida: pedido["local_partida"],
-                                chegada: pedido["local_destino"],
-                                nome: pedido["user"]["first_name"] + pedido["user"]["last_name"],
-                                data: DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                    .parse(pedido["hora_partida_minima"]),
-                                onPressed: () {
-                                  print(pedido["id"].runtimeType);
-                                  int id = pedido["id"];
-                                },
-                                price: pedido["valor"],
-                                vagasRestantes: null,
-                                buttonInnerText: "Aceitar",
-                                role: "Solicitante",);
+                              image: "assets/login_background.png",
+                              partida: pedido["local_partida"],
+                              chegada: pedido["local_destino"],
+                              nome:
+                                  "${pedido["user"]["first_name"]} ${pedido["user"]["last_name"]}",
+                              data: DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                  .parse(pedido["hora_partida_minima"]),
+                              onPressed: () async {
+                                try {
+                                  final response = await authService.createRide(
+                                    vehicleId,
+                                    DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                        .parse(pedido["hora_partida_minima"]),
+                                    pedido['valor'].toString(),
+                                    "4",
+                                    pedido["local_partida"],
+                                    pedido["local_destino"],
+                                  );
+
+                                  final responseAddUser =
+                                      await authService.otherUserSubscription(
+                                    pedido["fk_user"],
+                                    response['id'],
+                                  );
+
+                                  authService.deletePedidoByID(pedido["id"]);
+                                } catch (error) {
+                                  print("error: $error");
+                                  authService.deletePedidoByID(pedido["id"]);
+                                }
+                              },
+                              price: pedido["valor"],
+                              vagasRestantes: null,
+                              buttonInnerText: "Aceitar",
+                              role: "Solicitante",
+                            );
                             // TODO: criar carona com o pedido
                           },
                         ),
