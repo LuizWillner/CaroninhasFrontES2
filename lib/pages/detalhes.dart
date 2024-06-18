@@ -488,8 +488,6 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                                               [
                                                               index]["user"]["id"];
 
-                                                          print(
-                                                              'Cavaloooooooooooooooooooo        ${rideDetail["passageiros"][index]["user"]["id"]}');
                                                           _showRatingDialog(
                                                               context, id, 2);
                                                         },
@@ -532,6 +530,43 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                                 }
                               },
                             ),
+                            const SizedBox(height: 12.0),
+                            ElevatedButton.icon(
+                              icon: const FaIcon(FontAwesomeIcons.exclamation,
+                                  color: Colors.white),
+                              label: Text(
+                                user['id'] ==
+                                        rideDetail['motorista']['id_fk_user']
+                                    ? 'Deletar carona'
+                                    : 'sair da carona',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: clearBlueColor,
+                              ),
+                              onPressed: () async {
+                                if (user['id'] ==
+                                    rideDetail['motorista']['id_fk_user']) {
+                                  _showConfirmationDialog(
+                                      context,
+                                      rideDetail['id'],
+                                      rideDetail,
+                                      1,
+                                      "deletar essa carona");
+                                } else {
+                                  _showConfirmationDialog(
+                                      context,
+                                      rideDetail['id'],
+                                      rideDetail,
+                                      0,
+                                      "sair dessa carona");
+                                }
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -558,7 +593,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
             fontWeight: FontWeight.w900,
             fontSize: 30,
           ),
-          content: 'Você tem certeza que deseja $word essa carona?',
+          content: 'Você tem certeza que deseja ${word}?',
           contentStyle: const TextStyle(
             color: Color(0xFF0E4B7C),
             fontWeight: FontWeight.bold,
@@ -682,6 +717,7 @@ class _DetalhesCaronaState extends State<DetalhesCarona> {
                   authService.postRatingCaronista(
                       rideDetail["id"], id, rating, "comentarioPassageiro");
                 }
+                Navigator.of(context).pop();
               },
               child: const Text('Enviar Avaliação'),
             ),

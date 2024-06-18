@@ -112,7 +112,7 @@ class AuthService {
 
   void deleteCaronabyID(caronaID) async {
     try {
-      await apiService.deleteApi("carona/$caronaID");
+      await apiService.deleteApi("carona/$caronaID?enforce=true");
     } catch (e) {
       print('Erro ao deletar avaliação: $e');
     }
